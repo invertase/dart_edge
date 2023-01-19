@@ -6,24 +6,11 @@ import 'package:js/js_util.dart';
 import 'fetch_interop.dart' as interop;
 import 'fetch_interop.dart';
 
-void addFetchEventListener(void Function(FetchEvent event) listener) {
+void addFetchEventListener(Null Function(FetchEvent event) listener) {
   interop.addEventListener<interop.FetchEvent>('fetch',
       js.allowInterop((interop.FetchEvent delegate) {
     listener(FetchEvent._(delegate));
   }));
-}
-
-Stream<FetchEvent> get onFetch {
-  late StreamController<FetchEvent> controller;
-  controller = StreamController<FetchEvent>(
-    sync: true,
-    onListen: () {
-      addFetchEventListener((FetchEvent event) {
-        controller.sink.add(event);
-      });
-    },
-  );
-  return controller.stream;
 }
 
 class FetchEvent {
