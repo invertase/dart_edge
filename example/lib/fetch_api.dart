@@ -4,10 +4,13 @@ import 'package:js/js.dart' as js;
 import 'package:js/js_util.dart';
 
 import 'fetch_interop.dart' as interop;
+import 'fetch_interop.dart';
 
-void addEventListener(String type, Function listener) {
-  interop.addEventListener(
-      type, js.allowInterop((interop.FetchEvent event) {}));
+void addEventListener(String type, void Function(FetchEvent event) listener) {
+  interop.addEventListener<interop.FetchEvent>(type,
+      js.allowInterop((interop.FetchEvent delegate) {
+    listener(FetchEvent._(delegate));
+  }));
 }
 
 class FetchEvent {
@@ -17,7 +20,9 @@ class FetchEvent {
   String get type => _delegate.type;
   Request get request => Request._(_delegate.request);
   void respondWith(FutureOr<Response> response) async {
-    return _delegate.respondWith((await response)._delegate);
+    return _delegate.respondWith(futureToPromise(Future(() async {
+      return (await response)._delegate;
+    })));
   }
 }
 
@@ -66,7 +71,7 @@ class Response extends Body {
             jsify({
               'status': status,
               'statusText': statusText,
-              'headers': headers?._delegate,
+              'headers': headers?._delegate ?? jsify({}),
             })));
 
   int get status => _delegate.status;

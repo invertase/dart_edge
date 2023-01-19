@@ -1,23 +1,28 @@
-import 'cloudflare_workers_shelf.dart';
-import 'package:archive/archive.dart';
+// import 'cloudflare_workers_shelf.dart';
+// import 'package:archive/archive.dart';
 // import 'package:foo/cloudflare_adapater.dart';
 
+import 'fetch_api.dart';
+
 void main() {
-  final app = Router();
-
-  app.get('/hello', (Request request) {
-    final a = Archive();
-    a.addFile(ArchiveFile('foo', 0, [1, 2, 3]));
-    return Response.ok('hello-world');
+  addEventListener('fetch', (event) {
+    event.respondWith(Response('hello!!!', status: 200));
   });
+  // final app = Router();
 
-  app.get('/user/<user>', (Request request, String user) {
-    final cfProperties = request.context['cf'] as IncomingRequestCfProperties?;
-    print(cfProperties?.city);
-    return Response.ok('hello!!!!!!! $user from ${cfProperties?.city}');
-  });
+  // app.get('/hello', (Request request) {
+  //   final a = Archive();
+  //   a.addFile(ArchiveFile('foo', 0, [1, 2, 3]));
+  //   return Response.ok('hello-world');
+  // });
 
-  serve(app);
+  // app.get('/user/<user>', (Request request, String user) {
+  //   final cfProperties = request.context['cf'] as IncomingRequestCfProperties?;
+  //   print(cfProperties?.city);
+  //   return Response.ok('hello!!!!!!! $user from ${cfProperties?.city}');
+  // });
+
+  // serve(app);
 }
 
 
