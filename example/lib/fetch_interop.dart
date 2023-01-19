@@ -103,3 +103,8 @@ class FetchEvent {
   external void passThroughOnException();
   external void waitUntil(Promise promise);
 }
+
+// TODO fetch supports String or Request - Not sure on whether Dart API 
+// should support due to lack of overloading/unions
+@js.JS('fetch')
+external Promise<Response> fetch(String resource, [Object init]);

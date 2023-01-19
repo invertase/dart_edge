@@ -4,7 +4,6 @@ import 'package:js/js.dart' as js;
 import 'package:js/js_util.dart';
 
 import 'fetch_interop.dart' as interop;
-import 'fetch_interop.dart';
 
 void addFetchEventListener(void Function(FetchEvent event) listener) {
   interop.addEventListener<interop.FetchEvent>('fetch',
@@ -33,7 +32,7 @@ class FetchEvent {
   String get type => _delegate.type;
   Request get request => Request._(_delegate.request);
   void respondWith(FutureOr<Response> response) async {
-    return _delegate.respondWith(futureToPromise(Future(() async {
+    return _delegate.respondWith(interop.futureToPromise(Future(() async {
       return (await response)._delegate;
     })));
   }
@@ -118,4 +117,95 @@ class Headers {
   void set(String name, String value) => _delegate.set(name, value);
   void append(String name, String value) => _delegate.append(name, value);
   void delete(String name) => _delegate.delete(name);
+}
+
+Future<Response> fetch(
+  String url, {
+  String method = 'GET',
+  Headers? headers,
+  Object? body,
+  FetchMode? mode,
+  FetchCredentials? credentials,
+  FetchCache? cache,
+  FetchRedirect? redirect,
+  String? referrer,
+  FetchReferrerPolicy? referrerPolicy,
+  String? integrity,
+  bool? keepalive,
+  // AbortSignal? signal, TODO needs to be implemented
+}) async {
+  return Response._(await promiseToFuture(interop.fetch(
+      url,
+      jsify({
+        'method': method,
+        if (headers != null) 'headers': headers._delegate,
+        if (body != null) 'body': _convertBody(body),
+        if (mode != null) 'mode': mode._delegate,
+        if (credentials != null) 'credentials': credentials._delegate,
+        if (cache != null) 'cache': cache._delegate,
+        if (redirect != null) 'redirect': redirect._delegate,
+        if (referrer != null) 'referrer': referrer,
+        if (referrerPolicy != null) 'referrerPolicy': referrerPolicy._delegate,
+        if (integrity != null) 'integrity': integrity,
+        if (keepalive != null) 'keepalive': keepalive,
+        // if (signal != null) 'signal': signal._delegate,
+      }))));
+}
+
+enum FetchMode {
+  cors('cors'),
+  noCors('no-cors'),
+  sameOrigin('same-origin');
+
+  const FetchMode(this._delegate);
+
+  final String _delegate;
+}
+
+enum FetchCredentials {
+  omit('omit'),
+  sameOrigin('same-origin'),
+  include('include');
+
+  const FetchCredentials(this._delegate);
+
+  final String _delegate;
+}
+
+enum FetchCache {
+  defaultValue('default'),
+  noStore('no-store'),
+  reload('reload'),
+  noCache('no-cache'),
+  forceCache('force-cache'),
+  onlyIfCached('only-if-cached');
+
+  const FetchCache(this._delegate);
+
+  final String _delegate;
+}
+
+enum FetchRedirect {
+  follow('follow'),
+  error('error'),
+  manual('manual');
+
+  const FetchRedirect(this._delegate);
+
+  final String _delegate;
+}
+
+enum FetchReferrerPolicy {
+  noReferrer('no-referrer'),
+  noReferrerWhenDowngrade('no-referrer-when-downgrade'),
+  sameOrigin('same-origin'),
+  origin('origin'),
+  strictOrigin('strict-origin'),
+  originWhenCrossOrigin('origin-when-cross-origin'),
+  strictWhenCrossOrigin('strict-origin-when-cross-origin'),
+  unsafeUrl('unsafe-url');
+
+  const FetchReferrerPolicy(this._delegate);
+
+  final String _delegate;
 }
