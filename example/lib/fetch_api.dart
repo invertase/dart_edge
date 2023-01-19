@@ -197,14 +197,16 @@ enum FetchReferrerPolicy {
   final String _delegate;
 }
 
-// ignore_for_file: camel_case_types
-class caches {
+class _Caches {
+  const _Caches();
   // static Cache get defaultCache => Cache._(interop.defaultCache);
 
   static Future<Cache> open(String name) async {
     return Cache._(await promiseToFuture(interop.openCache(name)));
   }
 }
+
+const caches = _Caches();
 
 class Cache {
   final interop.Cache _delegate;
