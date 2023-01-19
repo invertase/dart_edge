@@ -107,7 +107,7 @@ class Headers {
 }
 
 Future<Response> fetch(
-  String url, {
+  Uri uri, {
   String method = 'GET',
   Headers? headers,
   Object? body,
@@ -122,7 +122,7 @@ Future<Response> fetch(
   // AbortSignal? signal, TODO needs to be implemented
 }) async {
   return Response._(await promiseToFuture(interop.fetch(
-      url,
+      uri.toString(),
       jsify({
         'method': method,
         if (headers != null) 'headers': headers._delegate,
