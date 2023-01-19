@@ -196,3 +196,45 @@ enum FetchReferrerPolicy {
 
   final String _delegate;
 }
+
+// ignore_for_file: camel_case_types
+class caches {
+  // static Cache get defaultCache => Cache._(interop.defaultCache);
+
+  static Future<Cache> open(String name) async {
+    return Cache._(await promiseToFuture(interop.openCache(name)));
+  }
+}
+
+class Cache {
+  final interop.Cache _delegate;
+
+  Cache._(this._delegate);
+
+  // Future<Response> match(Request request) async {
+  //   return Response._(await promiseToFuture(_delegate.match(request._delegate)));
+  // }
+
+  // Future<Response> matchAll(Request request) async {
+  //   return Response._(
+  //       await promiseToFuture(_delegate.matchAll(request._delegate)));
+  // }
+
+  // Future<Response> add(Request request) async {
+  //   return Response._(await promiseToFuture(_delegate.add(request._delegate)));
+  // }
+
+  // Future<Response> addAll(Request request) async {
+  //   return Response._(
+  //       await promiseToFuture(_delegate.addAll(request._delegate)));
+  // }
+
+  // Future<Response> delete(Request request) async {
+  //   return Response._(
+  //       await promiseToFuture(_delegate.delete(request._delegate)));
+  // }
+
+  // Future<Response> keys(Request request) async {
+  //   return Response._(await promiseToFuture(_delegate.keys(request._delegate)));
+  // }
+}

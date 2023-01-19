@@ -6,10 +6,10 @@ import 'fetch_interop.dart' show Promise, Response, Request;
 
 // TODO this is Cloudflare specific - move to extension or something?
 @js.JS('default')
-external Promise<CacheStorage> get defaultCache;
+external CacheStorage get defaultCache;
 
 @js.JS('open')
-external Promise<CacheStorage> open(String name);
+external Promise<CacheStorage> openCache(String name);
 
 @js.JS()
 class CacheStorage {
