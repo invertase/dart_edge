@@ -1,10 +1,17 @@
 import 'fetch_api.dart';
 
 void main() {
-  // Alternative none stream syntax:
   addFetchEventListener((FetchEvent event) {
     event.respondWith(Future(() async {
-      await Future.delayed(Duration(seconds: 1));
+      // This example will fetch a random quote from the
+      // dummyjson.com service...
+      final url = Uri.https(
+        'dummyjson.com',
+        '/quotes/random',
+      );
+      
+      final response = await fetch(url);
+      print(await response.json());
       return Response('hello-mike');
     }));
   });
