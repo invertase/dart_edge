@@ -1,46 +1,30 @@
-// import 'cloudflare_workers_shelf.dart';
-// import 'package:archive/archive.dart';
-// import 'package:foo/cloudflare_adapater.dart';
-
 import 'fetch_api.dart';
 
 void main() {
-  addEventListener('fetch', (event) {
-    event.respondWith(Response('hello!!!', status: 200));
+  onFetch.where((event) => event.request.url.endsWith('/mike')).listen((event) {
+    event.respondWith(Response('hello-mike'));
   });
-  // final app = Router();
 
-  // app.get('/hello', (Request request) {
-  //   final a = Archive();
-  //   a.addFile(ArchiveFile('foo', 0, [1, 2, 3]));
-  //   return Response.ok('hello-world');
-  // });
+  onFetch
+      .where((event) => event.request.url.endsWith('/elliot'))
+      .listen((event) {
+    event.respondWith(Response('hello-elliot'));
+  });
 
-  // app.get('/user/<user>', (Request request, String user) {
-  //   final cfProperties = request.context['cf'] as IncomingRequestCfProperties?;
-  //   print(cfProperties?.city);
-  //   return Response.ok('hello!!!!!!! $user from ${cfProperties?.city}');
-  // });
+  onFetch.listen((event) {
+    print(event.request.url);
+    event.respondWith(Response('I don\'t know you'));
+  });
 
-  // serve(app);
+  // Alternative none stream syntax:
+  //   addFetchEventListener((FetchEvent event) {
+  //     print(event.request.url);
+  //     if (event.request.url.endsWith('/elliot')) {
+  //       event.respondWith(Response('hello-elliot'));
+  //     } else if (event.request.url.endsWith('/mike')) {
+  //       event.respondWith(Response('hello-mike'));
+  //     } else {
+  //       event.respondWith(Response('I don\'t know you'));
+  //     }
+  //   });
 }
-
-
-// void foo() {
-//   return Target<Cloudflare>(
-//     routes: [
-//       Route(
-//         path: '/hello',
-//         handler: (request) => Response.ok('hello-world'),
-//       ),
-//       Route(
-//         path: '/user/<user>',
-//         handler: (request, String user) {
-//           final cfProperties = request.context['cf'] as IncomingRequestCfProperties?;
-//           print(cfProperties?.city);
-//           return Response.ok('hello!!!!!!! $user from ${cfProperties?.city}');
-//         },
-//       ),
-//     ],
-//   )
-// }
