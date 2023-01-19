@@ -4,6 +4,7 @@ import 'package:js/js.dart' as js;
 import 'package:js/js_util.dart';
 
 import 'fetch_interop.dart' as interop;
+import 'fetch_cache_interop.dart' as interop_caches;
 
 void addFetchEventListener(Null Function(FetchEvent event) listener) {
   interop.addEventListener<interop.FetchEvent>('fetch',
@@ -197,46 +198,102 @@ enum FetchReferrerPolicy {
   final String _delegate;
 }
 
-class _Caches {
-  const _Caches();
-  // static Cache get defaultCache => Cache._(interop.defaultCache);
+class CacheStorage {
+  const CacheStorage._();
 
-  static Future<Cache> open(String name) async {
-    return Cache._(await promiseToFuture(interop.openCache(name)));
+  Cache get defaultCache => Cache._(interop_caches.defaultCache);
+
+  Future<bool> delete(String cacheName) async {
+    return promiseToFuture(interop_caches.delete(cacheName));
+  }
+
+  Future<bool> has(String cacheName) async {
+    return promiseToFuture(interop_caches.has(cacheName));
+  }
+
+  Future<List<String>> keys(String cacheName) async {
+    final obj =
+        await promiseToFuture<List<Object>>(interop_caches.keys(cacheName));
+    return dartify(obj) as List<String>;
+  }
+
+  Future<Response?> match(Request request) async {
+    final obj = await promiseToFuture<interop.Response?>(
+        interop_caches.match(request._delegate));
+    return obj == null ? null : Response._(obj);
+  }
+
+  Future<Cache> open(String name) async {
+    return Cache._(await promiseToFuture(interop_caches.open(name)));
   }
 }
 
-const caches = _Caches();
+const caches = CacheStorage._();
 
 class Cache {
-  final interop.Cache _delegate;
+  final interop_caches.Cache _delegate;
 
   Cache._(this._delegate);
 
-  // Future<Response> match(Request request) async {
-  //   return Response._(await promiseToFuture(_delegate.match(request._delegate)));
-  // }
+  Future<void> add(Uri uri) async {
+    await promiseToFuture(_delegate.add(uri.toString()));
+  }
 
-  // Future<Response> matchAll(Request request) async {
-  //   return Response._(
-  //       await promiseToFuture(_delegate.matchAll(request._delegate)));
-  // }
+  Future<void> addAll(List<Uri> uris) async {
+    await promiseToFuture(_delegate
+        .addAll(uris.map((uri) => uri.toString()).toList(growable: false)));
+  }
 
-  // Future<Response> add(Request request) async {
-  //   return Response._(await promiseToFuture(_delegate.add(request._delegate)));
-  // }
+  Future<void> delete(
+    Uri uri, {
+    bool? ignoreSearch,
+    bool? ignoreMethod,
+    bool? ignoreVary,
+    String? cacheName,
+  }) async {
+    await promiseToFuture(_delegate.delete(uri.toString(), {
+      if (ignoreSearch != null) 'ignoreSearch': ignoreSearch,
+      if (ignoreMethod != null) 'ignoreMethod': ignoreMethod,
+      if (ignoreVary != null) 'ignoreVary': ignoreVary,
+      if (cacheName != null) 'cacheName': cacheName,
+    }));
+  }
 
-  // Future<Response> addAll(Request request) async {
-  //   return Response._(
-  //       await promiseToFuture(_delegate.addAll(request._delegate)));
-  // }
+  Future<List<Request>> list(
+    Uri uri, {
+    bool? ignoreSearch,
+    bool? ignoreMethod,
+    bool? ignoreVary,
+    String? cacheName,
+  }) async {
+    final obj = await promiseToFuture<List<interop.Request>>(
+        _delegate.match(uri.toString(), {
+      if (ignoreSearch != null) 'ignoreSearch': ignoreSearch,
+      if (ignoreMethod != null) 'ignoreMethod': ignoreMethod,
+      if (ignoreVary != null) 'ignoreVary': ignoreVary,
+      if (cacheName != null) 'cacheName': cacheName,
+    }));
 
-  // Future<Response> delete(Request request) async {
-  //   return Response._(
-  //       await promiseToFuture(_delegate.delete(request._delegate)));
-  // }
+    final list = dartify(obj) as List<interop.Request>;
+    return list.map((delegate) => Request._(delegate)).toList(growable: false);
+  }
 
-  // Future<Response> keys(Request request) async {
-  //   return Response._(await promiseToFuture(_delegate.keys(request._delegate)));
-  // }
+  Future<Response?> match(
+    Uri uri, {
+    bool? ignoreSearch,
+    bool? ignoreMethod,
+    bool? ignoreVary,
+  }) async {
+    final obj = await promiseToFuture<interop.Response?>(
+        _delegate.match(uri.toString(), {
+      if (ignoreSearch != null) 'ignoreSearch': ignoreSearch,
+      if (ignoreMethod != null) 'ignoreMethod': ignoreMethod,
+      if (ignoreVary != null) 'ignoreVary': ignoreVary,
+    }));
+
+    return obj == null ? null : Response._(obj);
+  }
+
+  // TODO matchAll
+  // TODO put
 }

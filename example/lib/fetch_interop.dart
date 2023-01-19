@@ -1,8 +1,6 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart' as js;
 
-export 'fetch_cache_interop.dart';
-
 @js.JS()
 class Promise<T> {
   external Promise(
