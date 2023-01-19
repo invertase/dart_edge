@@ -46,7 +46,7 @@ class Request extends Body {
 }
 
 @js.JS()
-class Response {
+class Response extends Body {
   // declare type BodyInit =
   // | ReadableStream
   // | string
@@ -55,7 +55,7 @@ class Response {
   // | URLSearchParams
   // | FormData;
   // constructor(bodyInit?: BodyInit | null, maybeInit?: ResponseInit | Response);
-  external factory Response([Object body, Object init]);
+  external factory Response([Object? body, Object init]);
   external Request clone();
   external Headers get headers;
   external int get status;
@@ -85,8 +85,9 @@ class AbortSignal {
 
 @js.JS()
 class Headers {
+  external factory Headers([Object init]);
   external String? get(String name);
-  external List<Object> getAll(String name);
+  // external List<Object> getAll(String name); CF Only?
   external bool has(String name);
   external void set(String name, String value);
   external void append(String name, String value);
