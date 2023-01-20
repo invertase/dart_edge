@@ -48,23 +48,20 @@ class Request {
     String? integrity,
     bool? keepalive,
     AbortSignal? signal,
-  }) : _delegate = interop.Request(
-          request.url,
-          jsify({
-            if (method != null) 'method': method,
-            if (headers != null) 'headers': headers._delegate,
-            if (body != null) 'body': _convertBody(body),
-            if (mode != null) 'mode': mode._delegate,
-            if (credentials != null) 'credentials': credentials._delegate,
-            if (cache != null) 'cache': cache._delegate,
-            if (redirect != null) 'redirect': redirect._delegate,
-            if (referrer != null) 'referrer': referrer,
-            if (referrerPolicy != null)
-              'referrerPolicy': referrerPolicy._delegate,
-            if (integrity != null) 'integrity': integrity,
-            if (keepalive != null) 'keepalive': keepalive,
-            if (signal != null) 'signal': signal._delegate,
-          }),
+  }) : this(
+          Uri.parse(request.url),
+          method: method,
+          headers: headers,
+          body: body,
+          mode: mode,
+          credentials: credentials,
+          cache: cache,
+          redirect: redirect,
+          referrer: referrer,
+          referrerPolicy: referrerPolicy,
+          integrity: integrity,
+          keepalive: keepalive,
+          signal: signal,
         );
 
   Request(
