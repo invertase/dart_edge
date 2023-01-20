@@ -44,10 +44,6 @@ external interop.CacheStorage get caches;
 @js.JS('undefined')
 external Object get jsUndefined;
 
-// TODO make full console utils
-@js.JS('console.dir')
-external void consoleDir(Object? object);
-
 bool _isBasicType(value) {
   if (value == null || value is num || value is bool || value is String) {
     return true;
