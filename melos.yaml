@@ -18,3 +18,9 @@ command:
     usePubspecOverrides: true
 ide:
   intellij: false
+
+scripts:
+  build:fetch_apis:
+    run: cd packages/fetch_apis && dart run build_runner build --delete-conflicting-outputs
+  build_watch:fetch_apis:
+    run: cd packages/fetch_apis && dart run build_runner watch --delete-conflicting-outputs
