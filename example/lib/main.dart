@@ -10,7 +10,7 @@ void main() {
         '/quotes/random',
       );
 
-      final response = await fetch(url);
+      final response = await fetch(Resource.uri(url));
       print(await response.json());
       return Response('hello-mike');
     }));

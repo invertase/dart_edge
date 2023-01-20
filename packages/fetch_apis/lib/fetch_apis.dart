@@ -1,10 +1,15 @@
+library fetch_apis;
+
 import 'dart:async';
 
+import 'package:fetch_apis/resource.dart';
 import 'package:js/js.dart' as js;
 import 'package:js/js_util.dart';
 
-import 'fetch_interop.dart' as interop;
-import 'cache_interop.dart' as interop_caches;
+import 'interop/fetch_interop.dart' as interop;
+import 'interop/cache_interop.dart' as interop_caches;
+
+export 'resource.dart' show Resource;
 
 void addFetchEventListener(Null Function(FetchEvent event) listener) {
   interop.addEventListener<interop.FetchEvent>('fetch',
@@ -49,7 +54,7 @@ class Request {
     bool? keepalive,
     AbortSignal? signal,
   }) : this(
-          Uri.parse(request.url),
+          Resource.request(request),
           method: method,
           headers: headers,
           body: body,
@@ -65,7 +70,7 @@ class Request {
         );
 
   Request(
-    Uri uri, {
+    Resource resource, {
     String? method,
     Headers? headers,
     Object? body,
@@ -79,7 +84,7 @@ class Request {
     bool? keepalive,
     AbortSignal? signal,
   }) : _delegate = interop.Request(
-          uri.toString(),
+          urlFromResource(resource),
           jsify({
             if (method != null) 'method': method,
             if (headers != null) 'headers': headers._delegate,
@@ -194,7 +199,7 @@ class AbortSignal {
 }
 
 Future<Response> fetch(
-  Uri uri, {
+  Resource resource, {
   String? method,
   Headers? headers,
   Object? body,
@@ -208,22 +213,24 @@ Future<Response> fetch(
   bool? keepalive,
   AbortSignal? signal,
 }) async {
-  return Response._(await promiseToFuture(interop.fetch(
-      uri.toString(),
-      jsify({
-        if (method != null) 'method': method,
-        if (headers != null) 'headers': headers._delegate,
-        if (body != null) 'body': _convertBody(body),
-        if (mode != null) 'mode': mode._delegate,
-        if (credentials != null) 'credentials': credentials._delegate,
-        if (cache != null) 'cache': cache._delegate,
-        if (redirect != null) 'redirect': redirect._delegate,
-        if (referrer != null) 'referrer': referrer,
-        if (referrerPolicy != null) 'referrerPolicy': referrerPolicy._delegate,
-        if (integrity != null) 'integrity': integrity,
-        if (keepalive != null) 'keepalive': keepalive,
-        if (signal != null) 'signal': signal._delegate,
-      }))));
+  final options = jsify({
+    if (method != null) 'method': method,
+    if (headers != null) 'headers': headers._delegate,
+    if (body != null) 'body': _convertBody(body),
+    if (mode != null) 'mode': mode._delegate,
+    if (credentials != null) 'credentials': credentials._delegate,
+    if (cache != null) 'cache': cache._delegate,
+    if (redirect != null) 'redirect': redirect._delegate,
+    if (referrer != null) 'referrer': referrer,
+    if (referrerPolicy != null) 'referrerPolicy': referrerPolicy._delegate,
+    if (integrity != null) 'integrity': integrity,
+    if (keepalive != null) 'keepalive': keepalive,
+    if (signal != null) 'signal': signal._delegate,
+  });
+
+  return Response._(
+    await promiseToFuture(interop.fetch(urlFromResource(resource), options)),
+  );
 }
 
 enum FetchMode {
