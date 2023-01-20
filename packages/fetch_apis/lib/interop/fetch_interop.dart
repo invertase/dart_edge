@@ -32,7 +32,7 @@ extension FetchEventExtension on interop.FetchEvent {
 @js.JS('fetch')
 external Promise<interop.Response> fetch(
   interop.Request request, [
-  interop.RequestInit init,
+  Object? init,
 ]);
 
 @js.JS('Object.keys')
