@@ -38,6 +38,12 @@ external Promise<interop.Response> fetch(
 @js.JS('Object.keys')
 external List<Object?> objectKeys(Object? object);
 
+@js.JS('caches')
+external interop.CacheStorage get caches;
+
+@js.JS('undefined')
+external Object get jsUndefined;
+
 // TODO make full console utils
 @js.JS('console.dir')
 external void consoleDir(Object? object);

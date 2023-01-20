@@ -1,0 +1,3 @@
+name = "test-js-worker"
+main = "src/index.js"
+compatibility_date = "2023-01-20"

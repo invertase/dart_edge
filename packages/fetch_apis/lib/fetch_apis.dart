@@ -120,6 +120,8 @@ Object? _convertBody(Object? body) {
 }
 
 class Response extends Body {
+  // TODO Response.json() factory
+
   Response._(interop.Response delegate) : super._(delegate);
 
   Response(
@@ -130,14 +132,15 @@ class Response extends Body {
   }) : super._(interop.Response(
             _convertBody(body),
             jsify({
-              'status': status,
-              'statusText': statusText,
-              'headers': headers?._delegate ?? jsify({}),
+              if (status != null) 'status': status,
+              if (statusText != null) 'statusText': statusText,
+              if (headers != null) 'headers': headers._delegate,
             })));
 
   int get status => _delegate.status;
   String get statusText => _delegate.statusText;
   Headers get headers => Headers._(_delegate.headers);
+  Response clone() => Response._(_delegate.clone());
 }
 
 class FormData {
@@ -334,7 +337,7 @@ class CacheStorage {
   }
 }
 
-final caches = CacheStorage._(interop.CacheStorage());
+final caches = CacheStorage._(interop.caches);
 
 class Cache {
   final interop.Cache _delegate;
@@ -365,20 +368,27 @@ class Cache {
   }
 
   Future<Response?> match(
+    // TODO resource
     Uri uri, {
     bool? ignoreSearch,
     bool? ignoreMethod,
     bool? ignoreVary,
   }) async {
-    final obj = await _delegate.match(
+    final deleObj = await promiseToFuture(_delegate.match(
         uri.toString(),
         interop.CacheQueryOptions(
+          // These need conditional setting (don't set if null) otherwise errors below
+          // on CF.
           ignoreMethod: ignoreMethod,
-          ignoreSearch: ignoreSearch,
-          ignoreVary: ignoreVary,
-        ));
-
-    return obj == null ? null : Response._(obj);
+          // Error: The 'ignoreSearch' field on 'CacheQueryOptions' is not implemented.
+          // ignoreSearch: ignoreSearch,
+          // Error: The 'ignoreVary' field on 'CacheQueryOptions' is not implemented.
+          // ignoreVary: ignoreVary,
+        )));
+    if (deleObj == interop.jsUndefined) {
+      return null;
+    }
+    return deleObj == null ? null : Response._(deleObj);
   }
 
   Future<Iterable<Response>> matchAll({
@@ -387,21 +397,31 @@ class Cache {
     bool? ignoreMethod,
     bool? ignoreVary,
   }) async {
-    final objs = await _delegate.matchAll(
+    final matches = await _delegate.matchAll(
         uri?.toString(),
         interop.CacheQueryOptions(
           ignoreMethod: ignoreMethod,
           ignoreSearch: ignoreSearch,
           ignoreVary: ignoreVary,
         ));
-
-    return objs.map((obj) => Response._(obj));
+    return matches.map((obj) => Response._(obj));
   }
 
   Future<void> put(
+    // TODO resource
     Uri uri,
     Response response,
-  ) {
-    return _delegate.put(uri.toString(), response._delegate);
+  ) async {
+    // TODO replace with typeguard and don't throw our own
+    // error
+    // if (response.bodyUsed) {
+    //   throw StateError('Response body is already used.');
+    // }
+    try {
+      await _delegate.put(uri.toString(), response._delegate);
+    } catch (e, s) {
+      print(e);
+      print(s);
+    }
   }
 }
