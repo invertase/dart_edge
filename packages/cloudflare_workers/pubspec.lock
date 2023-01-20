@@ -127,6 +127,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.5"
+  js_bindings:
+    dependency: transitive
+    description:
+      name: js_bindings
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   json_annotation:
     dependency: transitive
     description:

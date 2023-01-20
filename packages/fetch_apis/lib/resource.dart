@@ -16,11 +16,3 @@ class Resource with _$Resource {
   const factory Resource.uri(Uri uri) = UriType;
   const factory Resource.request(Request request) = RequestType;
 }
-
-String urlFromResource(Resource resource) {
-  return resource.when(
-    (url) => url,
-    uri: (uri) => uri.toString(),
-    request: (request) => 'todo',
-  );
-}

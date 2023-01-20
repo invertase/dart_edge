@@ -1,5 +1,14 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart' as js;
+import 'package:js_bindings/js_bindings.dart' as interop;
+
+export 'cf_cache_interop.dart' show defaultCache;
+
+@js.JS()
+external void addEventListener(
+  String type,
+  void Function(interop.ExtendableEvent event) callback,
+);
 
 @js.JS()
 class Promise<T> {
@@ -15,96 +24,45 @@ Promise<T> futureToPromise<T>(Future<T> future) {
   }));
 }
 
-@js.JS()
-external void addEventListener<T>(String type, void Function(T event) callback);
-
-@js.JS()
-class Body {
-  external bool get bodyUsed;
-  external Promise<String> text(); // Promise<String>
-  external Promise<Object> json(); // Promise<T>
-  external Promise<Object> formData(); // TODO Promise<FormData>
-  external Promise<Object> blob(); // Promise<Blob>
-  external Promise<Object> arrayBuffer(); // Promise<ArrayBuffer>
-  // TODO
-  // readonly body: ReadableStream | null;
+extension FetchEventExtension on interop.FetchEvent {
+  void respondWithPromise(Future<interop.Response> r) =>
+      js_util.callMethod(this, 'respondWith', [futureToPromise(r)]);
 }
 
-@js.JS()
-class Request extends Body {
-  // constructor(input: Request | string, init?: RequestInit | Request);
-  external factory Request(Object input, [Object init]);
-  external String get method;
-  external String get url;
-  external String get string;
-  external Request clone();
-  external Headers get headers;
-  external Fetcher? get fetcher;
-  external AbortSignal get signal;
-  // TODO extension
-  // external IncomingRequestCfProperties? get cf;
-}
-
-@js.JS()
-class Response extends Body {
-  // declare type BodyInit =
-  // | ReadableStream
-  // | string
-  // | ArrayBuffer
-  // | Blob
-  // | URLSearchParams
-  // | FormData;
-  // constructor(bodyInit?: BodyInit | null, maybeInit?: ResponseInit | Response);
-  external factory Response([Object? body, Object init]);
-  external Request clone();
-  external Headers get headers;
-  external int get status;
-  external String get statusText;
-  external bool get ok;
-  external bool get redirected;
-  external String get url;
-  // TODO
-  // readonly webSocket: WebSocket | null;
-  // readonly cf?: Object;
-}
-
-@js.JS()
-class Fetcher {
-  // TODO
-}
-
-// TODO: Extends EventTarget
-@js.JS()
-class AbortSignal {
-  external factory AbortSignal();
-  external static AbortSignal abort([Object reason]);
-  external static AbortSignal timeout(num delay);
-  external bool get aborted;
-  external Object get reason;
-  external void throwIfAborted();
-}
-
-@js.JS()
-class Headers {
-  external factory Headers([Object init]);
-  external String? get(String name);
-  // external List<Object> getAll(String name); CF Only?
-  external bool has(String name);
-  external void set(String name, String value);
-  external void append(String name, String value);
-  external void delete(String name);
-}
-
-@js.JS()
-class FetchEvent {
-  external String get type;
-  external Request get request;
-  external void respondWith(Object r);
-  external void passThroughOnException();
-  external void waitUntil(Promise promise);
-}
-
-// TODO fetch supports String or Request - Not sure on whether Dart API
-// should support due to lack of overloading/unions
 @js.JS('fetch')
-external Promise<Response> fetch(String resource, [Object init]);
+external Promise<interop.Response> fetch(
+  interop.Request request, [
+  interop.RequestInit init,
+]);
+
+@js.JS('Object.keys')
+external List<Object?> objectKeys(Object? object);
+
+// TODO make full console utils
+@js.JS('console.dir')
+external void consoleDir(Object? object);
+
+bool _isBasicType(value) {
+  if (value == null || value is num || value is bool || value is String) {
+    return true;
+  }
+  return false;
+}
+
+T dartify<T>(dynamic jsObject) {
+  if (_isBasicType(jsObject)) {
+    return jsObject as T;
+  }
+
+  if (jsObject is List) {
+    return jsObject.map(dartify).toList() as T;
+  }
+
+  var keys = objectKeys(jsObject);
+  var result = <String, dynamic>{};
+  for (var key in keys) {
+    result[key as String] = dartify(js_util.getProperty(jsObject, key));
+  }
+
+  return result as T;
+}
