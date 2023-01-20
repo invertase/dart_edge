@@ -344,38 +344,38 @@ class Cache {
 
   Cache._(this._delegate);
 
-  Future<void> add(Uri uri) async {
-    await _delegate.add(uri.toString());
+  Future<void> add(Resource resource) async {
+    await _delegate.add(requestFromResource(resource));
   }
 
-  Future<void> addAll(List<Uri> uris) async {
-    await _delegate.addAll(uris.map((uri) => uri.toString()));
+  Future<void> addAll(List<Resource> resources) async {
+    await _delegate.addAll(resources.map(requestFromResource));
   }
 
   Future<void> delete(
-    Uri uri, {
+    Resource resource, {
     bool? ignoreSearch,
     bool? ignoreMethod,
     bool? ignoreVary,
   }) async {
     await _delegate.delete(
-        uri.toString(),
-        interop.CacheQueryOptions(
-          ignoreMethod: ignoreMethod,
-          ignoreSearch: ignoreSearch,
-          ignoreVary: ignoreVary,
-        ));
+      requestFromResource(resource),
+      interop.CacheQueryOptions(
+        ignoreMethod: ignoreMethod,
+        ignoreSearch: ignoreSearch,
+        ignoreVary: ignoreVary,
+      ),
+    );
   }
 
   Future<Response?> match(
-    // TODO resource
-    Uri uri, {
+    Resource resource, {
     bool? ignoreSearch,
     bool? ignoreMethod,
     bool? ignoreVary,
   }) async {
     final deleObj = await promiseToFuture(_delegate.match(
-        uri.toString(),
+        requestFromResource(resource),
         interop.CacheQueryOptions(
           // These need conditional setting (don't set if null) otherwise errors below
           // on CF.
@@ -392,13 +392,13 @@ class Cache {
   }
 
   Future<Iterable<Response>> matchAll({
-    Uri? uri,
+    Resource? resource,
     bool? ignoreSearch,
     bool? ignoreMethod,
     bool? ignoreVary,
   }) async {
     final matches = await _delegate.matchAll(
-        uri?.toString(),
+        resource == null ? null : requestFromResource(resource),
         interop.CacheQueryOptions(
           ignoreMethod: ignoreMethod,
           ignoreSearch: ignoreSearch,
@@ -408,8 +408,7 @@ class Cache {
   }
 
   Future<void> put(
-    // TODO resource
-    Uri uri,
+    Resource resource,
     Response response,
   ) async {
     // TODO replace with typeguard and don't throw our own
@@ -418,7 +417,7 @@ class Cache {
     //   throw StateError('Response body is already used.');
     // }
     try {
-      await _delegate.put(uri.toString(), response._delegate);
+      await _delegate.put(requestFromResource(resource), response._delegate);
     } catch (e, s) {
       print(e);
       print(s);

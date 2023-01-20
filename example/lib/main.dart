@@ -17,7 +17,8 @@ void main() {
       );
 
       try {
-        final cachedResponse = await caches.defaultCache.match(url);
+        final cachedResponse =
+            await caches.defaultCache.match(Resource.uri(url));
         if (shouldUseCache && cachedResponse != null) {
           print('Using cached response');
           return cachedResponse;
@@ -35,7 +36,7 @@ void main() {
         print(Utf8Decoder().convert(buffer.asUint8List()));
 
         if (shouldUseCache) {
-          await caches.defaultCache.put(url, response.clone());
+          await caches.defaultCache.put(Resource.uri(url), response.clone());
         }
         return response;
       } catch (e, s) {
