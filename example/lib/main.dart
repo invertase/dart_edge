@@ -1,4 +1,4 @@
-import 'fetch_api.dart';
+import 'package:fetch_apis/fetch_apis.dart';
 
 void main() {
   addFetchEventListener((FetchEvent event) {
@@ -9,7 +9,7 @@ void main() {
         'dummyjson.com',
         '/quotes/random',
       );
-      
+
       final response = await fetch(url);
       print(await response.json());
       return Response('hello-mike');

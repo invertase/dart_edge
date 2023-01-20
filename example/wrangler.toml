@@ -5,4 +5,4 @@ main = ".dart_tool/worker/main.dart.js"
 [build]
 # add -O4 to enable dart2js optimizations in prod
 command = "dart compile js --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
-watch_dir = "lib"
+watch_dir = ["../packages", "lib"]

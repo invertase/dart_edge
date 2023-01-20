@@ -1,0 +1,12 @@
+name: fetch_apis
+version: 0.0.1
+
+environment:
+  sdk: ">=2.18.5 <3.0.0"
+
+dependencies:
+  js: ^0.6.5
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0

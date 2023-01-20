@@ -1,6 +1,4 @@
-import 'dart:js_util' as js_util;
 import 'package:js/js.dart' as js;
-export 'package:shelf_router/shelf_router.dart' show Router;
 
 @js.JS()
 class IncomingRequestCfProperties {

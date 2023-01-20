@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: cloudflare_workers,fetch_apis
+dependency_overrides:
+  cloudflare_workers:
+    path: ../packages/cloudflare_workers
+  fetch_apis:
+    path: ../packages/fetch_apis
