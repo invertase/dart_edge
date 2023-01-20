@@ -30,6 +30,6 @@ class Cache {
   external Promise delete(String url, [Object? options]);
   external Promise<List<Object>> keys(String url, [Object? options]);
   external Promise<Object?> match(String url, [Object? options]);
-  external Promise<List<Response>> matchAll(Object resource, [Object? options]);
-  external Promise put(Request request, Response response);
+  external Promise<List<Response>> matchAll(String? url, [Object? options]);
+  external Promise put(String url, Response response);
 }

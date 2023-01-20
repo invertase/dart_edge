@@ -76,6 +76,7 @@ class Fetcher {
 // TODO: Extends EventTarget
 @js.JS()
 class AbortSignal {
+  external factory AbortSignal();
   external static AbortSignal abort([Object reason]);
   external static AbortSignal timeout(num delay);
   external bool get aborted;
@@ -98,7 +99,6 @@ class Headers {
 class FetchEvent {
   external String get type;
   external Request get request;
-  // respondWith(promise: Response | Promise<Response>): void;
   external void respondWith(Object r);
   external void passThroughOnException();
   external void waitUntil(Promise promise);

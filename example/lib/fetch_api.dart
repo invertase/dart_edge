@@ -4,7 +4,7 @@ import 'package:js/js.dart' as js;
 import 'package:js/js_util.dart';
 
 import 'fetch_interop.dart' as interop;
-import 'fetch_cache_interop.dart' as interop_caches;
+import 'cache_interop.dart' as interop_caches;
 
 void addFetchEventListener(Null Function(FetchEvent event) listener) {
   interop.addEventListener<interop.FetchEvent>('fetch',
@@ -34,15 +34,83 @@ class Request {
   //   _delegate = interop.Request('GET', 'https://example.com');
   // }
 
+  Request.fromRequest(
+    Request request, {
+    String? method,
+    Headers? headers,
+    Object? body,
+    FetchMode? mode,
+    FetchCredentials? credentials,
+    FetchCache? cache,
+    FetchRedirect? redirect,
+    String? referrer,
+    FetchReferrerPolicy? referrerPolicy,
+    String? integrity,
+    bool? keepalive,
+    AbortSignal? signal,
+  }) : _delegate = interop.Request(
+          request.url,
+          jsify({
+            if (method != null) 'method': method,
+            if (headers != null) 'headers': headers._delegate,
+            if (body != null) 'body': _convertBody(body),
+            if (mode != null) 'mode': mode._delegate,
+            if (credentials != null) 'credentials': credentials._delegate,
+            if (cache != null) 'cache': cache._delegate,
+            if (redirect != null) 'redirect': redirect._delegate,
+            if (referrer != null) 'referrer': referrer,
+            if (referrerPolicy != null)
+              'referrerPolicy': referrerPolicy._delegate,
+            if (integrity != null) 'integrity': integrity,
+            if (keepalive != null) 'keepalive': keepalive,
+            if (signal != null) 'signal': signal._delegate,
+          }),
+        );
+
+  Request(
+    Uri uri, {
+    String? method,
+    Headers? headers,
+    Object? body,
+    FetchMode? mode,
+    FetchCredentials? credentials,
+    FetchCache? cache,
+    FetchRedirect? redirect,
+    String? referrer,
+    FetchReferrerPolicy? referrerPolicy,
+    String? integrity,
+    bool? keepalive,
+    AbortSignal? signal,
+  }) : _delegate = interop.Request(
+          uri.toString(),
+          jsify({
+            if (method != null) 'method': method,
+            if (headers != null) 'headers': headers._delegate,
+            if (body != null) 'body': _convertBody(body),
+            if (mode != null) 'mode': mode._delegate,
+            if (credentials != null) 'credentials': credentials._delegate,
+            if (cache != null) 'cache': cache._delegate,
+            if (redirect != null) 'redirect': redirect._delegate,
+            if (referrer != null) 'referrer': referrer,
+            if (referrerPolicy != null)
+              'referrerPolicy': referrerPolicy._delegate,
+            if (integrity != null) 'integrity': integrity,
+            if (keepalive != null) 'keepalive': keepalive,
+            if (signal != null) 'signal': signal._delegate,
+          }),
+        );
+
   String get method => _delegate.method;
   String get url => _delegate.url;
   String get string => _delegate.string;
-  Request clone() => Request._(_delegate.clone());
-  // Headers get headers => Headers._(_delegate.headers);
+  Request clone() => Request._(_delegate);
+  Headers get headers => Headers._(_delegate.headers);
   // Fetcher? get fetcher => _delegate.fetcher;
-  // AbortSignal get signal => AbortSignal._(_delegate.signal);
+  AbortSignal get signal => AbortSignal._(_delegate.signal);
   // TODO extension
   // IncomingRequestCfProperties? get cf => _delegate.cf;
+
+  // TODO; more here https://developer.mozilla.org/en-US/docs/Web/API/Request
 }
 
 Object? _convertBody(Object? body) {
@@ -107,9 +175,30 @@ class Headers {
   void delete(String name) => _delegate.delete(name);
 }
 
+class AbortSignal {
+  final interop.AbortSignal _delegate;
+
+  AbortSignal() : _delegate = interop.AbortSignal();
+
+  AbortSignal._(this._delegate);
+
+  static AbortSignal abort([Object? reason]) {
+    if (reason == null) return AbortSignal._(interop.AbortSignal.abort());
+    return AbortSignal._(interop.AbortSignal.abort(jsify(reason)));
+  }
+
+  static AbortSignal timeout(num delay) {
+    return AbortSignal._(interop.AbortSignal.timeout(delay));
+  }
+
+  bool get aborted => _delegate.aborted;
+  Object get reason => _delegate.reason;
+  void throwIfAborted() => _delegate.throwIfAborted();
+}
+
 Future<Response> fetch(
   Uri uri, {
-  String method = 'GET',
+  String? method,
   Headers? headers,
   Object? body,
   FetchMode? mode,
@@ -120,12 +209,12 @@ Future<Response> fetch(
   FetchReferrerPolicy? referrerPolicy,
   String? integrity,
   bool? keepalive,
-  // AbortSignal? signal, TODO needs to be implemented
+  AbortSignal? signal,
 }) async {
   return Response._(await promiseToFuture(interop.fetch(
       uri.toString(),
       jsify({
-        'method': method,
+        if (method != null) 'method': method,
         if (headers != null) 'headers': headers._delegate,
         if (body != null) 'body': _convertBody(body),
         if (mode != null) 'mode': mode._delegate,
@@ -136,7 +225,7 @@ Future<Response> fetch(
         if (referrerPolicy != null) 'referrerPolicy': referrerPolicy._delegate,
         if (integrity != null) 'integrity': integrity,
         if (keepalive != null) 'keepalive': keepalive,
-        // if (signal != null) 'signal': signal._delegate,
+        if (signal != null) 'signal': signal._delegate,
       }))));
 }
 
@@ -294,6 +383,26 @@ class Cache {
     return obj == null ? null : Response._(obj);
   }
 
-  // TODO matchAll
-  // TODO put
+  Future<List<Response>> matchAll({
+    Uri? uri,
+    bool? ignoreSearch,
+    bool? ignoreMethod,
+    bool? ignoreVary,
+  }) async {
+    final objs = await promiseToFuture<List<interop.Response>>(
+        _delegate.matchAll(uri?.toString(), {
+      if (ignoreSearch != null) 'ignoreSearch': ignoreSearch,
+      if (ignoreMethod != null) 'ignoreMethod': ignoreMethod,
+      if (ignoreVary != null) 'ignoreVary': ignoreVary,
+    }));
+
+    return objs.map((obj) => Response._(obj)).toList(growable: false);
+  }
+
+  Future<void> put(
+    Uri uri,
+    Response response,
+  ) async {
+    await promiseToFuture(_delegate.put(uri.toString(), response._delegate));
+  }
 }
