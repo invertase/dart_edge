@@ -4,5 +4,10 @@ main = ".dart_tool/worker/main.dart.js"
 
 [build]
 # add -O4 to enable dart2js optimizations in prod
-command = "dart compile js -O1 --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
+# Note: --no-frequency-based-minification is required for server mode, 
+# otherwise typerrors; TypeError: Instance of 'minified:u<minified:N>': type 'minified:u<minified:N>' is not a subtype of type 'minified:u<dynamic>'
+# Prod:
+command = "dart compile js -O4 --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
+# Local:
+# command = "dart compile js  --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
 watch_dir = ["../packages", "lib"]

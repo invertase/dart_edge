@@ -2,11 +2,15 @@ import 'dart:convert';
 
 import 'package:fetch_apis/fetch_apis.dart';
 
-const shouldUseCache = false;
+const shouldUseCache = true;
 
 void main() {
   addFetchEventListener((FetchEvent event) {
     event.respondWith(Future(() async {
+      if (event.request.url.contains('favicon.ico')) {
+        return Response('Not found', status: 404);
+      }
+
       final url = Uri.https(
         'dummyjson.com',
         '/quotes/random',
