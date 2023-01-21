@@ -44,46 +44,16 @@ class FetchEvent {
   }
 }
 
-class Request {
+class Request implements Body {
+  @override
   final interop.Request _delegate;
+
   Request._(this._delegate);
 
-  // Request(int status) {
-  //   _delegate = interop.Request('GET', 'https://example.com');
-  // }
-
-  Request(
-    Resource resource, {
-    String? method,
-    Headers? headers,
-    Object? body,
-    FetchMode? mode,
-    FetchCredentials? credentials,
-    FetchCache? cache,
-    FetchRedirect? redirect,
-    String? referrer,
-    FetchReferrerPolicy? referrerPolicy,
-    String? integrity,
-    bool? keepalive,
-    AbortSignal? signal,
-  }) : _delegate = interop.Request(
+  Request(Resource resource, [RequestInit? init])
+      : _delegate = interop.Request(
           requestFromResource(resource),
-          // TODO use RequestInit class
-          jsify({
-            if (method != null) 'method': method,
-            if (headers != null) 'headers': headers._delegate,
-            if (body != null) 'body': _convertBody(body),
-            if (mode != null) 'mode': mode._delegate,
-            if (credentials != null) 'credentials': credentials._delegate,
-            if (cache != null) 'cache': cache._delegate,
-            if (redirect != null) 'redirect': redirect._delegate,
-            if (referrer != null) 'referrer': referrer,
-            if (referrerPolicy != null)
-              'referrerPolicy': referrerPolicy._delegate,
-            if (integrity != null) 'integrity': integrity,
-            if (keepalive != null) 'keepalive': keepalive,
-            if (signal != null) 'signal': signal._delegate,
-          }),
+          jsify(init?.toJson() ?? {}),
         );
 
   String get method => _delegate.method;
@@ -93,10 +63,38 @@ class Request {
   Headers get headers => Headers._(_delegate.headers);
   // Fetcher? get fetcher => _delegate.fetcher;
   AbortSignal get signal => AbortSignal._(_delegate.signal);
+
+  @override
+  Future<ByteBuffer> arrayBuffer() async => _delegate.arrayBuffer();
+
+  @override
+  Future<Object> blob() async => Blob._(await _delegate.blob());
+
+  @override
+  ReadableStream? get body {
+    final body = _delegate.body;
+    if (body == null) {
+      return null;
+    }
+    return ReadableStream._(body);
+  }
+
+  @override
+  bool get bodyUsed => _delegate.bodyUsed;
+
+  @override
+  Future<FormData> formData() async => FormData._(await _delegate.formData());
+
+  @override
+  Future<Object?> json() async =>
+      // ignore: unnecessary_cast, Dart issue
+      interop.dartify(await (_delegate as interop.Body).json());
+
+  @override
+  Future<String> text() async => _delegate.text();
+
   // TODO extension
   // IncomingRequestCfProperties? get cf => _delegate.cf;
-
-  // TODO; more here https://developer.mozilla.org/en-US/docs/Web/API/Request
 }
 
 Object? _convertBody(Object? body) {
@@ -119,28 +117,88 @@ Object? _convertBody(Object? body) {
   );
 }
 
-class Response extends Body {
-  // TODO Response.json() factory
+class ResponseInit {
+  final int? status;
+  final String? statusText;
+  final Headers? headers;
 
-  Response._(interop.Response delegate) : super._(delegate);
+  ResponseInit({
+    this.status,
+    this.statusText,
+    this.headers,
+  });
+}
 
-  Response(
-    Object? body, {
-    int? status,
-    String? statusText,
-    Headers? headers,
-  }) : super._(interop.Response(
-            _convertBody(body),
-            jsify({
-              if (status != null) 'status': status,
-              if (statusText != null) 'statusText': statusText,
-              if (headers != null) 'headers': headers._delegate,
-            })));
+extension on ResponseInit {
+  Map<String, Object?> toJson() {
+    return {
+      if (status != null) 'status': status,
+      if (statusText != null) 'statusText': statusText,
+      if (headers != null) 'headers': headers,
+    };
+  }
+}
 
+class Response implements Body {
+  final interop.Response _delegate;
+
+  Response._(this._delegate);
+
+  Response(Object? body, [ResponseInit? init])
+      : _delegate = interop.Response(
+          _convertBody(body),
+          jsify(init?.toJson() ?? {}),
+        );
+
+  factory Response.error() {
+    throw UnimplementedError('');
+  }
+
+  factory Response.redirect() {
+    throw UnimplementedError('');
+  }
+
+  factory Response.json() {
+    throw UnimplementedError('');
+  }
+
+  // TODO type
+  // TODO url (or, Uri?)
+  // TODO redirected
   int get status => _delegate.status;
+  // TODO ok
   String get statusText => _delegate.statusText;
   Headers get headers => Headers._(_delegate.headers);
   Response clone() => Response._(_delegate.clone());
+
+  @override
+  Future<ByteBuffer> arrayBuffer() async => _delegate.arrayBuffer();
+
+  @override
+  Future<Object> blob() async => Blob._(await _delegate.blob());
+
+  @override
+  ReadableStream? get body {
+    final body = _delegate.body;
+    if (body == null) {
+      return null;
+    }
+    return ReadableStream._(body);
+  }
+
+  @override
+  bool get bodyUsed => _delegate.bodyUsed;
+
+  @override
+  Future<FormData> formData() async => FormData._(await _delegate.formData());
+
+  @override
+  Future<Object?> json() async =>
+      // ignore: unnecessary_cast, Dart issue
+      interop.dartify(await (_delegate as interop.Body).json());
+
+  @override
+  Future<String> text() async => _delegate.text();
 }
 
 class FormData {
@@ -157,23 +215,23 @@ class Blob {
   // TODO
 }
 
-class Body {
-  final interop.Response _delegate;
+class ReadableStream {
+  final interop.ReadableStream _delegate;
+  ReadableStream._(this._delegate);
 
-  Body._(this._delegate);
+  // TODO
+}
 
-  bool get bodyUsed => _delegate.bodyUsed;
-
-  Future<String> text() => _delegate.text();
-  Future<Object?> json() async =>
-      // ignore: unnecessary_cast, Dart issue
-      interop.dartify(await (_delegate as interop.Body).json());
-  Future<FormData> formData() async => FormData._(await _delegate.formData());
-  Future<Object> blob() async => Blob._(await _delegate.blob());
-  Future<ByteBuffer> arrayBuffer() async {
-    final buffer = await _delegate.arrayBuffer();
-    return buffer;
-  }
+// TODO - not sure how to implement the methods from the interop class
+abstract class Body {
+  // TODO we should have our own ReadableStream
+  ReadableStream? get body;
+  bool get bodyUsed;
+  Future<String> text();
+  Future<Object?> json();
+  Future<FormData> formData();
+  Future<Object> blob();
+  Future<ByteBuffer> arrayBuffer();
 }
 
 class Headers {
@@ -213,98 +271,147 @@ class AbortSignal {
   void throwIfAborted() => _delegate.throwIfAborted();
 }
 
-Future<Response> fetch(
-  Resource resource, {
-  String? method,
-  Headers? headers,
-  Object? body,
-  FetchMode? mode,
-  FetchCredentials? credentials,
-  FetchCache? cache,
-  FetchRedirect? redirect,
-  String? referrer,
-  FetchReferrerPolicy? referrerPolicy,
-  String? integrity,
-  bool? keepalive,
-  AbortSignal? signal,
-}) async {
-  final options = jsify({
-    if (method != null) 'method': method,
-    if (headers != null) 'headers': headers._delegate,
-    if (body != null) 'body': _convertBody(body),
-    if (mode != null) 'mode': mode._delegate,
-    if (credentials != null) 'credentials': credentials._delegate,
-    if (cache != null) 'cache': cache._delegate,
-    if (redirect != null) 'redirect': redirect._delegate,
-    if (referrer != null) 'referrer': referrer,
-    if (referrerPolicy != null) 'referrerPolicy': referrerPolicy._delegate,
-    if (integrity != null) 'integrity': integrity,
-    if (keepalive != null) 'keepalive': keepalive,
-    if (signal != null) 'signal': signal._delegate,
+class RequestInit {
+  final String method;
+  final Headers? headers;
+  final Object? body;
+  final interop.ReferrerPolicy? referrerPolicy;
+  final interop.RequestMode? mode;
+  final interop.RequestCredentials? credentials;
+  final interop.RequestCache? cache;
+  final interop.RequestRedirect? redirect;
+  final String? integrity;
+  final bool? keepalive;
+  final AbortSignal? signal;
+  final interop.RequestDuplex? duplex;
+
+  RequestInit({
+    this.method = 'GET',
+    this.headers,
+    this.body,
+    this.referrerPolicy,
+    this.mode,
+    this.credentials,
+    this.cache,
+    this.redirect,
+    this.integrity,
+    this.keepalive,
+    this.signal,
+    this.duplex,
   });
+}
 
+extension on interop.ReferrerPolicy {
+  String get value {
+    switch (this) {
+      case interop.ReferrerPolicy.empty:
+        return 'empty';
+      case interop.ReferrerPolicy.noReferrer:
+        return 'no-referrer';
+      case interop.ReferrerPolicy.noReferrerWhenDowngrade:
+        return 'no-referrer-when-downgrade';
+      case interop.ReferrerPolicy.sameOrigin:
+        return 'same-origin';
+      case interop.ReferrerPolicy.origin:
+        return 'origin';
+      case interop.ReferrerPolicy.strictOrigin:
+        return 'strict-origin';
+      case interop.ReferrerPolicy.originWhenCrossOrigin:
+        return 'origin-when-cross-origin';
+      case interop.ReferrerPolicy.strictOriginWhenCrossOrigin:
+        return 'strict-origin-when-cross-origin';
+      case interop.ReferrerPolicy.unsafeUrl:
+        return 'unsafe-url';
+    }
+  }
+}
+
+extension on interop.RequestMode {
+  String get value {
+    switch (this) {
+      case interop.RequestMode.sameOrigin:
+        return 'same-origin';
+      case interop.RequestMode.noCors:
+        return 'no-cors';
+      case interop.RequestMode.cors:
+        return 'cors';
+      case interop.RequestMode.navigate:
+        return 'navigate';
+    }
+  }
+}
+
+extension on interop.RequestCredentials {
+  String get value {
+    switch (this) {
+      case interop.RequestCredentials.omit:
+        return 'omit';
+      case interop.RequestCredentials.sameOrigin:
+        return 'same-origin';
+      case interop.RequestCredentials.include:
+        return 'include';
+    }
+  }
+}
+
+extension on interop.RequestCache {
+  String get value {
+    switch (this) {
+      case interop.RequestCache.valueDefault:
+        return 'default';
+      case interop.RequestCache.noStore:
+        return 'no-store';
+      case interop.RequestCache.reload:
+        return 'reload';
+      case interop.RequestCache.noCache:
+        return 'no-cache';
+      case interop.RequestCache.forceCache:
+        return 'force-cache';
+      case interop.RequestCache.onlyIfCached:
+        return 'only-if-cached';
+    }
+  }
+}
+
+extension on interop.RequestRedirect {
+  String get value {
+    switch (this) {
+      case interop.RequestRedirect.follow:
+        return 'follow';
+      case interop.RequestRedirect.error:
+        return 'error';
+      case interop.RequestRedirect.manual:
+        return 'manual';
+    }
+  }
+}
+
+extension on RequestInit {
+  Map<String, Object?> toJson() {
+    return {
+      'method': method,
+      if (headers != null) 'headers': headers!._delegate,
+      if (body != null) 'body': body,
+      if (referrerPolicy != null) 'referrerPolicy': referrerPolicy!.value,
+      if (mode != null) 'mode': mode!.value,
+      if (credentials != null) 'credentials': credentials!.value,
+      if (cache != null) 'cache': cache!.value,
+      if (redirect != null) 'redirect': redirect!.value,
+      if (integrity != null) 'integrity': integrity,
+      if (keepalive != null) 'keepalive': keepalive,
+      if (signal != null) 'signal': signal!._delegate,
+      if (duplex != null) 'duplex': duplex!.name,
+    };
+  }
+}
+
+Future<Response> fetch(Resource resource, [RequestInit? init]) async {
   return Response._(
-    await promiseToFuture(
-        interop.fetch(requestFromResource(resource), options)),
+    await promiseToFuture(interop.fetch(
+      requestFromResource(resource),
+      jsify(init?.toJson() ?? {}),
+    )),
   );
-}
-
-enum FetchMode {
-  cors('cors'),
-  noCors('no-cors'),
-  sameOrigin('same-origin');
-
-  const FetchMode(this._delegate);
-
-  final String _delegate;
-}
-
-enum FetchCredentials {
-  omit('omit'),
-  sameOrigin('same-origin'),
-  include('include');
-
-  const FetchCredentials(this._delegate);
-
-  final String _delegate;
-}
-
-enum FetchCache {
-  defaultValue('default'),
-  noStore('no-store'),
-  reload('reload'),
-  noCache('no-cache'),
-  forceCache('force-cache'),
-  onlyIfCached('only-if-cached');
-
-  const FetchCache(this._delegate);
-
-  final String _delegate;
-}
-
-enum FetchRedirect {
-  follow('follow'),
-  error('error'),
-  manual('manual');
-
-  const FetchRedirect(this._delegate);
-
-  final String _delegate;
-}
-
-enum FetchReferrerPolicy {
-  noReferrer('no-referrer'),
-  noReferrerWhenDowngrade('no-referrer-when-downgrade'),
-  sameOrigin('same-origin'),
-  origin('origin'),
-  strictOrigin('strict-origin'),
-  originWhenCrossOrigin('origin-when-cross-origin'),
-  strictWhenCrossOrigin('strict-origin-when-cross-origin'),
-  unsafeUrl('unsafe-url');
-
-  const FetchReferrerPolicy(this._delegate);
-
-  final String _delegate;
 }
 
 class CacheStorage {

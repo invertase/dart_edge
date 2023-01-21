@@ -8,7 +8,10 @@ void main() {
   addFetchEventListener((FetchEvent event) {
     event.respondWith(Future(() async {
       if (event.request.url.contains('favicon.ico')) {
-        return Response('Not found', status: 404);
+        return Response(
+          'Not found',
+          ResponseInit(status: 404),
+        );
       }
 
       final url = Uri.https(
@@ -30,7 +33,10 @@ void main() {
           'content-type': 'application/json',
           'x-foo': 'bar',
         });
-        final response = Response(buffer, headers: headers);
+        final response = Response(
+          buffer,
+          ResponseInit(headers: headers),
+        );
 
         // Make sure we can decode the response ourselves.
         print(Utf8Decoder().convert(buffer.asUint8List()));
