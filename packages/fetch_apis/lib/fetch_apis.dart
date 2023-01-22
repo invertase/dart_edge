@@ -11,15 +11,25 @@ import 'package:js_bindings/js_bindings.dart' as interop;
 import 'interop/fetch_interop.dart' as interop;
 
 export 'resource.dart' show Resource;
+export 'package:js_bindings/bindings/fetch.dart'
+    show
+        ResponseType,
+        RequestDuplex,
+        RequestCache,
+        RequestCredentials,
+        RequestDestination,
+        RequestMode;
 
 void addFetchEventListener(Null Function(FetchEvent event) listener) {
   if (js.context['window'] == null) {
     js.context['window'] = js.context['self'];
   }
-  interop.addEventListener('fetch',
-      js.allowInterop((interop.ExtendableEvent delegate) {
-    listener(FetchEvent._(delegate as interop.FetchEvent));
-  }));
+  interop.addEventListener(
+    'fetch',
+    js.allowInterop((interop.ExtendableEvent delegate) {
+      listener(FetchEvent._(delegate as interop.FetchEvent));
+    }),
+  );
 }
 
 interop.Request requestFromResource(Resource resource) {
@@ -45,7 +55,6 @@ class FetchEvent {
 }
 
 class Request implements Body {
-  @override
   final interop.Request _delegate;
 
   Request._(this._delegate);
@@ -58,11 +67,27 @@ class Request implements Body {
 
   String get method => _delegate.method;
   String get url => _delegate.url;
-
-  Request clone() => Request._(_delegate);
   Headers get headers => Headers._(_delegate.headers);
+  // TODO make sure this maps correct as using byName
+  interop.RequestDestination get destination => _delegate.destination;
+  String get referrer => _delegate.referrer;
+  // TODO make sure this maps correct as using byName
+  interop.ReferrerPolicy get referrerPolicy => _delegate.referrerPolicy;
+  // TODO make sure this maps correct as using byName
+  interop.RequestMode get mode => _delegate.mode;
+  // TODO make sure this maps correct as using byName
+  interop.RequestCredentials get credentials => _delegate.credentials;
+  // TODO make sure this maps correct as using byName
+  interop.RequestCache get cache => _delegate.cache;
+  // TODO make sure this maps correct as using byName
+  interop.RequestRedirect get redirect => _delegate.redirect;
+  String get integrity => _delegate.integrity;
+  bool get keepalive => _delegate.keepalive;
   // Fetcher? get fetcher => _delegate.fetcher;
   AbortSignal get signal => AbortSignal._(_delegate.signal);
+  // TODO make sure this maps correct as using byName
+  interop.FetchPriority get priority => _delegate.priority;
+  Request clone() => Request._(_delegate);
 
   @override
   Future<ByteBuffer> arrayBuffer() async => _delegate.arrayBuffer();
@@ -73,10 +98,7 @@ class Request implements Body {
   @override
   ReadableStream? get body {
     final body = _delegate.body;
-    if (body == null) {
-      return null;
-    }
-    return ReadableStream._(body);
+    return body == null ? null : ReadableStream._(body);
   }
 
   @override
@@ -129,6 +151,7 @@ class ResponseInit {
   });
 }
 
+// Extension since we only need it internally.
 extension on ResponseInit {
   Map<String, Object?> toJson() {
     return {
@@ -151,28 +174,36 @@ class Response implements Body {
         );
 
   factory Response.error() {
-    throw UnimplementedError('');
+    return Response._(
+      interop.PropsResponse.error(),
+    );
   }
 
-  factory Response.redirect() {
-    throw UnimplementedError('');
+  factory Response.redirect(Uri url, [int? status = 302]) {
+    return Response._(
+      interop.PropsResponse.redirect(url.toString(), status),
+    );
   }
 
-  factory Response.json() {
-    throw UnimplementedError('');
+  factory Response.json(Object? data, [ResponseInit? init]) {
+    return Response._(
+      interop.PropsResponse.json(data, jsify(init?.toJson() ?? {})),
+    );
   }
 
-  // TODO type
-  // TODO url (or, Uri?)
-  // TODO redirected
+  // TODO - I don't think this will work, it uses byName, but
+  // valueDefault needs to be mapped to default...
+  interop.ResponseType get type => _delegate.type;
+  Uri get url => Uri.parse(_delegate.url);
+  bool get redirected => _delegate.redirected;
   int get status => _delegate.status;
-  // TODO ok
+  bool get ok => _delegate.ok;
   String get statusText => _delegate.statusText;
   Headers get headers => Headers._(_delegate.headers);
   Response clone() => Response._(_delegate.clone());
 
   @override
-  Future<ByteBuffer> arrayBuffer() async => _delegate.arrayBuffer();
+  Future<ByteBuffer> arrayBuffer() => _delegate.arrayBuffer();
 
   @override
   Future<Object> blob() async => Blob._(await _delegate.blob());
@@ -180,10 +211,7 @@ class Response implements Body {
   @override
   ReadableStream? get body {
     final body = _delegate.body;
-    if (body == null) {
-      return null;
-    }
-    return ReadableStream._(body);
+    return body == null ? null : ReadableStream._(body);
   }
 
   @override
@@ -198,21 +226,62 @@ class Response implements Body {
       interop.dartify(await (_delegate as interop.Body).json());
 
   @override
-  Future<String> text() async => _delegate.text();
+  Future<String> text() => _delegate.text();
 }
 
 class FormData {
   final interop.FormData _delegate;
   FormData._(this._delegate);
 
-  // TODO
+  FormData() : _delegate = interop.FormData();
+
+  // TODO - FormDataEntryValue - see target
+  void append(String name, [Blob? value, String? filename]) {
+    _delegate.append(name, value?._delegate, filename);
+  }
+
+  void delete(String name) => _delegate.delete(name);
+  bool has(String name) => _delegate.has(name);
+
+  // TODO - FormDataEntryValue - see target
+  Iterable<dynamic> getAll(String name) => _delegate.getAll(name);
+
+  // TODO - FormDataEntryValue - see target
+  operator []=(String name, Object? value) {
+    throw UnimplementedError();
+    // _delegate.mSet(name, value);
+  }
+
+  // TODO - FormDataEntryValue - see target
+  dynamic operator [](String name) {
+    return _delegate.mGet(name);
+  }
 }
 
 class Blob {
   final interop.Blob _delegate;
   Blob._(this._delegate);
 
-  // TODO
+  // TODO BlobPropertyBag
+  Blob([Iterable<dynamic>? blobParts])
+      : _delegate = interop.Blob(
+          blobParts,
+        );
+
+  int get size => _delegate.size;
+  String get type => _delegate.type;
+
+  Blob slice([int? start, int? end, String? contentType]) {
+    return Blob._(_delegate.slice(start, end, contentType));
+  }
+
+  ReadableStream stream() {
+    return ReadableStream._(_delegate.stream());
+  }
+
+  Future<String> text() => _delegate.text();
+
+  Future<ByteBuffer> arrayBuffer() => _delegate.arrayBuffer();
 }
 
 class ReadableStream {
@@ -407,10 +476,12 @@ extension on RequestInit {
 
 Future<Response> fetch(Resource resource, [RequestInit? init]) async {
   return Response._(
-    await promiseToFuture(interop.fetch(
-      requestFromResource(resource),
-      jsify(init?.toJson() ?? {}),
-    )),
+    await promiseToFuture(
+      interop.fetch(
+        requestFromResource(resource),
+        jsify(init?.toJson() ?? {}),
+      ),
+    ),
   );
 }
 
