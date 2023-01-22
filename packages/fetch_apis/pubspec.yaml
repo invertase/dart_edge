@@ -6,7 +6,10 @@ environment:
 
 dependencies:
   freezed_annotation: ^2.2.0
-  js_bindings: ^0.0.7
+  js_bindings:
+    git:
+      url: https://github.com/Ehesp/js_bindings.git
+      ref: main
   js: ^0.6.5
 
 dev_dependencies:

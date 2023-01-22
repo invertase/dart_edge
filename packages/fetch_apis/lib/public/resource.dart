@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'fetch_apis.dart';
+import 'request.dart';
 
 part 'resource.freezed.dart';
 
