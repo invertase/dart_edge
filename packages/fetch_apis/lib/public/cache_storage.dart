@@ -1,7 +1,6 @@
 import 'dart:js_util';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import '../interop/fetch_interop.dart' as interop;
 import '../interop/cache_interop.dart' as interop;
 import 'cache.dart';
 import 'request.dart';

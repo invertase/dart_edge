@@ -12,7 +12,7 @@ part 'resource.freezed.dart';
   map: FreezedMapOptions.none,
 )
 class Resource with _$Resource {
-  const factory Resource(String url) = UrlType;
-  const factory Resource.uri(Uri uri) = UriType;
-  const factory Resource.request(Request request) = RequestType;
+  const factory Resource(String url) = StringValue;
+  const factory Resource.uri(Uri uri) = UriValue;
+  const factory Resource.request(Request request) = RequestValue;
 }

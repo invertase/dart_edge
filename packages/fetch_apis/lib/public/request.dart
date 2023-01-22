@@ -40,7 +40,7 @@ class Request implements Body {
   Request clone() => Request._(_delegate);
 
   @override
-  Future<ByteBuffer> arrayBuffer() async => _delegate.arrayBuffer();
+  Future<ByteBuffer> arrayBuffer() => _delegate.arrayBuffer();
 
   @override
   Future<Object> blob() async => blobFromJsObject(await _delegate.blob());
@@ -64,7 +64,7 @@ class Request implements Body {
       interop.dartify(await (_delegate as interop.Body).json());
 
   @override
-  Future<String> text() async => _delegate.text();
+  Future<String> text() => _delegate.text();
 
   // TODO extension
   // IncomingRequestCfProperties? get cf => _delegate.cf;

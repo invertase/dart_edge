@@ -4,7 +4,6 @@ import 'form_data.dart';
 import 'readable_stream.dart';
 
 abstract class Body {
-  // TODO we should have our own ReadableStream
   ReadableStream? get body;
   bool get bodyUsed;
   Future<String> text();

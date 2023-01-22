@@ -27,8 +27,8 @@ mixin _$Resource {
 
 /// @nodoc
 
-class _$UrlType implements UrlType {
-  const _$UrlType(this.url);
+class _$StringValue implements StringValue {
+  const _$StringValue(this.url);
 
   @override
   final String url;
@@ -42,7 +42,7 @@ class _$UrlType implements UrlType {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UrlType &&
+            other is _$StringValue &&
             (identical(other.url, url) || other.url == url));
   }
 
@@ -60,16 +60,16 @@ class _$UrlType implements UrlType {
   }
 }
 
-abstract class UrlType implements Resource {
-  const factory UrlType(final String url) = _$UrlType;
+abstract class StringValue implements Resource {
+  const factory StringValue(final String url) = _$StringValue;
 
   String get url;
 }
 
 /// @nodoc
 
-class _$UriType implements UriType {
-  const _$UriType(this.uri);
+class _$UriValue implements UriValue {
+  const _$UriValue(this.uri);
 
   @override
   final Uri uri;
@@ -83,7 +83,7 @@ class _$UriType implements UriType {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UriType &&
+            other is _$UriValue &&
             (identical(other.uri, uri) || other.uri == uri));
   }
 
@@ -101,16 +101,16 @@ class _$UriType implements UriType {
   }
 }
 
-abstract class UriType implements Resource {
-  const factory UriType(final Uri uri) = _$UriType;
+abstract class UriValue implements Resource {
+  const factory UriValue(final Uri uri) = _$UriValue;
 
   Uri get uri;
 }
 
 /// @nodoc
 
-class _$RequestType implements RequestType {
-  const _$RequestType(this.request);
+class _$RequestValue implements RequestValue {
+  const _$RequestValue(this.request);
 
   @override
   final Request request;
@@ -124,7 +124,7 @@ class _$RequestType implements RequestType {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RequestType &&
+            other is _$RequestValue &&
             (identical(other.request, request) || other.request == request));
   }
 
@@ -142,8 +142,8 @@ class _$RequestType implements RequestType {
   }
 }
 
-abstract class RequestType implements Resource {
-  const factory RequestType(final Request request) = _$RequestType;
+abstract class RequestValue implements Resource {
+  const factory RequestValue(final Request request) = _$RequestValue;
 
   Request get request;
 }
