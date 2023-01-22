@@ -18,7 +18,8 @@ export 'public/body.dart' show Body;
 export 'public/cache_storage.dart' show CacheStorage, caches;
 export 'public/cache.dart' show Cache;
 export 'public/fetch_event.dart' show FetchEvent;
-export 'public/form_data.dart' show FormData; // TODO FormDataEntryValue
+export 'public/form_data.dart'
+    show FormData, FormDataEntryValue, FormDataEntryFile;
 export 'public/headers.dart' show Headers;
 export 'public/readable_stream.dart' show ReadableStream;
 export 'public/request_init.dart' show RequestInit;
@@ -42,7 +43,7 @@ void addFetchEventListener(Null Function(FetchEvent event) listener) {
   // The js_bindings package assumes that the global object is `window`,
   // but in a worker enbironment, it is `self`.
   if (js.context['window'] == null) js.context['window'] = js.context['self'];
-  
+
   interop.addEventListener(
     'fetch',
     js.allowInterop((interop.ExtendableEvent delegate) {
