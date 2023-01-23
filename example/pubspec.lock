@@ -137,12 +137,10 @@ packages:
   js_bindings:
     dependency: transitive
     description:
-      path: "."
-      ref: main
-      resolved-ref: "79568d8bef4b43e7a6e64385391526a2b49611ec"
-      url: "https://github.com/Ehesp/js_bindings.git"
-    source: git
-    version: "0.0.7"
+      name: js_bindings
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.8"
   json_annotation:
     dependency: transitive
     description:

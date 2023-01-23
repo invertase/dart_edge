@@ -18,7 +18,7 @@ extension ResponseInitExtension on ResponseInit {
     return {
       if (status != null) 'status': status,
       if (statusText != null) 'statusText': statusText,
-      if (headers != null) 'headers': headers,
+      if (headers != null) 'headers': headers!.delegate,
     };
   }
 }
