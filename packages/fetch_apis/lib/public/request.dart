@@ -25,7 +25,7 @@ class Request implements Body {
         );
 
   String get method => _delegate.method;
-  String get url => _delegate.url;
+  Uri get url => Uri.parse(_delegate.url);
   Headers get headers => headersFromJsObject(_delegate.headers);
   interop.RequestDestination get destination => _delegate.destination;
   String get referrer => _delegate.referrer;

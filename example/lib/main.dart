@@ -7,7 +7,7 @@ const shouldUseCache = true;
 void main() {
   addFetchEventListener((FetchEvent event) {
     event.respondWith(Future(() async {
-      if (event.request.url.contains('favicon.ico')) {
+      if (event.request.url.toString().contains('favicon.ico')) {
         return Response(
           'Not found',
           ResponseInit(status: 404),
