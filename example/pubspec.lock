@@ -130,9 +130,11 @@ packages:
   js_bindings:
     dependency: transitive
     description:
-      name: js_bindings
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "9744c06443a4427f80f23b1c198c9690a60d8246"
+      resolved-ref: "9744c06443a4427f80f23b1c198c9690a60d8246"
+      url: "https://github.com/Ehesp/js_bindings"
+    source: git
     version: "0.0.9"
   json_annotation:
     dependency: transitive
@@ -320,6 +322,13 @@ packages:
     dependency: "direct overridden"
     description:
       path: "../packages/v8_runtime"
+      relative: true
+    source: path
+    version: "0.0.1"
+  vercel_edge:
+    dependency: "direct main"
+    description:
+      path: "../packages/vercel_edge"
       relative: true
     source: path
     version: "0.0.1"

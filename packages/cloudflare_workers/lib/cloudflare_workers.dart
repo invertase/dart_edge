@@ -36,15 +36,12 @@ external set __dartFetchHandler(
         f);
 
 class CloudflareWorkers {
-  final FutureOr<Response> Function(Request event, Environment env, ExecutionContext ctx)?
-      fetch;
+  final FutureOr<Response> Function(
+      Request event, Environment env, ExecutionContext ctx)? fetch;
 
   CloudflareWorkers({
     this.fetch,
   }) {
-    // Internal interop thinks its a window, but it's a worker so use self instead.
-    js.context['window'] = js.context['self'];
-
     if (fetch != null) {
       __dartFetchHandler = allowInterop(
           (interop.Request req, dynamic env, interop.ExecutionContext ctx) {

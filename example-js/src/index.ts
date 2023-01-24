@@ -9,14 +9,7 @@
  */
 
 export interface Env {
-	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-	// MY_KV_NAMESPACE: KVNamespace;
-	//
-	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	// MY_DURABLE_OBJECT: DurableObjectNamespace;
-	//
-	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
+	MY_DURABLE_OBJECT: DurableObjectNamespace;
 }
 
 export default {
@@ -25,8 +18,9 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<Response> {
-		const h = new HTMLRewriter();
-		
+		env.MY_DURABLE_OBJECT.idFromName('doo');
+
+
 		return new Response("Hello World!");
 	},
 };

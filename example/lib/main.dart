@@ -3,17 +3,22 @@ import 'dart:typed_data';
 import 'dart:js';
 import 'package:js_bindings/js_bindings.dart' as interop;
 import 'package:cloudflare_workers/cloudflare_workers.dart';
+import 'package:vercel_edge/vercel_edge.dart';
 import 'package:workers_dart_example/element_handler.dart';
 
 void main() {
+  VercelEdge(fetch: (request) {
+    return Response('Hello World From Dart!');
+  });
+
   CloudflareWorkers(
     fetch: (request, env, ctx) {
-      // final foo = env.read<MyDurableObject>('TODO');
-      final kv = env.getKVNamespace('TODO');
-      ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
-        print('waitUntil done');
-      }));
-      return Response('Hello World');
+      // final kv = env.getKVNamespace('TODO');
+
+      // ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
+      //   print('waitUntil done');
+      // }));
+      // return Response('Hello World');
     },
   );
 }
@@ -26,10 +31,10 @@ void main() {
 //   );
 // }
 
-const shouldUseCache = true;
-const apiBaseUrl = 'https://api.zapp.run';
-const projectsBaseUrl = 'https://projects.zapp.run';
-const sdkBaseUrl = 'https://sdk.zapp.run';
+// const shouldUseCache = true;
+// const apiBaseUrl = 'https://api.zapp.run';
+// const projectsBaseUrl = 'https://projects.zapp.run';
+// const sdkBaseUrl = 'https://sdk.zapp.run';
 
 // Future<ByteBuffer> fetchProjectArchive(
 //     FetchEvent event, Resource resource) async {
