@@ -19,6 +19,12 @@ class FetchEvent {
       return (await response).delegate;
     }));
   }
+
+  void waitUntil(FutureOr<void> future) {
+    return _delegate.waitUntilPromise(Future(() async {
+      await future;
+    }));
+  }
 }
 
 extension on interop.FetchEvent {
@@ -27,6 +33,9 @@ extension on interop.FetchEvent {
   /// so we force the incoming Future to be a Promise so the type is valid.
   void respondWithPromise(Future<interop.Response> r) =>
       js_util.callMethod(this, 'respondWith', [futureToPromise(r)]);
+
+  void waitUntilPromise(Future<void> r) =>
+      js_util.callMethod(this, 'waitUntil', [futureToPromise(r)]);
 }
 
 FetchEvent fetchEventFromJsObject(interop.FetchEvent fetchEvent) {

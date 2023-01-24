@@ -1,49 +1,133 @@
+import 'dart:typed_data';
+
 import 'package:fetch_apis/fetch_apis.dart';
 
 const shouldUseCache = true;
+const apiBaseUrl = 'https://api.zapp.run';
+const projectsBaseUrl = 'https://projects.zapp.run';
+
+Future<ByteBuffer> fetchProjectArchive(
+    FetchEvent event, Resource resource) async {
+  final cache = await caches.open('archives-cache');
+  final fromCache = await cache.match(resource);
+  if (fromCache != null) {
+    return fromCache.arrayBuffer();
+  }
+  final archiveBuffer =
+      await fetch(resource).then((response) => response.arrayBuffer());
+
+  event.waitUntil(
+    cache.put(
+      resource,
+      Response(
+        archiveBuffer,
+        ResponseInit(
+          headers: Headers({
+            "content-encoding": "gzip",
+            "content-type": "application/zip",
+            "content-disposition": 'attachment; filename=project.zip',
+            "cache-control": "public, max-age=604800",
+            // TODO 7 days right? new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toUTCString(),
+            "expires": DateTime.now().add(Duration(days: 7)).toUtc().toString(),
+          }),
+        ),
+      ),
+    ),
+  );
+
+  return archiveBuffer;
+}
 
 void main() {
   addFetchEventListener((FetchEvent event) {
     event.respondWith(Future(() async {
-      if (event.request.url.toString().contains('favicon.ico')) {
+      final url = event.request.url;
+      final params = url.queryParameters;
+      final cache = await caches.open('preview-zip-cache');
+      final path = event.request.url.path;
+      final theme = params['theme'] == 'dark' ? 'dark' : 'light';
+
+      String id = url.host.split('.').first;
+      id = id.split('-').last;
+
+      if (url.path == '/_qr.png') {
+        throw UnimplementedError('TODO QR Code');
+      }
+
+      final project = await fetch(Resource('$apiBaseUrl/project/$id'));
+
+      if (!project.ok) {
         return Response(
-          'Not found',
-          ResponseInit(status: 404),
+          'TODO HTML',
+          ResponseInit(
+            status: 404,
+            headers: Headers({
+              'content-encoding': 'gzip',
+              'content-type': 'text/html;charset=UTF-8',
+            }),
+          ),
         );
       }
 
-      return HTMLRewriter().on('h1', ElemetHandler(
-        element: (element) {
-          print('GOT H1 ELEMENT!');
-          print(element.tagName);
-          element.replace(
-              '<h1>Heh, not bad. <b>:D</b></h1>', ContentOptions(html: true));
-        },
-      )).onDocument(DocumentHandler(
-        comments: (comment) {
-          print('GOT COMMENT!');
-          print(comment.text);
-          comment.text = 'This is a modified comment';
-        },
-      )).transform(
-        Response(
-          '''<!DOCTYPE html>
-<html>
-  <head>
-    <title>My First Cloudflare Workers Site</title>
-  </head>
-  <body>
-    <h1>Hello, World!</h1>
-    <!-- This is a comment -->
-    <p>I'm hosted with Cloudflare Workers</p>
-  </body>
-</html>
-''',
-          ResponseInit(
-            headers: Headers({'content-type': 'text/html'}),
-          ),
-        ),
-      );
+      // TODO: type it?
+      final payload = (await project.json() as dynamic)!['payload'];
+      final sdk = payload['project']['meta']?['sdk'] ?? 'flutter';
+      final archiveUrl = '$projectsBaseUrl/${payload['project']['archive']}';
+
+      String archiveUrlCache = '$archiveUrl?file=$path';
+      if (path == '/') {
+        // For the index.html cache by title and description so that these show latest values when the project is updated.
+        archiveUrlCache =
+            '$archiveUrlCache&title=${payload['project']['title']}&description=${payload['project']['description']}';
+      }
+
+      final cachedHtmlResponse = await cache.match(Resource(archiveUrlCache));
+      if (cachedHtmlResponse != null) {
+        return cachedHtmlResponse;
+      }
+
+      final archiveBuffer = await fetchProjectArchive(event, Resource(archiveUrl));
+      final zip = {};
+
+//       if (event.request.url.toString().contains('favicon.ico')) {
+//         return Response(
+//           'Not found',
+//           ResponseInit(status: 404),
+//         );
+//       }
+
+//       return HTMLRewriter().on('h1', ElemetHandler(
+//         element: (element) {
+//           print('GOT H1 ELEMENT!');
+//           print(element.tagName);
+//           element.replace(
+//               '<h1>Heh, not bad. <b>:D</b></h1>', ContentOptions(html: true));
+//         },
+//       )).onDocument(DocumentHandler(
+//         comments: (comment) {
+//           print('GOT COMMENT!');
+//           print(comment.text);
+//           comment.text = 'This is a modified comment';
+//         },
+//       )).transform(
+//         Response(
+//           '''<!DOCTYPE html>
+// <html>
+//   <head>
+//     <title>My First Cloudflare Workers Site</title>
+//   </head>
+//   <body>
+//     <h1>Hello, World!</h1>
+//     <!-- This is a comment -->
+//     <p>I'm hosted with Cloudflare Workers</p>
+//   </body>
+// </html>
+// ''',
+//           ResponseInit(
+//             headers: Headers({'content-type': 'text/html'}),
+//           ),
+//         ),
+//       );
 
       // if (event.request.url.toString().contains('favicon.ico')) {
       //   return Response(

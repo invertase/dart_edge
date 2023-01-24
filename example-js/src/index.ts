@@ -26,6 +26,7 @@ export default {
 		ctx: ExecutionContext
 	): Promise<Response> {
 		const h = new HTMLRewriter();
+		ctx.waitUntil
 		return new Response("Hello World!");
 	},
 };
