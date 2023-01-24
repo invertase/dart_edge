@@ -6,6 +6,7 @@ environment:
 
 dependencies:
   v8_runtime: 0.0.1
+  js_bindings: ^0.0.8
   js: ^0.6.5
 
 dev_dependencies:

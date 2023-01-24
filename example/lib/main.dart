@@ -1,6 +1,7 @@
+import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:v8_runtime/v8_runtime.dart';
+import 'package:cloudflare_workers/cloudflare_workers.dart';
 import 'package:workers_dart_example/element_handler.dart';
 
 const shouldUseCache = true;
@@ -53,6 +54,7 @@ class Foo extends ElementHandler {
 void main() {
   addFetchEventListener((FetchEvent event) {
     event.respondWith(Future(() async {
+      print(event.request.cf.city);
       if (event.request.url.toString().contains('favicon.ico')) {
         return Response('', ResponseInit(status: 404));
       }

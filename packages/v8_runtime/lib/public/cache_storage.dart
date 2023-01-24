@@ -11,8 +11,6 @@ class CacheStorage {
 
   CacheStorage._(this._delegate);
 
-  Cache get defaultCache => cacheFromJsObject(interop.defaultCache);
-
   Future<bool> delete(String cacheName) async {
     return promiseToFuture(_delegate.delete(cacheName));
   }

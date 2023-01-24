@@ -121,7 +121,7 @@ packages:
     source: hosted
     version: "0.6.5"
   js_bindings:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: js_bindings
       url: "https://pub.dartlang.org"

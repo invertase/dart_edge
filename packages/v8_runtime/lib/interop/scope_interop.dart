@@ -1,4 +1,3 @@
-import 'dart:js_util' as js_util;
 import 'package:js/js.dart' as js;
 import 'package:js_bindings/js_bindings.dart' as interop;
 

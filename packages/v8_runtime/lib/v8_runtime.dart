@@ -2,20 +2,6 @@ library fetch_apis;
 
 export 'dart:async' show FutureOr;
 
-// TODO: this should be in a sep package
-export 'cf_html_rewriter.dart'
-    show
-        HTMLRewriter,
-        ContentOptions,
-        ElementHandler,
-        DocumentHandler,
-        Doctype,
-        Comment,
-        Text,
-        DocumentEnd,
-        Element,
-        EndTag;
-
 export 'public/top.dart';
 
 export 'public/abort_signal.dart' show AbortSignal;

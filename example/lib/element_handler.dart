@@ -1,5 +1,4 @@
-
-import 'package:v8_runtime/v8_runtime.dart';
+import 'package:cloudflare_workers/cloudflare_workers.dart';
 
 import 'main.dart';
 

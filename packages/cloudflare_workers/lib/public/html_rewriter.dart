@@ -1,12 +1,10 @@
-// TODO move this to a separate package
-
 import 'dart:async';
 import 'dart:js';
 
-import './interop/promise_interop.dart';
-
-import 'interop/cf_html_rewriter_interop.dart' as interop;
-import 'public/response.dart';
+import 'package:v8_runtime/v8_runtime.dart';
+import 'package:v8_runtime/public/response.dart';
+import 'package:v8_runtime/interop/promise_interop.dart';
+import '../interop/html_rewriter_interop.dart' as interop;
 
 class HTMLRewriter {
   final interop.HTMLRewriter _delegate;
