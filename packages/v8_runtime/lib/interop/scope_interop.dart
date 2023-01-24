@@ -38,3 +38,6 @@ external int setTimeout(
 
 @js.JS('clearTimeout')
 external void clearTimeout(int handle);
+
+@js.JS('_fetch')
+external interop.FetchEvent get fooFetch;
