@@ -3,6 +3,8 @@
 import 'dart:async';
 import 'dart:js';
 
+import 'package:fetch_apis/interop/promise_interop.dart';
+
 import 'interop/cf_html_rewriter_interop.dart' as interop;
 import 'public/response.dart';
 
@@ -49,17 +51,25 @@ abstract class ElementHandler {
 }
 
 extension on ElementHandler {
-  interop.ElemetHandler get _delegate => interop.ElemetHandler(
-        element: allowInterop(
-          (interop.Element obj) => element(Element._(obj)),
-        ),
-        comments: allowInterop(
-          (interop.Comment obj) => comments(Comment._(obj)),
-        ),
-        text: allowInterop(
-          (interop.Text obj) => text(Text._(obj)),
-        ),
-      );
+  interop.ElementHandler get _delegate {
+    return interop.ElementHandler(
+      element: allowInterop(
+        (interop.Element obj) {
+          return futureToPromise(Future(() => element(Element._(obj))));
+        },
+      ),
+      comments: allowInterop(
+        (interop.Comment obj) {
+          return futureToPromise(Future(() => comments(Comment._(obj))));
+        },
+      ),
+      text: allowInterop(
+        (interop.Text obj) {
+          return futureToPromise(Future(() => text(Text._(obj))));
+        },
+      ),
+    );
+  }
 }
 
 abstract class DocumentHandler {
@@ -70,20 +80,42 @@ abstract class DocumentHandler {
 }
 
 extension on DocumentHandler {
-  interop.DocumentHandler get _delegate => interop.DocumentHandler(
-        doctype: allowInterop(
-          (interop.Doctype obj) => doctype(Doctype._(obj)),
-        ),
-        comments: allowInterop(
-          (interop.Comment obj) => comments(Comment._(obj)),
-        ),
-        text: allowInterop(
-          (interop.Text obj) => text(Text._(obj)),
-        ),
-        end: allowInterop(
-          (interop.DocumentEnd obj) => end(DocumentEnd._(obj)),
-        ),
-      );
+  interop.DocumentHandler get _delegate {
+    return interop.DocumentHandler(
+      doctype: allowInterop(
+        (interop.Doctype obj) {
+          return futureToPromise(Future(() => doctype(Doctype._(obj))));
+        },
+      ),
+      comments: allowInterop(
+        (interop.Comment obj) {
+          return futureToPromise(Future(() => comments(Comment._(obj))));
+        },
+      ),
+      text: allowInterop(
+        (interop.Text obj) {
+          return futureToPromise(Future(() => text(Text._(obj))));
+        },
+      ),
+      end: allowInterop(
+        (interop.DocumentEnd obj) {
+          return futureToPromise(Future(() => end(DocumentEnd._(obj))));
+        },
+      ),
+    );
+  }
+  // doctype: allowInterop(
+  //   (interop.Doctype obj) => doctype(Doctype._(obj)),
+  // ),
+  // comments: allowInterop(
+  //   (interop.Comment obj) => comments(Comment._(obj)),
+  // ),
+  // text: allowInterop(
+  //   (interop.Text obj) => text(Text._(obj)),
+  // ),
+  // end: allowInterop(
+  //   (interop.DocumentEnd obj) => end(DocumentEnd._(obj)),
+  // ),
 }
 
 class Doctype {

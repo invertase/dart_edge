@@ -1,12 +1,12 @@
 @JS()
 library html_rewriter;
 
-import 'dart:async';
 import 'dart:js_util' as js_util;
+import 'package:fetch_apis/interop/promise_interop.dart';
 import 'package:js/js.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
-typedef HandlerMethod<T> = FutureOr<void> Function(T type);
+typedef HandlerMethod<T> = Promise<void> Function(T type);
 
 @JS()
 @staticInterop
@@ -15,7 +15,7 @@ class HTMLRewriter {
 }
 
 extension PropsHTMLRewriter on HTMLRewriter {
-  HTMLRewriter on(String selector, ElemetHandler handler) =>
+  HTMLRewriter on(String selector, ElementHandler handler) =>
       js_util.callMethod(this, 'on', [selector, handler]);
 
   HTMLRewriter onDocument(DocumentHandler handler) =>
@@ -28,8 +28,8 @@ extension PropsHTMLRewriter on HTMLRewriter {
 @anonymous
 @JS()
 @staticInterop
-class ElemetHandler {
-  external factory ElemetHandler({
+class ElementHandler {
+  external factory ElementHandler({
     HandlerMethod<Element>? element,
     HandlerMethod<Comment>? comments,
     HandlerMethod<Text>? text,
