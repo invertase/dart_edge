@@ -1,9 +1,9 @@
-import 'package:fetch_apis/public/readable_stream.dart';
 import 'dart:typed_data';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
 
 import 'blob.dart';
+import 'readable_stream.dart';
 
 // TODO: implement or extend?
 class File implements Blob {

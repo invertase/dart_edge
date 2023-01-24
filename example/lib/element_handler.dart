@@ -1,6 +1,5 @@
-import 'dart:async';
 
-import 'package:fetch_apis/cf_html_rewriter.dart';
+import 'package:v8_runtime/v8_runtime.dart';
 
 import 'main.dart';
 

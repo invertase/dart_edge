@@ -1,4 +1,4 @@
-name: fetch_apis
+name: v8_runtime
 version: 0.0.1
 
 environment:

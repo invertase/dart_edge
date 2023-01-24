@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: fetch_apis
+# melos_managed_dependency_overrides: v8_runtime
 dependency_overrides:
-  fetch_apis:
-    path: ../fetch_apis
+  v8_runtime:
+    path: ../v8_runtime

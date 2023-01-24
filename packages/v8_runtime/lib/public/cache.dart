@@ -1,9 +1,9 @@
 import 'dart:js_util';
 
-import 'package:fetch_apis/public/response.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
 import '../interop/utils_interop.dart' as interop;
+import 'response.dart';
 import 'resource.dart';
 
 class Cache {

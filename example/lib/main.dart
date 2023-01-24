@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:fetch_apis/fetch_apis.dart';
+import 'package:v8_runtime/v8_runtime.dart';
 import 'package:workers_dart_example/element_handler.dart';
 
 const shouldUseCache = true;

@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:js';
 
-import 'package:fetch_apis/interop/promise_interop.dart';
+import './interop/promise_interop.dart';
 
 import 'interop/cf_html_rewriter_interop.dart' as interop;
 import 'public/response.dart';
