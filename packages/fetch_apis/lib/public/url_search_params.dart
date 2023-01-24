@@ -1,6 +1,10 @@
 import 'package:js/js_util.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
+// TODO: Not sure if we actually need this. Uri.queryParameters/All returns
+// the same thing as this class which users are comfortable with. If any API
+// requires this as an arg, we can shim it in the interop layer.
+
 class URLSearchParams {
   final interop.URLSearchParams _delegate;
 

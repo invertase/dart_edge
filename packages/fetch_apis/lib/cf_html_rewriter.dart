@@ -13,7 +13,7 @@ class HTMLRewriter {
 
   HTMLRewriter() : _delegate = interop.HTMLRewriter();
 
-  HTMLRewriter on(String selector, ElemetHandler handler) {
+  HTMLRewriter on(String selector, ElementHandler handler) {
     return HTMLRewriter._(_delegate.on(selector, handler._delegate));
   }
 
@@ -42,47 +42,48 @@ extension on ContentOptions {
   interop.ContentOptions get delegate => _delegate;
 }
 
-class ElemetHandler {
-  final interop.ElemetHandler _delegate;
-  ElemetHandler({
-    interop.HandlerFunction<Element>? element,
-    interop.HandlerFunction<Comment>? comments,
-    interop.HandlerFunction<Text>? text,
-  }) : _delegate = interop.ElemetHandler(
-          element: allowInterop(
-            (interop.Element obj) => element?.call(Element._(obj)),
-          ),
-          comments: allowInterop(
-            (interop.Comment obj) => comments?.call(Comment._(obj)),
-          ),
-          text: allowInterop(
-            (interop.Text obj) => text?.call(Text._(obj)),
-          ),
-        );
+abstract class ElementHandler {
+  FutureOr<void> element(Element element) {}
+  FutureOr<void> comments(Comment comment) {}
+  FutureOr<void> text(Text text) {}
 }
 
-class DocumentHandler {
-  final interop.DocumentHandler _delegate;
+extension on ElementHandler {
+  interop.ElemetHandler get _delegate => interop.ElemetHandler(
+        element: allowInterop(
+          (interop.Element obj) => element(Element._(obj)),
+        ),
+        comments: allowInterop(
+          (interop.Comment obj) => comments(Comment._(obj)),
+        ),
+        text: allowInterop(
+          (interop.Text obj) => text(Text._(obj)),
+        ),
+      );
+}
 
-  DocumentHandler({
-    interop.HandlerFunction<Doctype>? doctype,
-    interop.HandlerFunction<Comment>? comments,
-    interop.HandlerFunction<Text>? text,
-    interop.HandlerFunction<DocumentEnd>? end,
-  }) : _delegate = interop.DocumentHandler(
-          doctype: allowInterop(
-            (interop.Doctype obj) => doctype?.call(Doctype._(obj)),
-          ),
-          comments: allowInterop(
-            (interop.Comment obj) => comments?.call(Comment._(obj)),
-          ),
-          text: allowInterop(
-            (interop.Text obj) => text?.call(Text._(obj)),
-          ),
-          end: allowInterop(
-            (interop.DocumentEnd obj) => end?.call(DocumentEnd._(obj)),
-          ),
-        );
+abstract class DocumentHandler {
+  FutureOr<void> doctype(Doctype element) {}
+  FutureOr<void> comments(Comment comment) {}
+  FutureOr<void> text(Text text) {}
+  FutureOr<void> end(DocumentEnd text) {}
+}
+
+extension on DocumentHandler {
+  interop.DocumentHandler get _delegate => interop.DocumentHandler(
+        doctype: allowInterop(
+          (interop.Doctype obj) => doctype(Doctype._(obj)),
+        ),
+        comments: allowInterop(
+          (interop.Comment obj) => comments(Comment._(obj)),
+        ),
+        text: allowInterop(
+          (interop.Text obj) => text(Text._(obj)),
+        ),
+        end: allowInterop(
+          (interop.DocumentEnd obj) => end(DocumentEnd._(obj)),
+        ),
+      );
 }
 
 class Doctype {

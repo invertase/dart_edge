@@ -1,10 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:fetch_apis/fetch_apis.dart';
+import 'package:workers_dart_example/element_handler.dart';
 
 const shouldUseCache = true;
 const apiBaseUrl = 'https://api.zapp.run';
 const projectsBaseUrl = 'https://projects.zapp.run';
+const sdkBaseUrl = 'https://sdk.zapp.run';
 
 Future<ByteBuffer> fetchProjectArchive(
     FetchEvent event, Resource resource) async {
@@ -86,9 +88,41 @@ void main() {
         return cachedHtmlResponse;
       }
 
-      final archiveBuffer = await fetchProjectArchive(event, Resource(archiveUrl));
+      final archiveBuffer =
+          await fetchProjectArchive(event, Resource(archiveUrl));
       final zip = {};
 
+      // ...
+
+      final handler = PreviewElementHandler(
+        flutterVersion: '', // TODO
+        flutterVersionRevision: '', // TODO
+        projectBuildId: '', // TODO
+        theme: theme,
+        sdk: sdk,
+      );
+
+      var response = HTMLRewriter()
+          .on('head', handler)
+          .on('script', handler)
+          .on('body', handler)
+          .transform(
+            Response(
+              'TODO new HTML',
+              ResponseInit(
+                headers: Headers({
+                  'content-encoding': 'gzip',
+                  'content-type': 'text/html;charset=UTF-8',
+                  // We only want brief cache to prevent spam refreshing the page,
+                  // but low enough to allow updates to project name and description as well as user changes to the
+                  // project index.html.
+                  "cache-control": "public, max-age=5",
+                }),
+              ),
+            ),
+          );
+
+      throw UnimplementedError();
 //       if (event.request.url.toString().contains('favicon.ico')) {
 //         return Response(
 //           'Not found',

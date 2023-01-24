@@ -13,7 +13,14 @@ class FormData {
 
   // TODO - FormDataEntryValue - see target
   void append(String name, FormDataEntryValue value) {
-    throw UnimplementedError();
+    value.when(file: (value) {
+      throw UnimplementedError();
+    }, string: (value) {
+      // TODO even though the JS api accepts a string, it seems to only
+      // accept a blob?
+      throw UnimplementedError();
+      // _delegate.append(name, value);
+    });
     // _delegate.append(name, value?.delegate, filename);
   }
 
@@ -48,7 +55,7 @@ class FormData {
   }
 
   // TODO - FormDataEntryValue - see target
-  FormDataEntryValue operator [](String name) {
+  FormDataEntryValue? operator [](String name) {
     final value = _delegate.mGet(name);
 
     if (value is String) {
@@ -57,7 +64,7 @@ class FormData {
       return FormDataEntryValue.file(FormDataEntryFile());
     }
 
-    throw StateError('Unknown FormDataEntryValue type: $value');
+    return null;
   }
 }
 

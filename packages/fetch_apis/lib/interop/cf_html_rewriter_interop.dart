@@ -6,7 +6,7 @@ import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
-typedef HandlerFunction<T> = FutureOr<void> Function(T type);
+typedef HandlerMethod<T> = FutureOr<void> Function(T type);
 
 @JS()
 @staticInterop
@@ -30,9 +30,9 @@ extension PropsHTMLRewriter on HTMLRewriter {
 @staticInterop
 class ElemetHandler {
   external factory ElemetHandler({
-    HandlerFunction<Element>? element,
-    HandlerFunction<Comment>? comments,
-    HandlerFunction<Text>? text,
+    HandlerMethod<Element>? element,
+    HandlerMethod<Comment>? comments,
+    HandlerMethod<Text>? text,
   });
 }
 
@@ -41,10 +41,10 @@ class ElemetHandler {
 @staticInterop
 class DocumentHandler {
   external factory DocumentHandler({
-    HandlerFunction<Doctype>? doctype,
-    HandlerFunction<Comment>? comments,
-    HandlerFunction<Text>? text,
-    HandlerFunction<DocumentEnd>? end,
+    HandlerMethod<Doctype>? doctype,
+    HandlerMethod<Comment>? comments,
+    HandlerMethod<Text>? text,
+    HandlerMethod<DocumentEnd>? end,
   });
 }
 

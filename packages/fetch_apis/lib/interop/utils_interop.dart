@@ -20,7 +20,7 @@ external List<Object?> objectKeys(Object? object);
 @js.JS('undefined')
 external Object get jsUndefined;
 
-bool _isBasicType(value) {
+bool isBasicType(value) {
   if (value == null || value is num || value is bool || value is String) {
     return true;
   }
@@ -28,7 +28,7 @@ bool _isBasicType(value) {
 }
 
 T dartify<T>(dynamic jsObject) {
-  if (_isBasicType(jsObject)) {
+  if (isBasicType(jsObject)) {
     return jsObject as T;
   }
 
