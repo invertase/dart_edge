@@ -8,17 +8,16 @@ import 'package:workers_dart_example/element_handler.dart';
 
 void main() {
   VercelEdge(fetch: (request) {
+    // TODO; does wait until work in Vercel?
     return Response('Hello World From Dart!');
   });
 
   CloudflareWorkers(
     fetch: (request, env, ctx) {
-      // final kv = env.getKVNamespace('TODO');
-
-      // ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
-      //   print('waitUntil done');
-      // }));
-      // return Response('Hello World');
+      ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
+        print('waitUntil done');
+      }));
+      return Response('Hello World');
     },
   );
 }

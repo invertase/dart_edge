@@ -1,4 +1,4 @@
-import '../interop/execution_context.dart' as interop;
+import '../interop/execution_context_interop.dart' as interop;
 
 class ExecutionContext {
   final interop.ExecutionContext _delegate;

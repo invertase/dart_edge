@@ -7,7 +7,7 @@ import 'package:v8_runtime/public/request.dart';
 import 'package:v8_runtime/public/response.dart';
 import 'package:v8_runtime/public/fetch_event.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
-import './interop/execution_context.dart' as interop;
+import 'interop/execution_context_interop.dart' as interop;
 import './public/execution_context.dart';
 import './public/environment.dart';
 import 'dart:js' as js;
