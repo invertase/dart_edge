@@ -9,6 +9,7 @@ void main() {
   CloudflareWorkers(
     fetch: (request, env, ctx) {
       // final foo = env.read<MyDurableObject>('TODO');
+      final kv = env.getKVNamespace('TODO');
       ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
         print('waitUntil done');
       }));

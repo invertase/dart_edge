@@ -1,6 +1,7 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
-import 'package:v8_runtime/interop/promise_interop.dart';
+
+import 'kv_namespace_interop.dart';
 
 @JS()
 @staticInterop
@@ -9,5 +10,14 @@ class Environment {
 }
 
 extension PropsEnvironment on Environment {
-  dynamic read(String name) => js_util.getProperty(this, name);
+  KVNamespace getKVNamespace(String name) {
+    final obj = js_util.getProperty(this, name);
+    if (obj == null) {
+      // TODO better error
+      throw StateError(
+        'KVNamespace binding not found: $name - ensure it has been added to the wrangler.toml',
+      );
+    }
+    return obj;
+  }
 }
