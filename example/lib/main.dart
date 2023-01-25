@@ -1,7 +1,7 @@
 import 'package:cloudflare_workers/cloudflare_workers.dart';
 
-class ElliotDurableObject extends DurableObject {
-  ElliotDurableObject(super.name);
+class Foo extends DurableObject {
+  Foo(super.name);
 
   @override
   FutureOr<Response> fetch(Request request) async {
@@ -21,7 +21,7 @@ class ElliotDurableObject extends DurableObject {
 
 void main() {
   CloudflareWorkers(
-    durableObjects: [ElliotDurableObject('ElliotDurableObject')],
+    durableObjects: [Foo('ElliotDurableObject')],
     fetch: (request, env, ctx) {
       if (request.url.toString().contains('favicon.ico')) {
         return Response('favicon.ico');
