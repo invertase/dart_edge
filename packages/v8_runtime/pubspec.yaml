@@ -9,7 +9,7 @@ dependencies:
   js_bindings: 
     git:
       url: https://github.com/Ehesp/js_bindings
-      ref: 9744c06443a4427f80f23b1c198c9690a60d8246
+      ref: 8f26a8ed951d559405bd08d12dea7bade7f7e9c2
   js: ^0.6.5
 
 dev_dependencies:

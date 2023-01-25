@@ -12,9 +12,12 @@ import './public/execution_context.dart';
 import './public/environment.dart';
 import 'dart:js' as js;
 
+import 'public/durable_object.dart';
+
 export 'package:v8_runtime/v8_runtime.dart';
 
 export './public/cache_storage.dart';
+export './public/durable_object.dart';
 export './public/html_rewriter.dart'
     show
         HTMLRewriter,
@@ -36,11 +39,14 @@ external set __dartFetchHandler(
         f);
 
 class CloudflareWorkers {
+  final Iterable<DurableObject>? durableObjects;
+
   final FutureOr<Response> Function(
       Request event, Environment env, ExecutionContext ctx)? fetch;
 
   CloudflareWorkers({
     this.fetch,
+    this.durableObjects,
   }) {
     if (fetch != null) {
       __dartFetchHandler = allowInterop(
@@ -54,6 +60,10 @@ class CloudflareWorkers {
           return response.delegate;
         }));
       });
+    }
+
+    if (durableObjects != null) {
+      
     }
   }
 }

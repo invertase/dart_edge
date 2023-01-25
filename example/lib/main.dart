@@ -1,23 +1,41 @@
-import 'dart:math';
-import 'dart:typed_data';
-import 'dart:js';
-import 'package:js_bindings/js_bindings.dart' as interop;
 import 'package:cloudflare_workers/cloudflare_workers.dart';
-import 'package:vercel_edge/vercel_edge.dart';
-import 'package:workers_dart_example/element_handler.dart';
+
+class ElliotDurableObject extends DurableObject {
+  ElliotDurableObject(super.name);
+
+  @override
+  FutureOr<Response> fetch(Request request) async {
+    print(env);
+    // TODO examples put this in the constructor... hmm
+    state.blockConcurrencyWhile(() async {
+      print('blockConcurrencyWhile');
+      await Future.delayed(Duration(seconds: 2));
+      print('blockConcurrencyWhile done');
+    });
+    state.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
+      print('waitUntil done');
+    }));
+    return Response('Hello World From ElliotDurableObject!');
+  }
+}
 
 void main() {
-  VercelEdge(fetch: (request) {
-    // TODO; does wait until work in Vercel?
-    return Response('Hello World From Dart!');
-  });
-
   CloudflareWorkers(
+    durableObjects: [ElliotDurableObject('ElliotDurableObject')],
     fetch: (request, env, ctx) {
-      ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
-        print('waitUntil done');
-      }));
-      return Response('Hello World');
+      if (request.url.toString().contains('favicon.ico')) {
+        return Response('favicon.ico');
+      }
+
+      final durable = env.getDurableObjectNamespace('ZAPP_STATS_WORKER');
+      final id = durable.idFromName('foo');
+      final instance = durable.get(id);
+
+      return instance.fetch(request);
+
+      // ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
+      //   print('waitUntil done');
+      // }));
     },
   );
 }

@@ -1,5 +1,59 @@
+import 'dart:async';
+import 'dart:js';
+import 'dart:js_util';
+
 import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:v8_runtime/interop/promise_interop.dart';
+import 'package:v8_runtime/public/request.dart';
+import 'package:v8_runtime/public/response.dart';
 import '../interop/durable_object_interop.dart' as interop;
+
+import 'environment.dart';
+
+abstract class DurableObject {
+  late final interop.DurableObject _delegate;
+
+  final String name;
+
+  DurableObjectState get state => DurableObjectState._(_delegate.state);
+  
+  Environment get env => environmentFromJsObject(_delegate.env);
+
+  DurableObject(this.name) {
+    // Create the delegate instance of the object.
+    _delegate = interop.DurableObject(fetch: allowInterop((fetchObj) {
+      return futureToPromise(Future(() async {
+        final r = await fetch(requestFromJsObject(fetchObj));
+        return r.delegate;
+      }));
+    }));
+
+    // Make sure the JS runtime has a place to store the objects
+    interop.durableObjects ??= jsify({});
+
+    interop.durableObjects = jsify({
+      ...dartify(interop.durableObjects) as Map,
+      name: _delegate,
+    });
+  }
+
+  FutureOr<Response> fetch(Request request);
+  FutureOr<void> alarm() {}
+}
+
+class DurableObjectState {
+  final interop.DurableObjectState _delegate;
+
+  DurableObjectState._(this._delegate);
+
+  DurableObjectId get id => DurableObjectId._(_delegate.id);
+  dynamic get storage => _delegate.storage;
+
+  void waitUntil(Future<void> future) => _delegate.waitUntil(future);
+
+  Future<T> blockConcurrencyWhile<T>(Future<T> Function() callback) =>
+      _delegate.blockConcurrencyWhile(allowInterop(callback));
+}
 
 class DurableObjectNamespace {
   final interop.DurableObjectNamespace _delegate;
@@ -15,7 +69,7 @@ class DurableObjectNamespace {
       DurableObjectStub._(_delegate.get(id._delegate));
 }
 
-DurableObjectNamespace kvNamespaceFromJsObject(
+DurableObjectNamespace durableObjectNamespaceFromJsObject(
         interop.DurableObjectNamespace obj) =>
     DurableObjectNamespace._(obj);
 
@@ -45,9 +99,10 @@ class Fetcher {
 
   Fetcher._(this._delegate);
 
-  Future<interop.Response> fetch(interop.Request resource,
-          [interop.RequestInit? init]) =>
-      _delegate.fetch(resource, init);
+  Future<Response> fetch(Request request, [interop.RequestInit? init]) async {
+    final response = await _delegate.fetch(request.delegate, init);
+    return responseFromJsObject(response);
+  }
 
   Socket connect(String address, [SocketOptions? options]) =>
       Socket._(_delegate.connect(address, options?._delegate));

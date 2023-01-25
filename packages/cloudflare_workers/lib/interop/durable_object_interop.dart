@@ -1,6 +1,55 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
+import 'package:js/js_util.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
+import 'environment_interop.dart' as interop;
+import 'package:v8_runtime/interop/promise_interop.dart';
+
+@JS('__durableObjects')
+external set durableObjects(dynamic value);
+
+@JS('__durableObjects')
+external dynamic get durableObjects;
+
+@anonymous
+@JS()
+class DurableObject {
+  external DurableObjectState get state;
+  external set state(DurableObjectState state);
+  external interop.Environment get env;
+  external set env(interop.Environment env);
+  external Promise<interop.Response> fetch(interop.Request request);
+  external factory DurableObject({
+    Promise<interop.Response> Function(interop.Request request) fetch,
+    dynamic state,
+  });
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectState {
+  external factory DurableObjectState();
+}
+
+extension PropsDurableObjectState on DurableObjectState {
+  DurableObjectId get id => js_util.getProperty(this, 'id');
+  // TODO
+  dynamic get storage => js_util.getProperty(this, 'storage');
+
+  void waitUntil(Future<void> f) =>
+      js_util.callMethod(this, 'waitUntil', [futureToPromise(f)]);
+
+  Future<T> blockConcurrencyWhile<T>(Future<T> Function() callback) {
+    return js_util.promiseToFuture(
+      js_util.callMethod(
+        this,
+        'blockConcurrencyWhile',
+        [allowInterop(callback)],
+      ),
+    );
+  }
+}
 
 @JS()
 @staticInterop
@@ -42,7 +91,8 @@ extension PropsFetcher on Fetcher {
   // TODO RequestInit<RequestInitCfProperties>
   Future<interop.Response> fetch(interop.Request resource,
           [interop.RequestInit? init]) =>
-      js_util.callMethod(this, 'fetch', [resource, init]);
+      js_util
+          .promiseToFuture(js_util.callMethod(this, 'fetch', [resource, init]));
 
   Socket connect(String address, [SocketOptions? options]) =>
       js_util.callMethod(this, 'connect', [address, options]);
@@ -63,6 +113,7 @@ extension PropsSocket on Socket {
   Future<void> close() => js_util.callMethod(this, 'close', []);
 }
 
+@anonymous
 @JS()
 @staticInterop
 class SocketOptions {

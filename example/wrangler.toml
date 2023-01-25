@@ -2,16 +2,26 @@ name = "dart-worker-example"
 compatibility_date = "2022-11-30"
 main = ".dart_tool/worker/entry.mjs"
 
-# [build]
+kv_namespaces = [
+  { binding = "TODO", id = "f09b02be8f6448a49b8b9d9a80bf9763", preview_id = "f09b02be8f6448a49b8b9d9a80bf9763" }
+]
+
+compatibility_flags = ["durable_object_alarms"]
+
+durable_objects.bindings = [
+  {name = "ZAPP_STATS_WORKER", class_name = "ElliotDurableObject"}
+]
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["ElliotDurableObject"]
+
+[build]
 # add -O4 to enable dart2js optimizations in prod
 # Note: --no-frequency-based-minification is required for server mode, 
 # otherwise typerrors; TypeError: Instance of 'minified:u<minified:N>': type 'minified:u<minified:N>' is not a subtype of type 'minified:u<dynamic>'
 # Prod:
-# command = "dart compile js -O4 --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
+command = "dart compile js -O1 --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
 # Local:
 # command = "dart compile js  --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
-# watch_dir = ["../packages", "lib"]
-
-kv_namespaces = [
-  { binding = "TODO", id = "f09b02be8f6448a49b8b9d9a80bf9763", preview_id = "f09b02be8f6448a49b8b9d9a80bf9763" }
-]
+watch_dir = ["../packages", "lib"]
