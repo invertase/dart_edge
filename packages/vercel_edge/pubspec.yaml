@@ -8,11 +8,11 @@ dependencies:
   v8_runtime: 0.0.1
   js_bindings: ^0.0.10
   js: ^0.6.5
-
+  path: ^1.8.3
+  
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
-  path: ^1.8.3
 
 executables:
   cloudflare_workers: main
