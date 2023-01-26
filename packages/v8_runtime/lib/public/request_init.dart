@@ -38,22 +38,20 @@ class RequestInit {
 }
 
 extension RequestInitExtension on RequestInit {
-  Map<String, Object?> toJson() {
-    return {
-      'method': method,
-      if (headers != null) 'headers': headers!.delegate,
-      if (body != null) 'body': body,
-      if (referrer != null) 'referrer': referrer,
-      if (referrerPolicy != null) 'referrerPolicy': referrerPolicy,
-      if (mode != null) 'mode': mode,
-      if (credentials != null) 'credentials': credentials,
-      if (cache != null) 'cache': cache,
-      if (redirect != null) 'redirect': redirect,
-      if (integrity != null) 'integrity': integrity,
-      if (keepalive != null) 'keepalive': keepalive,
-      if (signal != null) 'signal': signal!.delegate,
-      if (duplex != null) 'duplex': duplex,
-      if (priority != null) 'priority': priority,
-    };
-  }
+  interop.RequestInit get delegate => interop.RequestInit(
+        method: method,
+        headers: headers?.delegate,
+        body: body,
+        referrer: referrer,
+        referrerPolicy: referrerPolicy,
+        mode: mode,
+        credentials: credentials,
+        cache: cache,
+        redirect: redirect,
+        integrity: integrity,
+        keepalive: keepalive,
+        signal: signal?.delegate,
+        duplex: duplex,
+        priority: priority,
+      );
 }

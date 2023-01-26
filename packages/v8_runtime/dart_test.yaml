@@ -1,5 +1,5 @@
 override_platforms:
-  chrome:
+  node:
     settings:
       executable: node
-      arguments: ponyfill.js --
+      arguments: ponyfill.js

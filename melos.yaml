@@ -24,3 +24,6 @@ scripts:
     run: cd packages/fetch_apis && dart run build_runner build --delete-conflicting-outputs
   build_watch:fetch_apis:
     run: cd packages/fetch_apis && dart run build_runner watch --delete-conflicting-outputs
+    
+  test:v8_runtime:
+    run: cd packages/v8_runtime && dart test -p chrome
