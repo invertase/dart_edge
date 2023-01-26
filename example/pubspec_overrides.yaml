@@ -1,8 +1,0 @@
-# melos_managed_dependency_overrides: cloudflare_workers,v8_runtime,vercel_edge
-dependency_overrides:
-  cloudflare_workers:
-    path: ../packages/cloudflare_workers
-  v8_runtime:
-    path: ../packages/v8_runtime
-  vercel_edge:
-    path: ../packages/vercel_edge

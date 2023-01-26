@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: v8_runtime,vercel_edge
+dependency_overrides:
+  v8_runtime:
+    path: ../../v8_runtime
+  vercel_edge:
+    path: ..

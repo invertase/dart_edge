@@ -4,7 +4,6 @@ repository: https://github.com/invertase/dart_workers
 
 packages:
   - packages/**
-  - example
 
 command:
   version:

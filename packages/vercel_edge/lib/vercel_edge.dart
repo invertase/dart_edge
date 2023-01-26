@@ -5,6 +5,7 @@ import 'package:v8_runtime/public/request.dart';
 import 'package:v8_runtime/public/response.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
+export 'package:v8_runtime/v8_runtime.dart';
 export './public/request.dart';
 
 @JS('__dartFetchHandler')
