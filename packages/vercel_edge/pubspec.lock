@@ -140,11 +140,10 @@ packages:
   js_bindings:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "8f26a8ed951d559405bd08d12dea7bade7f7e9c2"
-      resolved-ref: "8f26a8ed951d559405bd08d12dea7bade7f7e9c2"
-      url: "https://github.com/Ehesp/js_bindings"
-    source: git
+      name: js_bindings
+      sha256: "2a6dbb828d712713c5ba7acea5ade862b96e56379e38935354d4e75b47984590"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.10"
   json_annotation:
     dependency: transitive
