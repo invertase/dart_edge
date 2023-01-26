@@ -5,23 +5,80 @@ import 'package:js_bindings/js_bindings.dart' as interop;
 import 'environment_interop.dart' as interop;
 import 'package:v8_runtime/interop/promise_interop.dart';
 
-@JS('__durableObjects')
-external set durableObjects(dynamic value);
-
-@JS('__durableObjects')
-external dynamic get durableObjects;
-
 @anonymous
 @JS()
 class DurableObject {
+  external Function get init;
+  external set init(Function init);
   external DurableObjectState get state;
   external set state(DurableObjectState state);
   external interop.Environment get env;
   external set env(interop.Environment env);
-  external Promise<interop.Response> fetch(interop.Request request);
-  external factory DurableObject({
-    Promise<interop.Response> Function(interop.Request request) fetch,
-    dynamic state,
+
+  external set fetch(
+      Promise<interop.Response> Function(interop.Request request) function);
+  external Promise<interop.Response> Function(interop.Request request)
+      get fetch;
+
+  external factory DurableObject();
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectStorage {
+  external factory DurableObjectStorage();
+}
+
+extension PropsDurableObjectStorage on DurableObjectStorage {
+  Future<dynamic> get(/* String | List<String> */ dynamic keys,
+      DurableObjectGetOptions options) async {
+    return js_util.promiseToFuture(
+      js_util.callMethod(this, 'get', [keys, options]),
+    );
+  }
+
+  Future<dynamic> put(
+      String key, dynamic value, DurableObjectPutOptions options) {
+    var newValue = value;
+    if (value is Map || value is Iterable) {
+      newValue = jsify(value);
+    }
+    return js_util.promiseToFuture(
+        js_util.callMethod(this, 'put', [key, newValue, options]));
+  }
+
+  Future<void> putEntries<T>(
+          Map<Object, T> entries, DurableObjectPutOptions options) =>
+      js_util.promiseToFuture(
+          js_util.callMethod(this, 'put', [jsify(entries), options]));
+
+  Future<bool> delete<T>(String key) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'delete', [key]));
+
+  Future<bool> deleteEntries<T>(Iterable<String> keys,
+          [DurableObjectPutOptions? options]) =>
+      js_util
+          .promiseToFuture(js_util.callMethod(this, 'delete', [keys, options]));
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectGetOptions {
+  external factory DurableObjectGetOptions({
+    bool? allowConcurrency,
+    bool? noCache,
+  });
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectPutOptions {
+  external factory DurableObjectPutOptions({
+    bool? allowUnconfirmed,
+    bool? noCache,
   });
 }
 
@@ -34,8 +91,8 @@ class DurableObjectState {
 
 extension PropsDurableObjectState on DurableObjectState {
   DurableObjectId get id => js_util.getProperty(this, 'id');
-  // TODO
-  dynamic get storage => js_util.getProperty(this, 'storage');
+
+  DurableObjectStorage get storage => js_util.getProperty(this, 'storage');
 
   void waitUntil(Future<void> f) =>
       js_util.callMethod(this, 'waitUntil', [futureToPromise(f)]);
@@ -51,6 +108,7 @@ extension PropsDurableObjectState on DurableObjectState {
   }
 }
 
+@anonymous
 @JS()
 @staticInterop
 class DurableObjectNamespace {
@@ -68,6 +126,7 @@ extension PropsDurableObjectNamespace on DurableObjectNamespace {
       js_util.callMethod(this, 'get', [id]);
 }
 
+@anonymous
 @JS()
 @staticInterop
 class DurableObjectId {
@@ -81,6 +140,7 @@ extension PropsDurableObjectId on DurableObjectId {
   String mToString() => js_util.callMethod(this, 'toString', []);
 }
 
+@anonymous
 @JS()
 @staticInterop
 class Fetcher {
@@ -98,6 +158,7 @@ extension PropsFetcher on Fetcher {
       js_util.callMethod(this, 'connect', [address, options]);
 }
 
+@anonymous
 @JS()
 @staticInterop
 class Socket {
@@ -122,9 +183,12 @@ class SocketOptions {
 
 extension PropsSocketOptions on SocketOptions {
   bool get tsl => js_util.getProperty(this, 'tsl');
-  set tsl(bool newValue) => js_util.setProperty(this, 'tsl', newValue);
+  set tsl(bool newValue) {
+    js_util.setProperty(this, 'tsl', newValue);
+  }
 }
 
+@anonymous
 @JS()
 @staticInterop
 class DurableObjectStub extends Fetcher {

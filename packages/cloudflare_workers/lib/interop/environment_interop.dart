@@ -4,6 +4,7 @@ import 'package:js/js.dart';
 import 'kv_namespace_interop.dart';
 import 'durable_object_interop.dart';
 
+@anonymous
 @JS()
 @staticInterop
 class Environment {

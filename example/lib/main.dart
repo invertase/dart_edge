@@ -1,41 +1,30 @@
 import 'package:cloudflare_workers/cloudflare_workers.dart';
 
-class Foo extends DurableObject {
-  Foo(super.name);
+// class ElliotDurableObject extends DurableObject {
+//   ElliotDurableObject(super.name);
 
-  @override
-  FutureOr<Response> fetch(Request request) async {
-    print(env);
-    // TODO examples put this in the constructor... hmm
-    state.blockConcurrencyWhile(() async {
-      print('blockConcurrencyWhile');
-      await Future.delayed(Duration(seconds: 2));
-      print('blockConcurrencyWhile done');
-    });
-    state.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
-      print('waitUntil done');
-    }));
-    return Response('Hello World From ElliotDurableObject!');
-  }
-}
+//   @override
+//   FutureOr<Response> fetch(Request request) async {
+//     await state.storage.put('foo', 123);
+//     final r = await state.storage.get('foo');
+//     print(r.numberValue);
+
+//     return Response('Hello World From ElliotDurableObject!');
+//   }
+// }
 
 void main() {
   CloudflareWorkers(
-    durableObjects: [Foo('ElliotDurableObject')],
+    // durableObjects: [ElliotDurableObject('ElliotDurableObject')],
     fetch: (request, env, ctx) {
       if (request.url.toString().contains('favicon.ico')) {
         return Response('favicon.ico');
       }
 
-      final durable = env.getDurableObjectNamespace('ZAPP_STATS_WORKER');
-      final id = durable.idFromName('foo');
-      final instance = durable.get(id);
-
-      return instance.fetch(request);
-
-      // ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
-      //   print('waitUntil done');
-      // }));
+      return Response('Hello World!');
+    },
+    scheduled: (event, env, ctx) {
+      // ScheduledEvent!!
     },
   );
 }
