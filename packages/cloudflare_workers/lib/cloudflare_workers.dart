@@ -1,16 +1,14 @@
-import 'dart:js_util';
+import 'dart:js_util' as js_util;
 
 import 'package:js/js.dart';
 import 'package:v8_runtime/interop/promise_interop.dart';
 import 'package:v8_runtime/v8_runtime.dart';
 import 'package:v8_runtime/public/request.dart';
 import 'package:v8_runtime/public/response.dart';
-import 'package:v8_runtime/public/fetch_event.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 import 'interop/execution_context_interop.dart' as interop;
 import './public/execution_context.dart';
 import './public/environment.dart';
-import 'dart:js' as js;
 
 import 'public/durable_object.dart';
 
@@ -38,6 +36,9 @@ external set __dartFetchHandler(
             interop.Request req, dynamic env, interop.ExecutionContext ctx)
         f);
 
+@JS('__durableObjects')
+external set __durableObjects(dynamic value);
+
 class CloudflareWorkers {
   final Iterable<DurableObject>? durableObjects;
 
@@ -48,6 +49,7 @@ class CloudflareWorkers {
     this.fetch,
     this.durableObjects,
   }) {
+    // Attach the fetch handler to the global object.
     if (fetch != null) {
       __dartFetchHandler = allowInterop(
           (interop.Request req, dynamic env, interop.ExecutionContext ctx) {
@@ -62,8 +64,19 @@ class CloudflareWorkers {
       });
     }
 
+    // Attach the durable objects to the global object, by name.
     if (durableObjects != null) {
-      
+      __durableObjects = js_util.jsify({
+        for (final instance in durableObjects!)
+          instance.name: instance.delegate
+            ..fetch = allowInterop((fetchObj) {
+              return futureToPromise(Future(() async {
+                final r = await instance.fetch(requestFromJsObject(fetchObj));
+                return r.delegate;
+              }));
+            })
+            ..init = allowInterop(instance.init)
+      });
     }
   }
 }

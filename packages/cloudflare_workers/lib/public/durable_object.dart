@@ -11,34 +11,23 @@ import '../interop/durable_object_interop.dart' as interop;
 import 'environment.dart';
 
 abstract class DurableObject {
-  late final interop.DurableObject _delegate;
+  final interop.DurableObject _delegate;
 
   final String name;
 
   DurableObjectState get state => DurableObjectState._(_delegate.state);
-  
+
   Environment get env => environmentFromJsObject(_delegate.env);
 
-  DurableObject(this.name) {
-    // Create the delegate instance of the object.
-    _delegate = interop.DurableObject(fetch: allowInterop((fetchObj) {
-      return futureToPromise(Future(() async {
-        final r = await fetch(requestFromJsObject(fetchObj));
-        return r.delegate;
-      }));
-    }));
+  DurableObject(this.name) : _delegate = interop.DurableObject();
 
-    // Make sure the JS runtime has a place to store the objects
-    interop.durableObjects ??= jsify({});
-
-    interop.durableObjects = jsify({
-      ...dartify(interop.durableObjects) as Map,
-      name: _delegate,
-    });
-  }
-
+  void init() {}
   FutureOr<Response> fetch(Request request);
   FutureOr<void> alarm() {}
+}
+
+extension DurableObjectExtension on DurableObject {
+  interop.DurableObject get delegate => _delegate;
 }
 
 class DurableObjectState {
@@ -47,12 +36,76 @@ class DurableObjectState {
   DurableObjectState._(this._delegate);
 
   DurableObjectId get id => DurableObjectId._(_delegate.id);
-  dynamic get storage => _delegate.storage;
+  DurableObjectStorage get storage => DurableObjectStorage._(_delegate.storage);
 
   void waitUntil(Future<void> future) => _delegate.waitUntil(future);
 
   Future<T> blockConcurrencyWhile<T>(Future<T> Function() callback) =>
       _delegate.blockConcurrencyWhile(allowInterop(callback));
+}
+
+class DurableObjectGetResult {
+  final interop.DurableObjectGetResult _delegate;
+  DurableObjectGetResult._(this._delegate);
+  dynamic operator [](String name) => _delegate.getKey(name);
+}
+
+class DurableObjectStorage {
+  final interop.DurableObjectStorage _delegate;
+
+  DurableObjectStorage._(this._delegate);
+
+  Future<T?> get<T>(
+    String key, {
+    bool allowConcurrency = false,
+    bool noCache = false,
+  }) async {
+    final obj = await _delegate.get(
+      key,
+      interop.DurableObjectGetOptions(
+        allowConcurrency: allowConcurrency,
+        noCache: noCache,
+      ),
+    );
+
+    if (obj is T) {
+      return dartify(obj) as T;
+    } else {
+      return null;
+    }
+  }
+
+  Future<DurableObjectGetResult> getKeys<T>(
+    Iterable<String> keys, {
+    bool allowConcurrency = false,
+    bool noCache = false,
+  }) async {
+    final obj = await _delegate.get(
+      keys,
+      interop.DurableObjectGetOptions(
+        allowConcurrency: allowConcurrency,
+        noCache: noCache,
+      ),
+    );
+
+    return DurableObjectGetResult._(obj);
+  }
+
+  Future<void> put<T>(
+    String key,
+    T value, {
+    bool allowUnconfirmed = false,
+    bool noCache = false,
+  }) async {
+    return _delegate.put(
+      key,
+      value,
+      interop.DurableObjectPutOptions(
+        allowUnconfirmed: allowUnconfirmed,
+        noCache: noCache,
+      ),
+    );
+  }
 }
 
 class DurableObjectNamespace {

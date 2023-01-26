@@ -5,16 +5,10 @@ class ElliotDurableObject extends DurableObject {
 
   @override
   FutureOr<Response> fetch(Request request) async {
-    print(env);
-    // TODO examples put this in the constructor... hmm
-    state.blockConcurrencyWhile(() async {
-      print('blockConcurrencyWhile');
-      await Future.delayed(Duration(seconds: 2));
-      print('blockConcurrencyWhile done');
-    });
-    state.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
-      print('waitUntil done');
-    }));
+    await state.storage.put('foo', 123);
+    final r = await state.storage.get('foo');
+    print(r);
+
     return Response('Hello World From ElliotDurableObject!');
   }
 }
