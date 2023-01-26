@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@edge-runtime/ponyfill": "^2.0.0",
-    "@edge-runtime/primitives": "^2.0.3"
-  }
-}

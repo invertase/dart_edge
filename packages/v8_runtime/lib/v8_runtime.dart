@@ -23,7 +23,6 @@ export 'public/response.dart' show Response;
 export 'public/text_decoder.dart'
     show TextDecoder, TextDecodeOptions, TextDecoderOptions;
 export 'public/text_encoder.dart' show TextEncoder, TextEncoderEncodeIntoResult;
-export 'public/url_search_params.dart' show URLSearchParams;
 
 export 'package:js_bindings/bindings/referrer_policy.dart' show ReferrerPolicy;
 export 'package:js_bindings/bindings/fetch.dart'
@@ -34,4 +33,5 @@ export 'package:js_bindings/bindings/fetch.dart'
         RequestCredentials,
         RequestDestination,
         RequestMode,
+        RequestRedirect,
         RequestPriority;

@@ -28,7 +28,9 @@ class JavaScriptObject {
 
 extension PropsJavaScriptObject on JavaScriptObject {
   T get<T>(String key) => js_util.getProperty(this, key);
-  void set(String key, dynamic value) => js_util.setProperty(this, key, value);
+  void set(String key, dynamic value) {
+    js_util.setProperty(this, key, value);
+  }
 }
 
 bool isBasicType(value) {

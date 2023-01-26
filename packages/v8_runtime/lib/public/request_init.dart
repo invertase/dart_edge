@@ -38,20 +38,22 @@ class RequestInit {
 }
 
 extension RequestInitExtension on RequestInit {
-  interop.RequestInit get delegate => interop.RequestInit(
-        method: method,
-        headers: headers?.delegate,
-        body: body,
-        referrer: referrer ?? '',
-        referrerPolicy: referrerPolicy ?? interop.ReferrerPolicy.empty,
-        mode: mode ?? interop.RequestMode.navigate,
-        credentials: credentials ?? interop.RequestCredentials.omit,
-        cache: cache ?? interop.RequestCache.valueDefault,
-        redirect: redirect ?? interop.RequestRedirect.follow,
-        integrity: integrity ?? '',
-        keepalive: keepalive ?? false,
-        signal: signal?.delegate,
-        duplex: duplex ?? interop.RequestDuplex.half,
-        priority: priority ?? interop.RequestPriority.auto,
-      );
+  interop.RequestInit get delegate {
+    return interop.RequestInit(
+      method: method,
+      headers: headers?.delegate ?? interop.Headers(),
+      body: body,
+      referrer: referrer ?? '',
+      referrerPolicy: referrerPolicy ?? interop.ReferrerPolicy.empty,
+      mode: mode ?? interop.RequestMode.cors,
+      credentials: credentials ?? interop.RequestCredentials.omit,
+      cache: cache ?? interop.RequestCache.valueDefault,
+      redirect: redirect ?? interop.RequestRedirect.follow,
+      integrity: integrity ?? '',
+      keepalive: keepalive ?? false,
+      signal: signal?.delegate,
+      duplex: duplex ?? interop.RequestDuplex.half,
+      priority: priority ?? interop.RequestPriority.auto,
+    );
+  }
 }

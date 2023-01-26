@@ -1,5 +1,0 @@
-override_platforms:
-  node:
-    settings:
-      executable: node
-      arguments: ponyfill.js

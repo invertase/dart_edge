@@ -1,4 +1,3 @@
-import 'dart:js_util';
 import 'dart:typed_data';
 
 import 'abort_signal.dart';
@@ -65,9 +64,6 @@ class Request implements Body {
 
   @override
   Future<String> text() => _delegate.text();
-
-  // TODO extension
-  // IncomingRequestCfProperties? get cf => _delegate.cf;
 }
 
 extension RequestExtension on Request {
