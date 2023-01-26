@@ -5,6 +5,8 @@ import 'package:v8_runtime/public/request.dart';
 import 'package:v8_runtime/public/response.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
+export './public/request.dart';
+
 @JS('__dartFetchHandler')
 external set __dartFetchHandler(
     Promise<interop.Response> Function(interop.Request req) f);
