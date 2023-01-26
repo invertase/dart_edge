@@ -1,35 +1,30 @@
 import 'package:cloudflare_workers/cloudflare_workers.dart';
 
-class ElliotDurableObject extends DurableObject {
-  ElliotDurableObject(super.name);
+// class ElliotDurableObject extends DurableObject {
+//   ElliotDurableObject(super.name);
 
-  @override
-  FutureOr<Response> fetch(Request request) async {
-    await state.storage.put('foo', 123);
-    final r = await state.storage.get('foo');
-    print(r);
+//   @override
+//   FutureOr<Response> fetch(Request request) async {
+//     await state.storage.put('foo', 123);
+//     final r = await state.storage.get('foo');
+//     print(r.numberValue);
 
-    return Response('Hello World From ElliotDurableObject!');
-  }
-}
+//     return Response('Hello World From ElliotDurableObject!');
+//   }
+// }
 
 void main() {
   CloudflareWorkers(
-    durableObjects: [ElliotDurableObject('ElliotDurableObject')],
+    // durableObjects: [ElliotDurableObject('ElliotDurableObject')],
     fetch: (request, env, ctx) {
       if (request.url.toString().contains('favicon.ico')) {
         return Response('favicon.ico');
       }
 
-      final durable = env.getDurableObjectNamespace('ZAPP_STATS_WORKER');
-      final id = durable.idFromName('foo');
-      final instance = durable.get(id);
-
-      return instance.fetch(request);
-
-      // ctx.waitUntil(Future.delayed(Duration(seconds: 2)).then((_) {
-      //   print('waitUntil done');
-      // }));
+      return Response('Hello World!');
+    },
+    scheduled: (event, env, ctx) {
+      // ScheduledEvent!!
     },
   );
 }

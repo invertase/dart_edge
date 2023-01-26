@@ -48,20 +48,18 @@ extension PropsDurableObjectStorage on DurableObjectStorage {
         js_util.callMethod(this, 'put', [key, newValue, options]));
   }
 
-  Future<void> putValues(
-          Map<String, dynamic> entries, DurableObjectPutOptions options) =>
+  Future<void> putEntries<T>(
+          Map<Object, T> entries, DurableObjectPutOptions options) =>
       js_util.promiseToFuture(
           js_util.callMethod(this, 'put', [jsify(entries), options]));
-}
 
-@anonymous
-@JS()
-class DurableObjectGetResult {
-  external factory DurableObjectGetResult();
-}
+  Future<bool> delete<T>(String key) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'delete', [key]));
 
-extension PropsDurableObjectGetResult on DurableObjectGetResult {
-  T getKey<T>(String key) => js_util.getProperty(this, key);
+  Future<bool> deleteEntries<T>(Iterable<String> keys,
+          [DurableObjectPutOptions? options]) =>
+      js_util
+          .promiseToFuture(js_util.callMethod(this, 'delete', [keys, options]));
 }
 
 @anonymous
@@ -185,7 +183,9 @@ class SocketOptions {
 
 extension PropsSocketOptions on SocketOptions {
   bool get tsl => js_util.getProperty(this, 'tsl');
-  set tsl(bool newValue) => js_util.setProperty(this, 'tsl', newValue);
+  set tsl(bool newValue) {
+    js_util.setProperty(this, 'tsl', newValue);
+  }
 }
 
 @anonymous

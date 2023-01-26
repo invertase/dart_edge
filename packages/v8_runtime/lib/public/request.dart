@@ -21,7 +21,7 @@ class Request implements Body {
   Request(Resource resource, [RequestInit? init])
       : _delegate = interop.Request(
           interop.requestFromResource(resource),
-          jsify(init?.toJson() ?? {}),
+          init?.delegate,
         );
 
   String get method => _delegate.method;

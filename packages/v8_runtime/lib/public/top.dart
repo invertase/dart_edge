@@ -29,7 +29,7 @@ Future<Response> fetch(Resource resource, [RequestInit? init]) async {
     await promiseToFuture(
       interop.fetch(
         interop.requestFromResource(resource),
-        jsify(init?.toJson() ?? {}),
+        init?.delegate,
       ),
     ),
   );
