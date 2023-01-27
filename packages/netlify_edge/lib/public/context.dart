@@ -6,6 +6,7 @@ class NetlifyContext {
   String get requestId => _delegate.requestId;
   NetlifyContext._(this._delegate);
   Account get account => Account._(_delegate.account);
+  Geo get geo => Geo._(_delegate.geo);
   Site get site => Site._(_delegate.site);
 }
 
