@@ -17,4 +17,4 @@ command = "dart compile js -O1 --no-frequency-based-minification --server-mode -
 # command = "dart run edge build cloudflare"
 # Local:
 # command = "dart compile js  --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
-watch_dir = ["../packages", "lib"]
+watch_dir = ["lib"]

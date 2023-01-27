@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 
 import '../utils/compiler.dart';
@@ -14,10 +13,65 @@ class VercelBuildCommand extends BaseCommand {
   @override
   final description = "Builds the project.";
 
-  BuildCommand() {}
+  BuildCommand() {
+    argParser.addFlag(
+      'dev',
+      help:
+          'Runs Dart Edge in a local development environment with hot reload via Vercel CLI.',
+    );
+  }
 
-  @override
-  void run() async {
+  Future<void> runDev() async {
+    // IN DEV:
+    // 1. Build to .dart_tool/edge
+    // 2. Append to the built file :
+    // addEventListener("fetch", async (event) => {
+    //   if (self.__dartFetchHandler !== undefined) {
+    //     event.respondWith(self.__dartFetchHandler(event.request));
+    //   }
+    // });
+    // Start a process to run the edge-runtime.
+    // Start a file watch listener - rebuilt dart & restart the edge-runtime process when anything
+    // in lib changes.
+
+    final outputFileName = 'main.dart.js';
+
+    final edgeTool = Directory(
+      p.join(Directory.current.path, '.dart_tool', 'edge'),
+    );
+
+    // Make reusable
+    final compiler = Compiler(
+      logger: logger,
+      entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
+      outputDirectory: edgeTool.path,
+      outputFileName: outputFileName,
+      level: CompilerLevel.dev,
+    );
+
+    await compiler.compile();
+
+    await File(p.join(edgeTool.path, outputFileName)).writeAsString(
+      devAddEventListener,
+      mode: FileMode.append,
+    );
+
+    // Start process - make reusable
+    final process = await Process.start('npx', [
+      'edge-runtime',
+      '--listen',
+      p.join(Directory.current.path, 'test.js'),
+      '--port',
+      Platform.environment['PORT']!,
+    ]);
+
+    // Kill safe
+    // process.kill();
+
+    // Watch for (dart) changes, stop process, call compile, start process
+  }
+
+  Future<void> runBuild() async {
     // Make configurable?
     final outputFileName = 'main.dart.js';
 
@@ -34,7 +88,7 @@ class VercelBuildCommand extends BaseCommand {
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: edgeFunction.path,
       outputFileName: outputFileName,
-      level: CompilerLevel.dev,
+      level: CompilerLevel.prod,
     );
 
     await compiler.compile();
@@ -91,8 +145,17 @@ class VercelBuildCommand extends BaseCommand {
     // Write the Edge Function config file.
     await edgeFunctionEntry
         .writeAsString(edgeFunctionEntryFileDefaultValue(outputFileName));
+  }
 
-    exit(0);
+  @override
+  void run() async {
+    final isDev = argResults!['dev'] as bool;
+
+    if (isDev) {
+      await runDev();
+    } else {
+      await runBuild();
+    }
   }
 }
 
@@ -106,6 +169,13 @@ const edgeFunctionConfigFileDefaultValue = '''{
   "runtime": "edge",
   "entrypoint": "entry.js"
 }
+''';
+
+const devAddEventListener = '''addEventListener("fetch", async (event) => {
+  if (self.__dartFetchHandler !== undefined) {
+    event.respondWith(self.__dartFetchHandler(event.request));
+  }
+});
 ''';
 
 final edgeFunctionEntryFileDefaultValue =
