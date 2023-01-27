@@ -102,18 +102,6 @@ extension on DocumentHandler {
       ),
     );
   }
-  // doctype: allowInterop(
-  //   (interop.Doctype obj) => doctype(Doctype._(obj)),
-  // ),
-  // comments: allowInterop(
-  //   (interop.Comment obj) => comments(Comment._(obj)),
-  // ),
-  // text: allowInterop(
-  //   (interop.Text obj) => text(Text._(obj)),
-  // ),
-  // end: allowInterop(
-  //   (interop.DocumentEnd obj) => end(DocumentEnd._(obj)),
-  // ),
 }
 
 class Doctype {

@@ -1,4 +1,4 @@
 {
-  "buildCommand": "dart run vercel_edge build",
-  "devCommand": "dart run vercel_edge dev"
+  "buildCommand": "dart run edge build vercel",
+  "devCommand": "dart run --define=PORT=$PORT edge build vercel"
 }

@@ -128,8 +128,9 @@ class DurableObjectStorageGetResult {
 
   DurableObjectStorageGetResult._(this._delegate);
 
+  // TODO: is this the best way? Or should we just get<T>
   String? get stringValue => _delegate?.toString();
-  num? get numberValue => int.tryParse(stringValue ?? '');
+  num? get numberValue => num.tryParse(stringValue ?? '');
   bool? get boolValue => stringValue == null
       ? null
       : stringValue?.toLowerCase() == 'true'

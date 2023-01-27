@@ -6,6 +6,7 @@ import 'readable_stream.dart';
 
 class Blob {
   final interop.Blob _delegate;
+
   Blob._(this._delegate);
 
   // TODO BlobPropertyBag

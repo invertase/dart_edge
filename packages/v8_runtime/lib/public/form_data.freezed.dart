@@ -18,8 +18,21 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$FormDataEntryValue {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(FormDataEntryFile file) file,
+    required TResult Function(File file) file,
     required TResult Function(String value) string,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(File file)? file,
+    TResult? Function(String value)? string,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(File file)? file,
+    TResult Function(String value)? string,
+    required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
@@ -30,7 +43,7 @@ class _$FileValue implements FileValue {
   const _$FileValue(this.file);
 
   @override
-  final FormDataEntryFile file;
+  final File file;
 
   @override
   String toString() {
@@ -40,17 +53,39 @@ class _$FileValue implements FileValue {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(FormDataEntryFile file) file,
+    required TResult Function(File file) file,
     required TResult Function(String value) string,
   }) {
     return file(this.file);
   }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(File file)? file,
+    TResult? Function(String value)? string,
+  }) {
+    return file?.call(this.file);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(File file)? file,
+    TResult Function(String value)? string,
+    required TResult orElse(),
+  }) {
+    if (file != null) {
+      return file(this.file);
+    }
+    return orElse();
+  }
 }
 
 abstract class FileValue implements FormDataEntryValue {
-  const factory FileValue(final FormDataEntryFile file) = _$FileValue;
+  const factory FileValue(final File file) = _$FileValue;
 
-  FormDataEntryFile get file;
+  File get file;
 }
 
 /// @nodoc
@@ -69,10 +104,32 @@ class _$StringValue implements StringValue {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(FormDataEntryFile file) file,
+    required TResult Function(File file) file,
     required TResult Function(String value) string,
   }) {
     return string(value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(File file)? file,
+    TResult? Function(String value)? string,
+  }) {
+    return string?.call(value);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(File file)? file,
+    TResult Function(String value)? string,
+    required TResult orElse(),
+  }) {
+    if (string != null) {
+      return string(value);
+    }
+    return orElse();
   }
 }
 
