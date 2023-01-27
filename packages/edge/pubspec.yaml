@@ -1,0 +1,7 @@
+name: edge
+description: TODO
+repository: https://github.com/invertase/dart_edge
+version: 0.0.1
+
+environment:
+  sdk: ">=2.18.5 <3.0.0"
