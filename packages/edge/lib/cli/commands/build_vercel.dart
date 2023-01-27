@@ -97,9 +97,6 @@ class VercelBuildCommand extends BaseCommand {
   }
 
   Future<void> runBuild() async {
-    // Make configurable?
-    final outputFileName = 'main.dart.js';
-
     final vercelDirectory = Directory(
       p.join(Directory.current.path, '.vercel'),
     );
@@ -108,7 +105,10 @@ class VercelBuildCommand extends BaseCommand {
       p.join(vercelDirectory.path, 'functions', 'dart.func'),
     );
 
-    await _compile(edgeFunction.path, level: CompilerLevel.O4);
+    final compiledFile = await _compile(
+      edgeFunction.path,
+      level: CompilerLevel.O4,
+    );
 
     final configFile = File(p.join(vercelDirectory.path, 'config.json'));
 
@@ -156,7 +156,7 @@ class VercelBuildCommand extends BaseCommand {
 
     // Write the Edge Function config file.
     await File(p.join(edgeFunction.path, 'entry.js')).writeAsString(
-      edgeFunctionEntryFileDefaultValue(outputFileName),
+      edgeFunctionEntryFileDefaultValue(compiledFile),
     );
   }
 
