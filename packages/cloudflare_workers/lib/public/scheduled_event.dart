@@ -1,7 +1,4 @@
-import '../interop/scheduled_event_intertop.dart' as interop;
-
-import 'environment.dart';
-import 'execution_context.dart';
+import '../interop/scheduled_event_interop.dart' as interop;
 
 class ScheduledEvent {
   final interop.ScheduledEvent _delegate;
@@ -12,8 +9,6 @@ class ScheduledEvent {
   String get scheduled => _delegate.scheduled;
   DateTime get scheduledTime =>
       DateTime.fromMillisecondsSinceEpoch(_delegate.scheduledTime);
-  Environment get env => environmentFromJsObject(_delegate.env);
-  ExecutionContext get ctx => executionContextFromJsObject(_delegate.ctx);
 }
 
 ScheduledEvent scheduledEventFromJsObject(interop.ScheduledEvent obj) =>

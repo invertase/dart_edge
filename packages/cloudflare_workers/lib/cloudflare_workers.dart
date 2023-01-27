@@ -8,6 +8,7 @@ export './public/cloudflare_workers.dart'
 
 export './public/cache_storage.dart'
     show CloudflareWorkersCacheStorageExtension;
+export './public/email_message.dart' show EmailMessage;
 export './public/environment.dart' show Environment;
 export './public/execution_context.dart' show ExecutionContext;
 export './public/fetcher.dart' show Fetcher;

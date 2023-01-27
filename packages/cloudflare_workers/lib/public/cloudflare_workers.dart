@@ -1,16 +1,20 @@
 import 'dart:js_util' as js_util;
 
-import 'package:cloudflare_workers/public/scheduled_event.dart';
 import 'package:js/js.dart';
 import 'package:v8_runtime/interop/promise_interop.dart';
 import 'package:v8_runtime/v8_runtime.dart';
 import 'package:v8_runtime/public/request.dart';
 import 'package:v8_runtime/public/response.dart';
+
 import 'package:js_bindings/js_bindings.dart' as interop;
 import '../interop/environment_interop.dart' as interop;
-import '../interop/scheduled_event_intertop.dart' as interop;
+import '../interop/scheduled_event_interop.dart' as interop;
+import '../interop/email_message_interop.dart' as interop;
 import '../interop/execution_context_interop.dart' as interop;
+
 import '../public/execution_context.dart';
+import '../public/scheduled_event.dart';
+import '../public/email_message.dart';
 import '../public/environment.dart';
 import '../public/do/durable_object.dart';
 
@@ -26,6 +30,12 @@ external set globalDartScheduledHandler(
             interop.Environment env, interop.ExecutionContext ctx)
         f);
 
+@JS('__dartEmailHandler')
+external set globalDartEmailHandler(
+    Promise<void> Function(interop.EmailMessage message,
+            interop.Environment env, interop.ExecutionContext ctx)
+        f);
+
 @JS('__durableObjects')
 external set globalDurableObjects(dynamic value);
 
@@ -34,6 +44,9 @@ typedef CloudflareWorkersFetchEvent = FutureOr<Response> Function(
 
 typedef CloudflareWorkersScheduledEvent = FutureOr<void> Function(
     ScheduledEvent event, Environment env, ExecutionContext ctx);
+
+typedef CloudflareWorkersEmailEvent = FutureOr<void> Function(
+    EmailMessage message, Environment env, ExecutionContext ctx);
 
 void attachFetchHandler(CloudflareWorkersFetchEvent handler) {
   globalDartFetchHandler = allowInterop((interop.Request req,
@@ -62,6 +75,19 @@ void attachScheduledHandler(CloudflareWorkersScheduledEvent handler) {
   });
 }
 
+void attachEmailHandler(CloudflareWorkersEmailEvent handler) {
+  globalDartEmailHandler = allowInterop((interop.EmailMessage message,
+      interop.Environment env, interop.ExecutionContext ctx) {
+    return futureToPromise(Future(() async {
+      return handler(
+        emailMessageFromJsObject(message),
+        environmentFromJsObject(env),
+        executionContextFromJsObject(ctx),
+      );
+    }));
+  });
+}
+
 void attachDurableObjects(Iterable<DurableObject> instances) {
   globalDurableObjects = js_util.jsify({
     for (final instance in instances)
@@ -83,9 +109,12 @@ class CloudflareWorkers {
 
   final CloudflareWorkersScheduledEvent? scheduled;
 
+  final CloudflareWorkersEmailEvent? email;
+
   CloudflareWorkers({
     this.fetch,
     this.scheduled,
+    this.email,
     this.durableObjects,
   }) {
     // Attach the fetch handler to the global object.
@@ -96,6 +125,11 @@ class CloudflareWorkers {
     // Attach the scheduled handler to the global object.
     if (scheduled != null) {
       attachScheduledHandler(scheduled!);
+    }
+
+    // Attach the email handler to the global object.
+    if (email != null) {
+      attachEmailHandler(email!);
     }
 
     // Attach the durable objects to the global object, by name.
