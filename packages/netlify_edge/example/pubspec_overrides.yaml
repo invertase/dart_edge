@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: netlify_edge,v8_runtime
+dependency_overrides:
+  netlify_edge:
+    path: ..
+  v8_runtime:
+    path: ../../v8_runtime
