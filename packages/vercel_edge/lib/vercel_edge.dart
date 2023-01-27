@@ -13,15 +13,15 @@ external set __dartFetchHandler(
     Promise<interop.Response> Function(interop.Request req) f);
 
 class VercelEdge {
-  final FutureOr<Response> Function(Request event)? fetch;
+  final FutureOr<Response> Function(Request request)? fetch;
 
   VercelEdge({
     this.fetch,
   }) {
     if (fetch != null) {
-      __dartFetchHandler = allowInterop((interop.Request req) {
+      __dartFetchHandler = allowInterop((interop.Request request) {
         return futureToPromise(Future(() async {
-          final response = await fetch!(requestFromJsObject(req));
+          final response = await fetch!(requestFromJsObject(request));
           return response.delegate;
         }));
       });
