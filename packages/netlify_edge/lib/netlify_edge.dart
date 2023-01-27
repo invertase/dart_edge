@@ -8,6 +8,7 @@ import 'package:js_bindings/js_bindings.dart' as interop;
 import 'interop/context_interop.dart' as interop;
 
 export 'package:v8_runtime/v8_runtime.dart';
+export './public/context.dart' hide netlifyContextFromJsObject;
 
 @JS('__dartFetchHandler')
 external set __dartFetchHandler(
