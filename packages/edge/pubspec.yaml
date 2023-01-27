@@ -10,6 +10,7 @@ dependencies:
   args: ^2.3.2
   cli_util: ^0.3.5
   path: ^1.8.3
+  hotreloader: ^3.0.5
 
 executables:
   edge:

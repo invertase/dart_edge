@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
+import 'package:hotreloader/hotreloader.dart';
 
 import '../utils/compiler.dart';
 import 'base_command.dart';
@@ -13,7 +14,7 @@ class VercelBuildCommand extends BaseCommand {
   @override
   final description = "Builds the project.";
 
-  BuildCommand() {
+  VercelBuildCommand() {
     argParser.addFlag(
       'dev',
       help:
@@ -21,54 +22,78 @@ class VercelBuildCommand extends BaseCommand {
     );
   }
 
-  Future<void> runDev() async {
-    // IN DEV:
-    // 1. Build to .dart_tool/edge
-    // 2. Append to the built file :
-    // addEventListener("fetch", async (event) => {
-    //   if (self.__dartFetchHandler !== undefined) {
-    //     event.respondWith(self.__dartFetchHandler(event.request));
-    //   }
-    // });
-    // Start a process to run the edge-runtime.
-    // Start a file watch listener - rebuilt dart & restart the edge-runtime process when anything
-    // in lib changes.
+  Future<String> _compile(
+    String outputDirectory, {
+    required CompilerLevel level,
+  }) async {
+    final outFileName = 'main.dart.js';
 
-    final outputFileName = 'main.dart.js';
-
-    final edgeTool = Directory(
-      p.join(Directory.current.path, '.dart_tool', 'edge'),
-    );
-
-    // Make reusable
     final compiler = Compiler(
       logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
-      outputDirectory: edgeTool.path,
-      outputFileName: outputFileName,
-      level: CompilerLevel.dev,
+      outputDirectory: outputDirectory,
+      outputFileName: outFileName,
+      level: level,
     );
 
     await compiler.compile();
+    return p.join(outputDirectory, outFileName);
+  }
 
-    await File(p.join(edgeTool.path, outputFileName)).writeAsString(
+  Future<String> _compileDev(String outputDirectory) async {
+    final compiledFile = await _compile(
+      outputDirectory,
+      level: CompilerLevel.O1,
+    );
+
+    // Append the event listener to the file - imports don't work
+    // so we need to add it to the end of the file.
+    await File(compiledFile).writeAsString(
       devAddEventListener,
       mode: FileMode.append,
     );
 
-    // Start process - make reusable
-    final process = await Process.start('npx', [
+    return compiledFile;
+  }
+
+  Future<Process> _startDevServer(String entryFile) {
+    return Process.start('npx', [
       'edge-runtime',
       '--listen',
-      p.join(Directory.current.path, 'test.js'),
+      entryFile,
       '--port',
       Platform.environment['PORT']!,
     ]);
+  }
 
-    // Kill safe
-    // process.kill();
+  Future<void> runDev() async {
+    final edgeTool = Directory(
+      p.join(Directory.current.path, '.dart_tool', 'edge'),
+    );
 
-    // Watch for (dart) changes, stop process, call compile, start process
+    String compiledFile = await _compileDev(edgeTool.path);
+
+    // Start Dev Server
+    Process devServer = await _startDevServer(compiledFile);
+    HotReloader? reloader;
+
+    try {
+      reloader = await HotReloader.create(
+        debounceInterval: Duration(milliseconds: 50),
+        onAfterReload: (ctx) async {
+          logger.write('Changes detected - restarting server...');
+          devServer.kill();
+          await _compileDev(edgeTool.path);
+          devServer = await _startDevServer(compiledFile);
+          logger.write('Server restarted');
+        },
+      );
+    } catch (e) {
+      logger.write('Error - shutting down');
+      await reloader?.stop();
+      devServer.kill();
+      exit(1);
+    }
   }
 
   Future<void> runBuild() async {
@@ -83,19 +108,11 @@ class VercelBuildCommand extends BaseCommand {
       p.join(vercelDirectory.path, 'functions', 'dart.func'),
     );
 
-    final compiler = Compiler(
-      logger: logger,
-      entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
-      outputDirectory: edgeFunction.path,
-      outputFileName: outputFileName,
-      level: CompilerLevel.prod,
-    );
-
-    await compiler.compile();
+    await _compile(edgeFunction.path, level: CompilerLevel.O4);
 
     final configFile = File(p.join(vercelDirectory.path, 'config.json'));
-    String configFileValue;
 
+    String configFileValue;
     if (await configFile.exists()) {
       // If a config file already exists, merge in the new route.
       final json = jsonDecode(await configFile.readAsString());
@@ -137,14 +154,10 @@ class VercelBuildCommand extends BaseCommand {
     // Write the Edge Function config file.
     await edgeFunctionConfig.writeAsString(edgeFunctionConfigFileDefaultValue);
 
-    // Create a File instance of the Edge Function config file.
-    final edgeFunctionEntry = File(
-      p.join(edgeFunction.path, 'entry.js'),
-    );
-
     // Write the Edge Function config file.
-    await edgeFunctionEntry
-        .writeAsString(edgeFunctionEntryFileDefaultValue(outputFileName));
+    await File(p.join(edgeFunction.path, 'entry.js')).writeAsString(
+      edgeFunctionEntryFileDefaultValue(outputFileName),
+    );
   }
 
   @override

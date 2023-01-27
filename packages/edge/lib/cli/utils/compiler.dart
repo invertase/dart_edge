@@ -4,8 +4,10 @@ import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 
 enum CompilerLevel {
-  dev,
-  prod,
+  O1,
+  O2,
+  O3,
+  O4,
 }
 
 class Compiler {
@@ -38,7 +40,7 @@ class Compiler {
       exit(1);
     }
 
-    final compiling = logger.progress('Compiling Dart entry point');
+    // final compiling = logger.progress('Compiling Dart entry point');
 
     final process = await Process.run('dart', [
       'compile',
@@ -51,7 +53,7 @@ class Compiler {
       entry.path,
     ]);
 
-    compiling.finish(showTiming: true);
+    // compiling.finish(showTiming: true);
 
     if (process.exitCode != 0) {
       logger.write('Failed to compile dart file.');
