@@ -32,7 +32,7 @@ class Compiler {
     this.outputFileName = 'main.dart.js',
   });
 
-  Future<void> compile() async {
+  Future<String> compile() async {
     final entry = File(entryPoint);
 
     if (!await entry.exists()) {
@@ -42,6 +42,8 @@ class Compiler {
 
     // final compiling = logger.progress('Compiling Dart entry point');
 
+    final outputPath = p.join(outputDirectory, outputFileName);
+
     final process = await Process.run('dart', [
       'compile',
       'js',
@@ -49,7 +51,7 @@ class Compiler {
       '--no-frequency-based-minification',
       '--server-mode',
       '-o',
-      p.join(outputDirectory, outputFileName),
+      outputPath,
       entry.path,
     ]);
 
@@ -64,5 +66,7 @@ class Compiler {
     logger.trace(process.stdout);
 
     // TODO: cleanup .deps, .map files?
+
+    return outputPath;
   }
 }

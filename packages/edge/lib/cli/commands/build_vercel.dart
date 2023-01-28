@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:hotreloader/hotreloader.dart';
 
 import '../utils/compiler.dart';
+import '../utils/dev_server.dart';
 import 'base_command.dart';
 
 class VercelBuildCommand extends BaseCommand {
@@ -40,60 +40,24 @@ class VercelBuildCommand extends BaseCommand {
     return p.join(outputDirectory, outFileName);
   }
 
-  Future<String> _compileDev(String outputDirectory) async {
-    final compiledFile = await _compile(
-      outputDirectory,
-      level: CompilerLevel.O1,
-    );
-
-    // Append the event listener to the file - imports don't work
-    // so we need to add it to the end of the file.
-    await File(compiledFile).writeAsString(
-      devAddEventListener,
-      mode: FileMode.append,
-    );
-
-    return compiledFile;
-  }
-
-  Future<Process> _startDevServer(String entryFile) {
-    return Process.start('npx', [
-      'edge-runtime',
-      '--listen',
-      entryFile,
-      '--port',
-      Platform.environment['PORT']!,
-    ]);
-  }
-
   Future<void> runDev() async {
     final edgeTool = Directory(
       p.join(Directory.current.path, '.dart_tool', 'edge'),
     );
 
-    String compiledFile = await _compileDev(edgeTool.path);
+    final devServer = DevServer(
+      logger: logger,
+      startScript: devAddEventListener,
+      compiler: Compiler(
+        logger: logger,
+        entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
+        outputDirectory: edgeTool.path,
+        outputFileName: 'main.dart.js',
+        level: CompilerLevel.O1,
+      ),
+    );
 
-    // Start Dev Server
-    Process devServer = await _startDevServer(compiledFile);
-    HotReloader? reloader;
-
-    try {
-      reloader = await HotReloader.create(
-        debounceInterval: Duration(milliseconds: 50),
-        onAfterReload: (ctx) async {
-          logger.write('Changes detected - restarting server...');
-          devServer.kill();
-          await _compileDev(edgeTool.path);
-          devServer = await _startDevServer(compiledFile);
-          logger.write('Server restarted');
-        },
-      );
-    } catch (e) {
-      logger.write('Error - shutting down');
-      await reloader?.stop();
-      devServer.kill();
-      exit(1);
-    }
+    await devServer.start();
   }
 
   Future<void> runBuild() async {

@@ -7,4 +7,5 @@ environment:
 
 dependencies:
   netlify_edge: 0.0.1
+  edge: ^0.0.1
 

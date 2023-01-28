@@ -1,6 +1,7 @@
 import 'base_command.dart';
 import 'build_vercel.dart';
 import 'build_cloudflare.dart';
+import 'build_netlify.dart';
 
 class BuildCommand extends BaseCommand {
   @override
@@ -12,6 +13,7 @@ class BuildCommand extends BaseCommand {
   BuildCommand() {
     addSubcommand(CloudflareBuildCommand());
     addSubcommand(VercelBuildCommand());
+    addSubcommand(NetlifyBuildCommand());
   }
 
   @override
