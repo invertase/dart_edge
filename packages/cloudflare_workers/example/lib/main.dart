@@ -4,7 +4,7 @@ void main() {
   CloudflareWorkers(
     fetch: (request, env, ctx) async {
       if (request.method == 'GET') {
-        return Response('Hello World!!');
+        return Response('Hello World :D');
       }
 
       print(request.headers['content-type']);
@@ -34,7 +34,7 @@ void main() {
         },
       );
 
-      return Response('Hello World!!');
+      return Response('Hello World :D');
     },
     scheduled: (event, env, ctx) {
       // ScheduledEvent!!

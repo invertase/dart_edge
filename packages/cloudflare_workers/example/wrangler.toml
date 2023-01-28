@@ -1,6 +1,6 @@
 name = "dart-worker-example"
 compatibility_date = "2022-11-30"
-main = ".dart_tool/worker/entry.js"
+main = ".dart_tool/edge/entry.js"
 
 compatibility_flags = ['formdata_parser_supports_files']
 
@@ -9,12 +9,5 @@ kv_namespaces = [
 ]
 
 [build]
-# add -O4 to enable dart2js optimizations in prod
-# Note: --no-frequency-based-minification is required for server mode, 
-# otherwise typerrors; TypeError: Instance of 'minified:u<minified:N>': type 'minified:u<minified:N>' is not a subtype of type 'minified:u<dynamic>'
-# Prod:
-command = "dart compile js -O1 --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
-# command = "dart run edge build cloudflare"
-# Local:
-# command = "dart compile js  --no-frequency-based-minification --server-mode -o .dart_tool/worker/main.dart.js lib/main.dart"
+command = "dart run edge build cloudflare --dev"
 watch_dir = ["lib"]

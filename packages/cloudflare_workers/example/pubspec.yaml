@@ -7,3 +7,4 @@ environment:
 
 dependencies:
   cloudflare_workers: 0.0.1
+  edge: ^0.0.1

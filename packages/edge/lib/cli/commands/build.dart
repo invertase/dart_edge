@@ -1,5 +1,6 @@
 import 'base_command.dart';
 import 'build_vercel.dart';
+import 'build_cloudflare.dart';
 
 class BuildCommand extends BaseCommand {
   @override
@@ -9,6 +10,7 @@ class BuildCommand extends BaseCommand {
   final description = "Builds the project.";
 
   BuildCommand() {
+    addSubcommand(CloudflareBuildCommand());
     addSubcommand(VercelBuildCommand());
   }
 
