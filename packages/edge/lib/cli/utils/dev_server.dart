@@ -7,11 +7,13 @@ class DevServer {
   final Compiler compiler;
   final Logger logger;
   final String startScript;
+  final String? port;
 
   DevServer({
     required this.compiler,
     required this.logger,
     required this.startScript,
+    this.port,
   });
 
   Future<Process> _startEdgeRuntime(String entryFile) {
@@ -20,7 +22,7 @@ class DevServer {
       '--listen',
       entryFile,
       '--port',
-      Platform.environment['PORT'] ?? '3000',
+      port ?? Platform.environment['PORT'] ?? '3000',
     ]);
   }
 

@@ -13,6 +13,8 @@ class NetlifyBuildCommand extends BaseCommand {
   final description = "TODO.";
 
   NetlifyBuildCommand() {
+    argParser.addOption('port',
+        help: 'The port to run the dev server on.', defaultsTo: '4000');
     argParser.addFlag(
       'dev',
       help:
@@ -25,9 +27,12 @@ class NetlifyBuildCommand extends BaseCommand {
       p.join(Directory.current.path, '.dart_tool', 'edge'),
     );
 
+    // print(Platform.environment);
+
     final devServer = DevServer(
       logger: logger,
-      startScript: '',
+      startScript: devAddEventListener,
+      port: argResults!['port'] as String,
       compiler: Compiler(
         logger: logger,
         entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
