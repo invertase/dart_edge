@@ -58,6 +58,7 @@ class DevServer {
       );
     } catch (e) {
       logger.write('Error - shutting down');
+      logger.write(e.toString());
       await reloader?.stop();
       devServer.kill();
       exit(1);
