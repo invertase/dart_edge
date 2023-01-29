@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:js_bindings/js_bindings.dart' as interop;
 import '../interop/crypto_interop.dart' as interop;
 
@@ -10,7 +12,9 @@ class Crypto {
 
   SubtleCrypto get subtle => SubtleCrypto._(_delegate.subtle);
 
-  // TODO getRandomValues
+  // TODO Is this the right way to do this?
+  TypedData getRandomValues(TypedData typedArray) =>
+      _delegate.getRandomValues(typedArray);
 
   String randomUUID() => _delegate.randomUUID();
 }

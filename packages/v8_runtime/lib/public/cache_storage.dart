@@ -12,11 +12,11 @@ class CacheStorage {
   CacheStorage._(this._delegate);
 
   Future<bool> delete(String cacheName) async {
-    return promiseToFuture(_delegate.delete(cacheName));
+    return _delegate.delete(cacheName);
   }
 
   Future<bool> has(String cacheName) async {
-    return promiseToFuture(_delegate.has(cacheName));
+    return _delegate.has(cacheName);
   }
 
   Future<Iterable<String>> keys() async {
@@ -30,7 +30,7 @@ class CacheStorage {
   }
 
   Future<Cache> open(String name) async {
-    return cacheFromJsObject(await promiseToFuture(_delegate.open(name)));
+    return cacheFromJsObject(await _delegate.open(name));
   }
 }
 

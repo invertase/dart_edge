@@ -1,6 +1,7 @@
 import 'dart:js_util' show jsify;
 import 'package:js_bindings/js_bindings.dart' as interop;
 
+// TODO missing iterable methods - not available in JS bindings
 class Headers {
   final interop.Headers _delegate;
 

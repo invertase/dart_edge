@@ -1,6 +1,5 @@
 [dev]
   command = "dart --enable-vm-service run edge build netlify --dev"
-  targetPort = 4000
 
 [build]
   command = "dart run edge build netlify"

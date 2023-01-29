@@ -56,7 +56,6 @@ class Compiler {
     ]);
 
     // compiling.finish(showTiming: true);
-
     if (process.exitCode != 0) {
       logger.write('Failed to compile dart file.');
       stderr.write(process.stderr);

@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 
 import '../utils/compiler.dart';
@@ -23,26 +25,57 @@ class NetlifyBuildCommand extends BaseCommand {
   }
 
   Future<void> runDev() async {
-    final edgeTool = Directory(
-      p.join(Directory.current.path, '.dart_tool', 'edge'),
+    final netlifyEdge = Directory(
+      p.join(Directory.current.path, '.netlify', 'edge-functions', 'dart_edge'),
     );
+
+    final compiler = Compiler(
+      logger: logger,
+      entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
+      outputDirectory: netlifyEdge.path,
+      level: CompilerLevel.O1,
+    );
+
+    await compiler.compile();
+
+    await File(p.join(netlifyEdge.path, 'index.js'))
+        .writeAsString(edgeFunctionEntryFileDefaultValue('main.dart.js'));
+
+    try {
+      print('Starting hot reload...');
+      final reloader = await HotReloader.create(
+        debounceInterval: Duration(milliseconds: 50),
+        onBeforeReload: (ctx) {
+          print(ctx.event?.path);
+          return true;
+        },
+        onAfterReload: (ctx) async {
+          // TODO: Compiler works, but netlify doesnt realise the file has
+          // changes unless we manually save?
+          logger.write('Changes detected...');
+          await compiler.compile();
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
 
     // print(Platform.environment);
 
-    final devServer = DevServer(
-      logger: logger,
-      startScript: devAddEventListener,
-      port: argResults!['port'] as String,
-      compiler: Compiler(
-        logger: logger,
-        entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
-        outputDirectory: edgeTool.path,
-        outputFileName: 'main.dart.js',
-        level: CompilerLevel.O1,
-      ),
-    );
+    // final devServer = DevServer(
+    //   logger: logger,
+    //   startScript: devAddEventListener,
+    //   port: argResults!['port'] as String,
+    //   compiler: Compiler(
+    //     logger: logger,
+    //     entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
+    //     outputDirectory: edgeTool.path,
+    //     outputFileName: 'main.dart.js',
+    //     level: CompilerLevel.O1,
+    //   ),
+    // );
 
-    await devServer.start();
+    // await devServer.start();
   }
 
   @override
@@ -91,5 +124,5 @@ export default (request, context) => {
   }
 }
 
-export const config = { path: "/*" }
+export const config = { path: "*" }
 ''';
