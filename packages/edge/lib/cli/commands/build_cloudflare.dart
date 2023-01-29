@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'package:toml/toml.dart';
 
 import '../utils/compiler.dart';
 import 'base_command.dart';
@@ -28,6 +29,16 @@ class CloudflareBuildCommand extends BaseCommand {
       exit(1);
     }
 
+    final toml = TomlDocument.parse(await tomlFile.readAsString()).toMap();
+
+    final durableObjectBindings = toml['durable_objects']?['bindings'] ?? [];
+    final Set<String> durableObjectNames = {
+      for (final binding in durableObjectBindings)
+        if (binding['class_name'] != null) binding['class_name']
+    };
+
+    print(durableObjectNames);
+
     // TODO: figure out how to get durable objects from toml
 
     final isDev = argResults!['dev'] as bool;
@@ -46,9 +57,15 @@ class CloudflareBuildCommand extends BaseCommand {
 
     await compiler.compile();
 
+    String entryFile = edgeFunctionEntryFileDefaultValue('main.dart.js');
+
+    // Add durable objects as exports.
+    for (final durableObjectName in durableObjectNames) {
+      entryFile += edgeFunctionDurableObjectValue(durableObjectName);
+    }
+
     // Update the entry file.
-    await File(p.join(edgeTool.path, 'entry.js'))
-        .writeAsString(edgeFunctionEntryFileDefaultValue('main.dart.js'));
+    await File(p.join(edgeTool.path, 'entry.js')).writeAsString(entryFile);
   }
 }
 
@@ -72,4 +89,32 @@ export default {
     }
   },
 };
+
+''';
+
+final edgeFunctionDurableObjectValue = (String className) => '''
+export class $className {
+  constructor(state, env) {
+    const instance = self.__durableObjects["$className"];
+
+    if (!instance) {
+      throw new Error(
+        `No Dart Durable object instance named '$className' found.`
+      );
+    }
+
+    instance.state = state;
+    instance.env = env;
+    instance.init();
+    this.delegate = instance;
+  }
+
+  fetch(request) {
+    return this.delegate.fetch(request);
+  }
+
+  alarm() {
+    return this.delegate.alarm();
+  }
+}
 ''';

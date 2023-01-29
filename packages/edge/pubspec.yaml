@@ -11,6 +11,7 @@ dependencies:
   cli_util: ^0.3.5
   path: ^1.8.3
   hotreloader: ^3.0.5
+  toml: ^0.13.1
 
 executables:
   edge:

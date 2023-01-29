@@ -98,6 +98,11 @@ void attachDurableObjects(Iterable<DurableObject> instances) {
             return r.delegate;
           }));
         })
+        ..alarm = allowInterop(() {
+          return futureToPromise(Future(() async {
+            await instance.alarm();
+          }));
+        })
         ..init = allowInterop(instance.init)
   });
 }

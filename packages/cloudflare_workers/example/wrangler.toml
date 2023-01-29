@@ -8,6 +8,11 @@ kv_namespaces = [
   { binding = "TODO", id = "f09b02be8f6448a49b8b9d9a80bf9763", preview_id = "f09b02be8f6448a49b8b9d9a80bf9763" }
 ]
 
+durable_objects.bindings = [
+  {name = "ZAPP_STATS_WORKER", class_name = "StatsWorker"},
+  {name = "ZAPP_STATS_WORKER2", class_name = "StatsWorker2"}
+]
+
 [build]
 command = "dart run edge build cloudflare --dev"
 watch_dir = ["lib"]

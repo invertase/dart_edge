@@ -17,8 +17,12 @@ class DurableObject {
 
   external set fetch(
       Promise<interop.Response> Function(interop.Request request) function);
+
   external Promise<interop.Response> Function(interop.Request request)
       get fetch;
+
+  external set alarm(Promise<void> Function() function);
+  external Promise<void> Function() get alarm;
 
   external factory DurableObject();
 }
