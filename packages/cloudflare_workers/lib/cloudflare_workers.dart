@@ -25,7 +25,26 @@ export './public/html_rewriter.dart'
         DocumentEnd,
         Element,
         EndTag;
-export './public/kv_namespace.dart' show KVNamespace;
+export './public/kv_namespace.dart'
+    show
+        KVNamespace,
+        KVNamespaceGetWithMetadataResult,
+        KVNamespaceGetOptions,
+        KVNamespacePutOptions,
+        KVNamespaceListResult,
+        KVNamespaceListKey,
+        KVNamespaceListOptions;
+export './public/request_init.dart'
+    show
+        CloudflareWorkersRequestInitExtension,
+        RequestInitCfProperties,
+        RequestInitCfPropertiesImageMinify,
+        BasicImageTransformations,
+        RequestInitCfPropertiesImageDraw,
+        BasicImageTransformationsFit,
+        BasicImageTransformationsGravity,
+        RequestInitCfPropertiesImageDrawRepeat,
+        RequestInitCfPolish;
 export './public/request.dart'
     show CloudflareWorkersRequestExtension, IncomingRequestCfProperties;
 export './public/scheduled_event.dart' show ScheduledEvent;
