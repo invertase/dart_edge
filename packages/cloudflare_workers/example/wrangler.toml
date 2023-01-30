@@ -2,8 +2,6 @@ name = "dart-worker-example"
 compatibility_date = "2022-11-30"
 main = ".dart_tool/edge/entry.js"
 
-compatibility_flags = ['formdata_parser_supports_files']
-
 kv_namespaces = [
   { binding = "TODO", id = "f09b02be8f6448a49b8b9d9a80bf9763", preview_id = "f09b02be8f6448a49b8b9d9a80bf9763" }
 ]

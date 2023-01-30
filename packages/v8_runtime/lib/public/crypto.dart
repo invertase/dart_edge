@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:js_bindings/js_bindings.dart' as interop;
 import '../interop/crypto_interop.dart' as interop;
 
-export 'package:js_bindings/js_bindings.dart' show KeyFormat;
+export 'package:js_bindings/js_bindings.dart' show KeyFormat, KeyType;
+
+final crypto = Crypto._(interop.crypto);
 
 class Crypto {
   final interop.Crypto _delegate;
@@ -24,7 +26,15 @@ class SubtleCrypto {
 
   SubtleCrypto._(this._delegate);
 
-  // TODO encrypt
+  Future<ByteBuffer> encrypt(
+    Algorithm algorithm,
+    CryptoKey key,
+    dynamic data,
+  ) {
+    final obj = _delegate.encrypt(algorithm._delegate, key._delegate, data);
+    throw UnimplementedError('TODO - how to handle return type?');
+  }
+
   // TODO decrypt
   // TODO sign
   // TODO verify
@@ -38,4 +48,35 @@ class SubtleCrypto {
   // TODO unwrapKey
 }
 
-final crypto = Crypto._(interop.crypto);
+abstract class Algorithm {
+  final interop.Algorithm _delegate;
+  Algorithm._(this._delegate);
+  String get name => _delegate.name;
+}
+
+class RsaOaepParams extends Algorithm {
+  final interop.RsaOaepParams _rsaDelegate;
+
+  RsaOaepParams._(this._rsaDelegate)
+      : super._(interop.Algorithm(name: 'RSA-OAEP'));
+
+  factory RsaOaepParams({
+    ByteBuffer? label,
+  }) =>
+      RsaOaepParams._(interop.RsaOaepParams(
+        label: label,
+      ));
+
+  ByteBuffer? get label => _rsaDelegate.label;
+  set label(ByteBuffer? value) => _rsaDelegate.label = value;
+}
+
+class CryptoKey {
+  final interop.CryptoKey _delegate;
+
+  CryptoKey._(this._delegate);
+
+  interop.KeyType get type => _delegate.type;
+  bool get extractable => _delegate.extractable;
+  List<String> get usages => _delegate.usages;
+}
