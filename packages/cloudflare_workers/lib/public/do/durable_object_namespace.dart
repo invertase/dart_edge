@@ -8,8 +8,10 @@ class DurableObjectNamespace {
 
   DurableObjectNamespace._(this._delegate);
 
-  DurableObjectId newUniqueId() =>
-      durableObjectIdFromJsObject(_delegate.newUniqueId());
+  DurableObjectId newUniqueId(
+          [DurableObjectNamespaceNewUniqueIdOptions? options]) =>
+      durableObjectIdFromJsObject(_delegate.newUniqueId(options?.delegate ??
+          interop.DurableObjectNamespaceNewUniqueIdOptions()));
   DurableObjectId idFromName(String name) =>
       durableObjectIdFromJsObject(_delegate.idFromName(name));
   DurableObjectId idFromString(String id) =>
@@ -21,3 +23,16 @@ class DurableObjectNamespace {
 DurableObjectNamespace durableObjectNamespaceFromJsObject(
         interop.DurableObjectNamespace obj) =>
     DurableObjectNamespace._(obj);
+
+class DurableObjectNamespaceNewUniqueIdOptions {
+  String? jurisdiction;
+
+  DurableObjectNamespaceNewUniqueIdOptions({this.jurisdiction});
+}
+
+extension on DurableObjectNamespaceNewUniqueIdOptions {
+  interop.DurableObjectNamespaceNewUniqueIdOptions get delegate =>
+      interop.DurableObjectNamespaceNewUniqueIdOptions(
+        jurisdiction: jurisdiction,
+      );
+}

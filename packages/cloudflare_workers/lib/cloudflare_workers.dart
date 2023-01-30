@@ -35,4 +35,12 @@ export './public/do/durable_object_id.dart' show DurableObjectId;
 export './public/do/durable_object_namespace.dart' show DurableObjectNamespace;
 export './public/do/durable_object.dart' show DurableObject;
 export './public/do/durable_object_state.dart' show DurableObjectState;
-export './public/do/durable_object_storage.dart' show DurableObjectStorage;
+export './public/do/durable_object_storage.dart'
+    show DurableObjectStorage, DurableObjectTransaction;
+export './public/do/durable_object_storage_options.dart'
+    show
+        DurableObjectGetOptions,
+        DurableObjectGetAlarmOptions,
+        DurableObjectSetAlarmOptions,
+        DurableObjectPutOptions,
+        DurableObjectListOptions;

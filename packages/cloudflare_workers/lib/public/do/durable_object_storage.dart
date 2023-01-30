@@ -2,115 +2,112 @@ import 'dart:async';
 import 'dart:js_util';
 
 import '../../interop/durable_object_interop.dart' as interop;
+import './durable_object_storage_options.dart';
 
 class DurableObjectStorage {
   final interop.DurableObjectStorage _delegate;
 
   DurableObjectStorage._(this._delegate);
 
-  Future<DurableObjectStorageGetResult> get(
-    String key, {
-    bool allowConcurrency = false,
-    bool noCache = false,
-  }) async {
-    return DurableObjectStorageGetResult._(
-      await _delegate.get(
-        key,
-        interop.DurableObjectGetOptions(
-          allowConcurrency: allowConcurrency,
-          noCache: noCache,
-        ),
-      ),
+  Future<T?> get<T>(String key, [DurableObjectGetOptions? options]) async {
+    final obj = await _delegate.get(
+      key,
+      options?.delegate ?? interop.DurableObjectGetOptions(),
     );
+
+    return obj == null ? null : dartify(obj) as T;
   }
 
-  Future<Map<String, DurableObjectStorageGetResult>> getEntries(
-    Iterable<String> keys, {
-    bool allowConcurrency = false,
-    bool noCache = false,
-  }) async {
-    // TODO: implement - returns a JS Map (not object).
-    throw UnimplementedError();
+  Future<Map<String, T>> getEntries<T>(Iterable<String> keys,
+      [DurableObjectGetOptions? options]) async {
+    final obj = await _delegate.get(
+      keys,
+      options?.delegate ?? interop.DurableObjectGetOptions(),
+    );
+
+    return dartify(obj) as Map<String, T>;
   }
 
   Future<void> put<T>(
     String key,
-    T value, {
-    bool allowUnconfirmed = false,
-    bool noCache = false,
-  }) async {
+    T value, [
+    DurableObjectPutOptions? options,
+  ]) async {
     return _delegate.put(
       key,
       value,
-      interop.DurableObjectPutOptions(
-        allowUnconfirmed: allowUnconfirmed,
-        noCache: noCache,
-      ),
+      options?.delegate ?? interop.DurableObjectPutOptions(),
     );
   }
 
-  Future<void> putEntries<T>(
-    Map<Object, T> entries, {
-    bool allowUnconfirmed = false,
-    bool noCache = false,
-  }) async {
+  Future<void> putEntries<T>(Map<Object, T> entries,
+      [DurableObjectPutOptions? options]) async {
     return _delegate.putEntries<T>(
       entries,
-      interop.DurableObjectPutOptions(
-        allowUnconfirmed: allowUnconfirmed,
-        noCache: noCache,
-      ),
+      options?.delegate ?? interop.DurableObjectPutOptions(),
     );
   }
 
-  Future<bool> delete(dynamic key) async {
-    return _delegate.delete(key);
+  Future<bool> delete(String key, [DurableObjectPutOptions? options]) async {
+    return _delegate.delete(
+      key,
+      options?.delegate ?? interop.DurableObjectPutOptions(),
+    );
+  }
+
+  Future<void> deleteAll([DurableObjectPutOptions? options]) async {
+    return _delegate.deleteAll(
+      options?.delegate ?? interop.DurableObjectPutOptions(),
+    );
   }
 
   Future<bool> deleteEntries(
-    Iterable<String> keys, {
-    bool allowUnconfirmed = false,
-    bool noCache = false,
-  }) async {
+    Iterable<String> keys, [
+    DurableObjectPutOptions? options,
+  ]) async {
     return _delegate.deleteEntries(
-        keys,
-        interop.DurableObjectPutOptions(
-          allowUnconfirmed: allowUnconfirmed,
-          noCache: noCache,
-        ));
+      keys,
+      options?.delegate ?? interop.DurableObjectPutOptions(),
+    );
   }
 
-  // TODO list options
-  Future<Map<String, DurableObjectStorageGetResult>> list() async {
-    throw UnimplementedError();
+  Future<Map<String, T>> list<T>([DurableObjectListOptions? options]) async {
+    final obj = await _delegate.list(
+      options?.delegate ?? interop.DurableObjectListOptions(),
+    );
+
+    return dartify(obj) as Map<String, T>;
   }
 
-  Future<void> transaction(Future<void> Function(dynamic tsx) callback) async {
-    throw UnimplementedError();
+  Future<void> transaction(
+      Future<void> Function(DurableObjectTransaction tsx) callback) async {
+    return _delegate.transaction((tsx) async {
+      return callback(DurableObjectTransaction._(tsx));
+    });
   }
 
-  // TODO: Supported options: Like get() above, but without noCache.
-  Future<num?> deleteAll() async {
-    throw UnimplementedError();
+  Future<int?> getAlarm([DurableObjectGetAlarmOptions? options]) async {
+    return _delegate.getAlarm(
+      options?.delegate ?? interop.DurableObjectGetAlarmOptions(),
+    );
   }
 
-  // TODO: Supported options: Like get() above, but without noCache.
-  Future<num?> getAlarm() async {
-    throw UnimplementedError();
+  Future<void> setAlarm(DateTime scheduledTime,
+      [DurableObjectSetAlarmOptions? options]) async {
+    return _delegate.setAlarm(
+      scheduledTime,
+      options?.delegate ?? interop.DurableObjectSetAlarmOptions(),
+    );
   }
 
-  // TODO Supported options: Like put() above, but without noCache.
-  Future<void> setAlarm() async {
-    throw UnimplementedError();
-  }
-
-  // TODO: Supported options: Like put() above, but without noCache.
-  Future<void> deleteAlarm() async {
-    throw UnimplementedError();
+  Future<void> deleteAlarm([DurableObjectSetAlarmOptions? options]) async {
+    return _delegate.deleteAlarm(
+      options?.delegate ?? interop.DurableObjectSetAlarmOptions(),
+    );
   }
 
   Future<void> sync() async {
-    throw UnimplementedError();
+    return _delegate.sync();
   }
 }
 
@@ -123,20 +120,11 @@ DurableObjectStorage durableObjectStorageFromJsObject(
 ) =>
     DurableObjectStorage._(obj);
 
-class DurableObjectStorageGetResult {
-  final dynamic _delegate;
+class DurableObjectTransaction extends DurableObjectStorage {
+  final interop.DurableObjectTransaction _tsxDelegate;
+  DurableObjectTransaction._(this._tsxDelegate) : super._(_tsxDelegate);
 
-  DurableObjectStorageGetResult._(this._delegate);
-
-  // TODO: is this the best way? Or should we just get<T>
-  String? get stringValue => _delegate?.toString();
-  num? get numberValue => num.tryParse(stringValue ?? '');
-  bool? get boolValue => stringValue == null
-      ? null
-      : stringValue?.toLowerCase() == 'true'
-          ? true
-          : false;
-  Map<Object, Object?>? get mapValue =>
-      dartify(_delegate) as Map<Object, Object?>?;
-  List<Object?>? get listValue => dartify(_delegate) as List<Object?>?;
+  void rollback() {
+    _tsxDelegate.rollback();
+  }
 }

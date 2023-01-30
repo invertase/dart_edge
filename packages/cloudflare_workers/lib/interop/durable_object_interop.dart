@@ -57,13 +57,48 @@ extension PropsDurableObjectStorage on DurableObjectStorage {
       js_util.promiseToFuture(
           js_util.callMethod(this, 'put', [jsify(entries), options]));
 
-  Future<bool> delete<T>(String key) =>
-      js_util.promiseToFuture(js_util.callMethod(this, 'delete', [key]));
+  Future<bool> delete<T>(String key, DurableObjectPutOptions options) => js_util
+      .promiseToFuture(js_util.callMethod(this, 'delete', [key, options]));
+
+  Future<void> deleteAll(DurableObjectPutOptions options) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'deleteAll', [options]));
 
   Future<bool> deleteEntries<T>(Iterable<String> keys,
           [DurableObjectPutOptions? options]) =>
       js_util
           .promiseToFuture(js_util.callMethod(this, 'delete', [keys, options]));
+
+  Future<Map<Object, T>> list<T>([DurableObjectListOptions? options]) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'list', [options]));
+
+  Future<int?> getAlarm([DurableObjectGetAlarmOptions? options]) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'getAlarm', [options]));
+
+  Future<void> setAlarm(DateTime scheduled,
+          [DurableObjectSetAlarmOptions? options]) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'setAlarm', [
+        scheduled.millisecondsSinceEpoch,
+        options,
+      ]));
+
+  Future<void> deleteAlarm([DurableObjectSetAlarmOptions? options]) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'deleteAlarm', [
+        options,
+      ]));
+
+  Future<void> sync() =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'sync', []));
+
+  Future<void> transaction(
+      Future<void> Function(DurableObjectTransaction tsx) callback) {
+    return js_util.promiseToFuture(
+      js_util.callMethod(this, 'transaction', [
+        allowInterop((tsx) async {
+          await callback(tsx);
+        })
+      ]),
+    );
+  }
 }
 
 @anonymous
@@ -79,10 +114,55 @@ class DurableObjectGetOptions {
 @anonymous
 @JS()
 @staticInterop
+class DurableObjectGetAlarmOptions {
+  external factory DurableObjectGetAlarmOptions({
+    bool? allowConcurrency,
+  });
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectSetAlarmOptions {
+  external factory DurableObjectSetAlarmOptions({
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+  });
+}
+
+@anonymous
+@JS()
+@staticInterop
 class DurableObjectPutOptions {
   external factory DurableObjectPutOptions({
+    bool? allowConcurrency,
     bool? allowUnconfirmed,
     bool? noCache,
+  });
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectListOptions {
+  external factory DurableObjectListOptions({
+    String? start,
+    String? startAfter,
+    String? end,
+    String? prefix,
+    bool? reverse,
+    bool? limit,
+    bool? allowConcurrency,
+    bool? noCache,
+  });
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectNamespaceNewUniqueIdOptions {
+  external factory DurableObjectNamespaceNewUniqueIdOptions({
+    String? jurisdiction,
   });
 }
 
@@ -120,8 +200,9 @@ class DurableObjectNamespace {
 }
 
 extension PropsDurableObjectNamespace on DurableObjectNamespace {
-  // TODO options
-  DurableObjectId newUniqueId() => js_util.callMethod(this, 'newUniqueId', []);
+  DurableObjectId newUniqueId(
+          [DurableObjectNamespaceNewUniqueIdOptions? options]) =>
+      js_util.callMethod(this, 'newUniqueId', [options]);
   DurableObjectId idFromName(String name) =>
       js_util.callMethod(this, 'idFromName', [name]);
   DurableObjectId idFromString(String id) =>
@@ -202,4 +283,15 @@ class DurableObjectStub extends Fetcher {
 extension PropsDurableObjectStub on DurableObjectStub {
   DurableObjectId get id => js_util.getProperty(this, 'id');
   String get name => js_util.getProperty(this, 'name');
+}
+
+@anonymous
+@JS()
+@staticInterop
+class DurableObjectTransaction extends DurableObjectStorage {
+  external factory DurableObjectTransaction();
+}
+
+extension PropsDurableObjectTransaction on DurableObjectTransaction {
+  void rollback() => js_util.callMethod(this, 'rollback', []);
 }
