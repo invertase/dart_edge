@@ -4,6 +4,7 @@ export './public/cloudflare_workers.dart'
     show
         CloudflareWorkersFetchEvent,
         CloudflareWorkersScheduledEvent,
+        CloudflareWorkersEmailEvent,
         CloudflareWorkers;
 
 export './public/cache_storage.dart'
