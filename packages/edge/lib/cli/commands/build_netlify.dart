@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:hotreloader/hotreloader.dart';
 import 'package:path/path.dart' as p;
 
 import '../utils/compiler.dart';
@@ -41,24 +40,24 @@ class NetlifyBuildCommand extends BaseCommand {
     await File(p.join(netlifyEdge.path, 'index.js'))
         .writeAsString(edgeFunctionEntryFileDefaultValue('main.dart.js'));
 
-    try {
-      print('Starting hot reload...');
-      final reloader = await HotReloader.create(
-        debounceInterval: Duration(milliseconds: 50),
-        onBeforeReload: (ctx) {
-          print(ctx.event?.path);
-          return true;
-        },
-        onAfterReload: (ctx) async {
-          // TODO: Compiler works, but netlify doesnt realise the file has
-          // changes unless we manually save?
-          logger.write('Changes detected...');
-          await compiler.compile();
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
+    // try {
+    //   print('Starting hot reload...');
+    //   final reloader = await HotReloader.create(
+    //     debounceInterval: Duration(milliseconds: 50),
+    //     onBeforeReload: (ctx) {
+    //       print(ctx.event?.path);
+    //       return true;
+    //     },
+    //     onAfterReload: (ctx) async {
+    //       // TODO: Compiler works, but netlify doesnt realise the file has
+    //       // changes unless we manually save?
+    //       logger.write('Changes detected...');
+    //       await compiler.compile();
+    //     },
+    //   );
+    // } catch (e) {
+    //   print(e);
+    // }
 
     // print(Platform.environment);
 

@@ -57,7 +57,7 @@ class VercelBuildCommand extends BaseCommand {
       ),
     );
 
-    await devServer.start();
+    devServer.start();
   }
 
   Future<void> runBuild() async {
