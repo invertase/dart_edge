@@ -1,7 +1,6 @@
 import 'dart:js_util';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:v8_runtime/interop/utils_interop.dart';
 import '../interop/cache_interop.dart' as interop;
 import 'cache.dart';
 import 'request.dart';
@@ -28,6 +27,8 @@ class CacheStorage {
     return _delegate.keys();
   }
 
+  // TODO - support match options.
+  // MultiCacheQueryOptions requires a string value (cacheName), but this throws on CF.
   Future<Response?> match(Request request) async {
     final obj = await promiseToFuture<interop.Response?>(
         _delegate.match(request.delegate));
@@ -51,23 +52,23 @@ class CacheQueryOptions {
   });
 }
 
-class MultiCacheQueryOptions extends CacheQueryOptions {
-  String? cacheName;
+// class MultiCacheQueryOptions extends CacheQueryOptions {
+//   String? cacheName;
 
-  MultiCacheQueryOptions({
-    this.cacheName,
-    super.ignoreSearch,
-    super.ignoreMethod,
-    super.ignoreVary,
-  });
-}
+//   MultiCacheQueryOptions({
+//     this.cacheName,
+//     super.ignoreSearch,
+//     super.ignoreMethod,
+//     super.ignoreVary,
+//   });
+// }
 
-extension on MultiCacheQueryOptions {
-  interop.MultiCacheQueryOptions get delegate {
-    return interop.MultiCacheQueryOptions(
-      cacheName: cacheName ?? '',
-    )
-      ..ignoreMethod = ignoreMethod ?? false
-      ..ignoreVary = ignoreVary ?? false;
-  }
-}
+// extension on MultiCacheQueryOptions {
+//   interop.MultiCacheQueryOptions get delegate {
+//     return interop.MultiCacheQueryOptions(
+//       cacheName: cacheName ?? '',
+//     )
+//       ..ignoreMethod = ignoreMethod ?? false
+//       ..ignoreVary = ignoreVary ?? false;
+//   }
+// }
