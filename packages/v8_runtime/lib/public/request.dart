@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'abort_signal.dart';
+import 'abort.dart';
 import 'blob.dart';
 import 'body.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;

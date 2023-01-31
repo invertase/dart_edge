@@ -4,7 +4,9 @@ class ReadableStream {
   final interop.ReadableStream _delegate;
   ReadableStream._(this._delegate);
 
-  // TODO
+  bool get locked => _delegate.locked;
+
+  // TODO implement methods
 }
 
 ReadableStream readableStreamFromJsObject(interop.ReadableStream delegate) {

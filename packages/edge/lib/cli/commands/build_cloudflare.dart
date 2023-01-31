@@ -37,10 +37,6 @@ class CloudflareBuildCommand extends BaseCommand {
         if (binding['class_name'] != null) binding['class_name']
     };
 
-    print(durableObjectNames);
-
-    // TODO: figure out how to get durable objects from toml
-
     final isDev = argResults!['dev'] as bool;
 
     final edgeTool = Directory(
@@ -58,6 +54,8 @@ class CloudflareBuildCommand extends BaseCommand {
     await compiler.compile();
 
     String entryFile = edgeFunctionEntryFileDefaultValue('main.dart.js');
+
+    logger.trace('Generating Durable Object exports: $durableObjectNames');
 
     // Add durable objects as exports.
     for (final durableObjectName in durableObjectNames) {

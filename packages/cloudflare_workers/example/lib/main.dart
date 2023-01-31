@@ -3,38 +3,25 @@ import 'package:cloudflare_workers/cloudflare_workers.dart';
 void main() {
   CloudflareWorkers(
     fetch: (request, env, ctx) async {
-      if (request.method == 'GET') {
-        return Response('Hello World :D');
+      if (request.url.toString().contains('favicon.ico')) {
+        return Response('');
       }
 
-      print(request.headers['content-type']);
+      try {
+        final r = await fetch(Resource('https://dummyjson.com/products/1'));
+        print('got response');
+        print(r.ok);
+        final j = await r.json() as dynamic;
+        print(j);
+        for (final p in j['images']) {
+          print(p);
+        }
+      } catch (e) {
+        print('ERROR');
+        print(e);
+      }
 
-      final formData = await request.formData();
-
-      // final string = formData.get('string');
-      // string?.maybeWhen(
-      //   string: (value) => print(value),
-      //   orElse: () {
-      //     throw StateError('Expected string');
-      //   },
-      // );
-
-      final file = formData.get('file');
-      file?.maybeWhen(
-        file: (value) async {
-          print(value.name);
-          print(value.lastModified);
-          print(value.webkitRelativePath);
-          print(await value.text());
-          print(await value.slice());
-          print(await value.arrayBuffer());
-        },
-        orElse: () {
-          throw StateError('Expected file');
-        },
-      );
-
-      return Response('Hello World :D');
+      return Response('Hello World!');
     },
     scheduled: (event, env, ctx) {
       // ScheduledEvent!!

@@ -11,10 +11,6 @@ import 'resource.dart';
 import 'response.dart';
 
 void addFetchEventListener(Null Function(FetchEvent event) listener) {
-  // The js_bindings package assumes that the global object is `window`,
-  // but in a worker enbironment, it is `self`.
-  if (js.context['window'] == null) js.context['window'] = js.context['self'];
-
   interop.addEventListener(
     'fetch',
     js.allowInterop((interop.ExtendableEvent delegate) {
@@ -29,7 +25,7 @@ Future<Response> fetch(Resource resource, [RequestInit? init]) async {
     await promiseToFuture(
       interop.fetch(
         interop.requestFromResource(resource),
-        init?.delegate,
+        jsify(init?.toJson() ?? {}),
       ),
     ),
   );

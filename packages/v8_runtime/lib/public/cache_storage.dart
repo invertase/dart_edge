@@ -1,10 +1,13 @@
 import 'dart:js_util';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:v8_runtime/interop/utils_interop.dart';
 import '../interop/cache_interop.dart' as interop;
 import 'cache.dart';
 import 'request.dart';
 import 'response.dart';
+
+final caches = CacheStorage._(interop.caches);
 
 class CacheStorage {
   final interop.CacheStorage _delegate;
@@ -20,6 +23,8 @@ class CacheStorage {
   }
 
   Future<Iterable<String>> keys() async {
+    throw UnimplementedError(
+        'TODO: delegate API does not return the correct type');
     return _delegate.keys();
   }
 
@@ -34,4 +39,35 @@ class CacheStorage {
   }
 }
 
-final caches = CacheStorage._(interop.caches);
+class CacheQueryOptions {
+  bool? ignoreSearch;
+  bool? ignoreMethod;
+  bool? ignoreVary;
+
+  CacheQueryOptions({
+    this.ignoreSearch,
+    this.ignoreMethod,
+    this.ignoreVary,
+  });
+}
+
+class MultiCacheQueryOptions extends CacheQueryOptions {
+  String? cacheName;
+
+  MultiCacheQueryOptions({
+    this.cacheName,
+    super.ignoreSearch,
+    super.ignoreMethod,
+    super.ignoreVary,
+  });
+}
+
+extension on MultiCacheQueryOptions {
+  interop.MultiCacheQueryOptions get delegate {
+    return interop.MultiCacheQueryOptions(
+      cacheName: cacheName ?? '',
+    )
+      ..ignoreMethod = ignoreMethod ?? false
+      ..ignoreVary = ignoreVary ?? false;
+  }
+}

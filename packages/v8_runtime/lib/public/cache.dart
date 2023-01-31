@@ -3,6 +3,7 @@ import 'dart:js_util';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
 import '../interop/utils_interop.dart' as interop;
+import 'request.dart';
 import 'response.dart';
 import 'resource.dart';
 
@@ -75,21 +76,10 @@ class Cache {
   }
 
   Future<void> put(
-    Resource resource,
+    Request request,
     Response response,
   ) async {
-    // TODO replace with typeguard and don't throw our own
-    // error
-    // if (response.bodyUsed) {
-    //   throw StateError('Response body is already used.');
-    // }
-    try {
-      await _delegate.put(
-          interop.requestFromResource(resource), response.delegate);
-    } catch (e, s) {
-      print(e);
-      print(s);
-    }
+    return _delegate.put(request.delegate, response.delegate);
   }
 }
 

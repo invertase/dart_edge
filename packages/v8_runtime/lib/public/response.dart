@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:js_util' show jsify;
 import 'dart:typed_data';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
 import '../interop/utils_interop.dart' as interop;
 
+import '../interop/utils_interop.dart';
 import '../utils.dart';
 import 'blob.dart';
 import 'body.dart';
@@ -24,18 +26,21 @@ class Response implements Body {
         );
 
   factory Response.error() {
+    // TODO: This won't work, see https://github.com/jodinathan/js_bindings/issues/25
     return Response._(
       interop.PropsResponse.error(),
     );
   }
 
   factory Response.redirect(Uri url, [int? status = 302]) {
+    // TODO: This won't work, see https://github.com/jodinathan/js_bindings/issues/25
     return Response._(
       interop.PropsResponse.redirect(url.toString(), status),
     );
   }
 
   factory Response.json(Object? data, [ResponseInit? init]) {
+    // TODO: This won't work, see https://github.com/jodinathan/js_bindings/issues/25
     return Response._(
       interop.PropsResponse.json(data, jsify(init?.toJson() ?? {})),
     );
@@ -70,9 +75,13 @@ class Response implements Body {
       formDataFromJsObject(await _delegate.formData());
 
   @override
-  Future<Object?> json() async =>
-      // ignore: unnecessary_cast, Dart issue
-      interop.dartify(await (_delegate as interop.Body).json());
+  Future<Object?> json() async {
+    // We don't call `_delegate.json()` directly, as it decodes the JSON
+    // from JS `JSON.parse`, which does not translate all values back to Dart
+    // correctly (e.g. a List is not translated to a JsArray).
+    final text = await _delegate.text();
+    return jsonDecode(text);
+  }
 
   @override
   Future<String> text() => _delegate.text();

@@ -19,8 +19,10 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<Response> {
-		env.MY_DURABLE_OBJECT.idFromName('doo');
-
+		await caches.default.match(request, {
+			// @ts-ignore
+			cacheName: 'fooooo',
+		});
 
 		return new Response("Hello World!");
 	},

@@ -4,15 +4,17 @@ import 'package:js_bindings/js_bindings.dart' as interop;
 
 import 'readable_stream.dart';
 
+export 'package:js_bindings/js_bindings.dart' show EndingType;
+
 class Blob {
   final interop.Blob _delegate;
 
   Blob._(this._delegate);
 
-  // TODO BlobPropertyBag
-  Blob([Iterable<dynamic>? blobParts])
+  Blob([Iterable<dynamic>? blobParts, BlobPropertyBag? options])
       : _delegate = interop.Blob(
           blobParts,
+          options?.delegate ?? interop.BlobPropertyBag(),
         );
 
   int get size => _delegate.size;
@@ -37,4 +39,20 @@ extension BlobExtension on Blob {
 
 Blob blobFromJsObject(interop.Blob delegate) {
   return Blob._(delegate);
+}
+
+class BlobPropertyBag {
+  String? type;
+  interop.EndingType? endings;
+
+  BlobPropertyBag({this.type, this.endings});
+}
+
+extension on BlobPropertyBag {
+  interop.BlobPropertyBag get delegate {
+    return interop.BlobPropertyBag(
+      type: type,
+      endings: endings,
+    );
+  }
 }
