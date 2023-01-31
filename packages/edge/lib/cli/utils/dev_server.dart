@@ -46,27 +46,28 @@ class DevServer {
   }
 
   Future<void> start() async {
+    String compiled = await _compile();
+
     while (true) {
-      print('Starting....');
       Process process = await _startEdgeRuntime(
-        await _compile(),
+        compiled,
       );
 
       final watcher = DirectoryWatcher(p.join(Directory.current.path, 'lib'));
-      // Timer? _debounce;
+      Timer? _debounce;
       StreamSubscription? watcherSubscription;
 
       final completer = Completer();
       watcherSubscription = watcher.events.listen((event) async {
-        completer.complete();
+        if (_debounce?.isActive ?? false) _debounce?.cancel();
+        _debounce = Timer(const Duration(milliseconds: 750), () {
+          if (!completer.isCompleted) completer.complete();
+        });
       });
       await completer.future;
       await watcherSubscription.cancel();
-      process.kill(ProcessSignal.sigkill);
-      await process.stdout;
-      await process.stderr;
-      // print(await process.exitCode);
-      await Future.delayed(Duration(milliseconds: 20000));
+      compiled = await _compile();
+      process.kill(ProcessSignal.sigterm);
     }
 
     // Future<HotReloader> makeHotReloader() {
