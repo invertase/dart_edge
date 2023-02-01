@@ -1,7 +1,5 @@
-<p align="center">
-  <h1 align="center">Dart Edge (Experimental)</h1>
-  <span align="center">Run Dart on on the Edge.</span>
-</p>
+<h1 align="center">Dart Edge (Experimental)</h1>
+<p align="center">Run Dart on on the Edge.</p>
 
 <p align="center">
   <a href="https://github.com/invertase/melos#readme-badge"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square" alt="Melos" /></a>
