@@ -36,15 +36,14 @@ export './public/kv_namespace.dart'
         KVNamespaceListOptions;
 export './public/request_init.dart'
     show
-        CloudflareWorkersRequestInitExtension,
-        RequestInitCfProperties,
-        RequestInitCfPropertiesImageMinify,
+        CloudflareRequestInit,
+        CloudflareRequestInitImageMinify,
         BasicImageTransformations,
-        RequestInitCfPropertiesImageDraw,
+        CloudflareRequestInitImageDraw,
         BasicImageTransformationsFit,
         BasicImageTransformationsGravity,
-        RequestInitCfPropertiesImageDrawRepeat,
-        RequestInitCfPolish;
+        CloudflareRequestInitImageDrawRepeat,
+        CloudflareRequestInitPolish;
 export './public/request.dart'
     show CloudflareWorkersRequestExtension, IncomingRequestCfProperties;
 export './public/scheduled_event.dart' show ScheduledEvent;

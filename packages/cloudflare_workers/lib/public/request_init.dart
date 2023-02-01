@@ -8,10 +8,10 @@ class CloudflareRequestInit {
   Map<String, int>? cacheTtlByStatus;
   bool? scrapeShield;
   bool? apps;
-  RequestInitCfPropertiesImageDraw? image;
-  RequestInitCfPropertiesImageMinify? minify;
+  CloudflareRequestInitImageDraw? image;
+  CloudflareRequestInitImageMinify? minify;
   bool? mirage;
-  RequestInitCfPolish? polish;
+  CloudflareRequestInitPolish? polish;
   String? resolveOverride;
 
   CloudflareRequestInit({
@@ -30,7 +30,7 @@ class CloudflareRequestInit {
   });
 }
 
-extension RequestInitCfPropertiesExtension on CloudflareRequestInit {
+extension CloudflareRequestInitExtension on CloudflareRequestInit {
   interop.RequestInitCfProperties get delegate {
     return interop.RequestInitCfProperties()
       ..cacheEverything = cacheEverything
@@ -48,20 +48,20 @@ extension RequestInitCfPropertiesExtension on CloudflareRequestInit {
   }
 }
 
-class RequestInitCfPropertiesImageMinify {
+class CloudflareRequestInitImageMinify {
   bool? javascript;
   bool? css;
   bool? html;
 
-  RequestInitCfPropertiesImageMinify({
+  CloudflareRequestInitImageMinify({
     this.javascript,
     this.css,
     this.html,
   });
 }
 
-extension RequestInitCfPropertiesImageMinifyExtension
-    on RequestInitCfPropertiesImageMinify {
+extension CloudflareRequestInitImageMinifyExtension
+    on CloudflareRequestInitImageMinify {
   interop.RequestInitCfPropertiesImageMinify get delegate {
     return interop.RequestInitCfPropertiesImageMinify()
       ..javascript = javascript
@@ -88,16 +88,16 @@ class BasicImageTransformations {
   });
 }
 
-class RequestInitCfPropertiesImageDraw extends BasicImageTransformations {
+class CloudflareRequestInitImageDraw extends BasicImageTransformations {
   String url;
   num? opacity;
-  RequestInitCfPropertiesImageDrawRepeat? repeat;
+  CloudflareRequestInitImageDrawRepeat? repeat;
   num? top;
   num? left;
   num? bottom;
   num? right;
 
-  RequestInitCfPropertiesImageDraw({
+  CloudflareRequestInitImageDraw({
     required this.url,
     this.opacity,
     this.repeat,
@@ -114,12 +114,12 @@ class RequestInitCfPropertiesImageDraw extends BasicImageTransformations {
   });
 }
 
-extension RequestInitCfPropertiesImageDrawExtension
-    on RequestInitCfPropertiesImageDraw {
+extension CloudflareRequestInitImageDrawExtension
+    on CloudflareRequestInitImageDraw {
   interop.RequestInitCfPropertiesImageDraw get delegate {
     return interop.RequestInitCfPropertiesImageDraw(url: url)
       ..opacity = opacity
-      ..repeat = repeat == RequestInitCfPropertiesImageDrawRepeat.valueTrue
+      ..repeat = repeat == CloudflareRequestInitImageDrawRepeat.valueTrue
           ? true
           : repeat?.name
       ..top = top
@@ -156,13 +156,13 @@ enum BasicImageTransformationsGravity {
   // cordinates?
 }
 
-enum RequestInitCfPropertiesImageDrawRepeat {
+enum CloudflareRequestInitImageDrawRepeat {
   valueTrue,
   x,
   y,
 }
 
-enum RequestInitCfPolish {
+enum CloudflareRequestInitPolish {
   lossy,
   lossless,
   off,
