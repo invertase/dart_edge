@@ -12,7 +12,8 @@ external void addEventListener(
 @js.JS('fetch')
 external Promise<interop.Response> fetch(
   interop.Request request, [
-  interop.RequestInit? init,
+  // Object, since we need to pass a Map in some cases.
+  Object? init,
 ]);
 
 @js.JS('atob')

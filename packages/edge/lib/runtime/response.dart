@@ -10,17 +10,24 @@ import 'body.dart';
 import 'form_data.dart';
 import 'headers.dart';
 import 'readable_stream.dart';
-import 'response_init.dart';
 
 class Response implements Body {
   final interop.Response _delegate;
 
   Response._(this._delegate);
 
-  Response(Object? body, [ResponseInit? init])
-      : _delegate = interop.Response(
+  Response(
+    Object? body, {
+    int? status,
+    String? statusText,
+    Headers? headers,
+  }) : _delegate = interop.Response(
           convertBody(body),
-          jsify(init?.toJson() ?? {}),
+          interop.ResponseInit(
+            status: status,
+            statusText: statusText,
+            headers: headers?.delegate,
+          ),
         );
 
   factory Response.error() {
@@ -33,11 +40,20 @@ class Response implements Body {
     );
   }
 
-  factory Response.json(Object? data, [ResponseInit? init]) {
+  factory Response.json(
+    Object? data, {
+    int? status,
+    String? statusText,
+    Headers? headers,
+  }) {
     return Response._(
       interop.Response.json(
         data != null ? jsify(data) : null,
-        jsify(init?.toJson() ?? {}),
+        interop.ResponseInit(
+          status: status,
+          statusText: statusText,
+          headers: headers?.delegate,
+        ),
       ),
     );
   }

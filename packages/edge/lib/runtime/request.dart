@@ -9,7 +9,6 @@ import 'interop/utils_interop.dart' as interop;
 import 'form_data.dart';
 import 'headers.dart';
 import 'readable_stream.dart';
-import 'request_init.dart';
 import 'resource.dart';
 
 class Request implements Body {
@@ -17,10 +16,38 @@ class Request implements Body {
 
   Request._(this._delegate);
 
-  Request(Resource resource, [RequestInit? init])
-      : _delegate = interop.Request(
+  Request(
+    Resource resource, {
+    String? method,
+    Headers? headers,
+    Object? body,
+    String? referrer,
+    interop.ReferrerPolicy? referrerPolicy,
+    interop.RequestMode? mode,
+    interop.RequestCredentials? credentials,
+    interop.RequestCache? cache,
+    interop.RequestRedirect? redirect,
+    String? integrity,
+    bool? keepalive,
+    AbortSignal? signal,
+    interop.RequestDuplex? duplex,
+  }) : _delegate = interop.Request(
           interop.requestFromResource(resource),
-          init?.delegate,
+          interop.RequestInit(
+            method: method,
+            headers: headers?.delegate,
+            body: body,
+            referrer: referrer,
+            referrerPolicy: referrerPolicy,
+            mode: mode,
+            credentials: credentials,
+            cache: cache,
+            redirect: redirect,
+            integrity: integrity,
+            keepalive: keepalive,
+            signal: signal?.delegate,
+            duplex: duplex,
+          ),
         );
 
   String get method => _delegate.method;

@@ -1,4 +1,4 @@
-export 'package:edge/runtime.dart';
+export 'package:edge/runtime.dart' hide fetch;
 
 export './public/cloudflare_workers.dart'
     show
@@ -64,3 +64,4 @@ export './public/do/durable_object_storage_options.dart'
         DurableObjectSetAlarmOptions,
         DurableObjectPutOptions,
         DurableObjectListOptions;
+export './public/top.dart' show fetch;

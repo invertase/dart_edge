@@ -12,8 +12,7 @@ void main() {
     });
 
     test('it performs a POST request', () async {
-      final response =
-          await fetchFromServer('/200', RequestInit(method: 'POST'));
+      final response = await fetchFromServer('/200', method: 'POST');
       expect(response.status, 200);
       expect(await response.text(), 'POST');
     });

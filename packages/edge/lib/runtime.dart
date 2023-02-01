@@ -14,10 +14,8 @@ export 'runtime/file.dart' show File;
 export 'runtime/form_data.dart' show FormData, FormDataEntryValue;
 export 'runtime/headers.dart' show Headers;
 export 'runtime/readable_stream.dart' show ReadableStream;
-export 'runtime/request_init.dart' show RequestInit;
 export 'runtime/request.dart' show Request;
 export 'runtime/resource.dart' show Resource;
-export 'runtime/response_init.dart' show ResponseInit;
 export 'runtime/response.dart' show Response;
 export 'runtime/text_decoder.dart'
     show TextDecoder, TextDecodeOptions, TextDecoderOptions;

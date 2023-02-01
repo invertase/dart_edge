@@ -1,4 +1,5 @@
 import 'package:cloudflare_workers/cloudflare_workers.dart';
+import 'package:cloudflare_workers/public/request_init.dart';
 
 class TestDo extends DurableObject {
   TestDo(super.name);
@@ -17,6 +18,7 @@ void main() {
       final durable = env.getDurableObjectNamespace('ZAPP_STATS_WORKER');
       final id = durable.idFromName('test');
       await durable.get(id).fetch(request);
+
       return Response('');
     },
   );

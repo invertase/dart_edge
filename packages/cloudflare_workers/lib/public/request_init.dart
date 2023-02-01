@@ -1,14 +1,6 @@
-import 'package:edge/runtime/request_init.dart';
-
 import '../interop/request_init_interop.dart' as interop;
 
-extension CloudflareWorkersRequestInitExtension on RequestInit {
-  set cf(RequestInitCfProperties properties) {
-    delegate.cf = properties.delegate;
-  }
-}
-
-class RequestInitCfProperties {
+class CloudflareRequestInit {
   bool? cacheEverything;
   bool? cacheKey;
   Iterable<String>? cacheTags;
@@ -22,7 +14,7 @@ class RequestInitCfProperties {
   RequestInitCfPolish? polish;
   String? resolveOverride;
 
-  RequestInitCfProperties({
+  CloudflareRequestInit({
     this.cacheEverything,
     this.cacheKey,
     this.cacheTags,
@@ -38,7 +30,7 @@ class RequestInitCfProperties {
   });
 }
 
-extension RequestInitCfPropertiesExtension on RequestInitCfProperties {
+extension RequestInitCfPropertiesExtension on CloudflareRequestInit {
   interop.RequestInitCfProperties get delegate {
     return interop.RequestInitCfProperties()
       ..cacheEverything = cacheEverything

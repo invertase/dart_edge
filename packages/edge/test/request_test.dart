@@ -12,10 +12,9 @@ void main() {
         reason: 'The default method is should be GET',
       );
 
-      expect(Request(resource, RequestInit(method: 'GET')).method, 'GET');
-      expect(Request(resource, RequestInit(method: 'POST')).method, 'POST');
-      expect(
-          Request(resource, RequestInit(method: 'OPTIONS')).method, 'OPTIONS');
+      expect(Request(resource, method: 'GET').method, 'GET');
+      expect(Request(resource, method: 'POST').method, 'POST');
+      expect(Request(resource, method: 'OPTIONS').method, 'OPTIONS');
     });
 
     test('.url', () {
@@ -34,11 +33,9 @@ void main() {
         Resource(
           'https://foo.com',
         ),
-        RequestInit(
-          headers: Headers({
-            'foo': 'bar',
-          }),
-        ),
+        headers: Headers({
+          'foo': 'bar',
+        }),
       );
 
       expect(request.headers['foo'], 'bar');
@@ -52,7 +49,7 @@ void main() {
     test('.destination', () {
       final request = Request(
         Resource('https://foo.com'),
-        RequestInit(referrer: 'https://example.com'),
+        referrer: 'https://example.com',
       );
 
       expect(request.referrer.isNotEmpty, true);
@@ -61,7 +58,7 @@ void main() {
     test('.referrerPolicy', () {
       final request = Request(
         Resource('https://foo.com'),
-        RequestInit(referrerPolicy: ReferrerPolicy.origin),
+        referrerPolicy: ReferrerPolicy.origin,
       );
 
       expect(request.referrerPolicy, ReferrerPolicy.origin);
@@ -70,7 +67,7 @@ void main() {
     test('.mode', () {
       final request = Request(
         Resource('https://foo.com'),
-        RequestInit(mode: RequestMode.cors),
+        mode: RequestMode.cors,
       );
 
       expect(request.mode, RequestMode.cors);
@@ -79,7 +76,7 @@ void main() {
     test('.mode', () {
       final request = Request(
         Resource('https://foo.com'),
-        RequestInit(credentials: RequestCredentials.sameOrigin),
+        credentials: RequestCredentials.sameOrigin,
       );
 
       expect(request.credentials, RequestCredentials.sameOrigin);
@@ -88,7 +85,7 @@ void main() {
     test('.cache', () {
       final request = Request(
         Resource('https://foo.com'),
-        RequestInit(cache: RequestCache.noStore),
+        cache: RequestCache.noStore,
       );
 
       expect(request.cache, RequestCache.noStore);
@@ -97,7 +94,7 @@ void main() {
     test('.redirect', () {
       final request = Request(
         Resource('https://foo.com'),
-        RequestInit(redirect: RequestRedirect.error),
+        redirect: RequestRedirect.error,
       );
 
       expect(request.redirect, RequestRedirect.error);
@@ -106,7 +103,7 @@ void main() {
     test('.destination', () {
       final request = Request(
         Resource('https://foo.com'),
-        RequestInit(integrity: 'foo'),
+        integrity: 'foo',
       );
 
       expect(request.integrity, 'foo');
@@ -117,7 +114,7 @@ void main() {
 
       final request2 = Request(
         Resource('https://foo.com'),
-        RequestInit(keepalive: true),
+        keepalive: true,
       );
 
       expect(request.keepalive, false);
@@ -137,7 +134,8 @@ void main() {
         Resource(
           'https://foo.com',
         ),
-        RequestInit(method: 'POST', body: 'foo'),
+        method: 'POST',
+        body: 'foo',
       );
       expect(request.bodyUsed, false);
       expect(await request.text(), 'foo');
@@ -159,7 +157,8 @@ void main() {
         Resource(
           'https://foo.com',
         ),
-        RequestInit(method: 'POST', body: 'foo'),
+        method: 'POST',
+        body: 'foo',
       );
 
       expect(await request.text(), 'foo');
