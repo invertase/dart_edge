@@ -70,3 +70,12 @@ If you're not familar with the concept of serverless functions, you should be aw
 
 Serverless functions on the Edge are different. They are invoked once-per-request and are not long lived. You cannot access the file system, and in some cases cannot establish long-lived connections (depending on the platform). Netlify
 has a great [article](https://www.netlify.com/blog/edge-functions-explained/) explaining the differences.
+
+<p align="center">
+  <a href="https://invertase.io/?utm_source=readme&utm_medium=footer&utm_campaign=edge">
+    <img width="75px" src="https://static.invertase.io/assets/invertase/invertase-rounded-avatar.png">
+  </a>
+  <p align="center">
+    Built and maintained by <a href="https://invertase.io/?utm_source=readme&utm_medium=footer&utm_campaign=edge">Invertase</a>.
+  </p>
+</p>
