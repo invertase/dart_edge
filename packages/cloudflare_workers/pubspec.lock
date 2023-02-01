@@ -141,8 +141,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d30bb3a3c8eea3c6915658d8e0ee9f5f5657cab6
-      resolved-ref: d30bb3a3c8eea3c6915658d8e0ee9f5f5657cab6
+      ref: b1e53c4a3d7e488e39e290044554493fc9b26576
+      resolved-ref: b1e53c4a3d7e488e39e290044554493fc9b26576
       url: "https://github.com/jodinathan/js_bindings.git"
     source: git
     version: "0.0.10"

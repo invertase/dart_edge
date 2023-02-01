@@ -12,9 +12,7 @@ external void addEventListener(
 @js.JS('fetch')
 external Promise<interop.Response> fetch(
   interop.Request request, [
-  // TODO: Using `interop.RequestInit` here causes a runtime error where
-  // null vs undefined is not handled correctly.
-  Object? init,
+  interop.RequestInit? init,
 ]);
 
 @js.JS('atob')
@@ -40,6 +38,3 @@ external int setTimeout(
 
 @js.JS('clearTimeout')
 external void clearTimeout(int handle);
-
-@js.JS('_fetch')
-external interop.FetchEvent get fooFetch;

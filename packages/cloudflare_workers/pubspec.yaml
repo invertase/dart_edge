@@ -9,7 +9,7 @@ dependencies:
   js_bindings:
     git:
       url: https://github.com/jodinathan/js_bindings.git
-      ref: d30bb3a3c8eea3c6915658d8e0ee9f5f5657cab6
+      ref: b1e53c4a3d7e488e39e290044554493fc9b26576
   js: ^0.6.5
 
 dev_dependencies:

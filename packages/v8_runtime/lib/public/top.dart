@@ -23,11 +23,7 @@ void addFetchEventListener(Null Function(FetchEvent event) listener) {
 Future<Response> fetch(Resource resource, [RequestInit? init]) async {
   return responseFromJsObject(
     await promiseToFuture(
-      interop.fetch(
-        interop.requestFromResource(resource),
-        // Can't use init?.delegate - see RequestInit.delegate as to why.
-        jsify(init?.toJson() ?? {}),
-      ),
+      interop.fetch(interop.requestFromResource(resource), init?.delegate),
     ),
   );
 }

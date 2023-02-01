@@ -42,7 +42,3 @@ extension on interop.FetchEvent {
 FetchEvent fetchEventFromJsObject(interop.FetchEvent fetchEvent) {
   return FetchEvent._(fetchEvent);
 }
-
-FetchEvent fooBar() {
-  return FetchEvent._(fooFetch);
-}
