@@ -8,4 +8,7 @@ environment:
 dependencies:
   edge: ^0.0.1
   vercel_edge: ^0.0.1
-
+  {{#shelf}}
+  shelf: ^1.4.0
+  shelf_router: ^1.1.3
+  {{/shelf}}
