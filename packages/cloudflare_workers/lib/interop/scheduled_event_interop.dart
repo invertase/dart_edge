@@ -10,6 +10,7 @@ class ScheduledEvent {
 
 extension PropsScheduledEvent on ScheduledEvent {
   String get cron => js_util.getProperty(this, 'cron');
-  String get scheduled => js_util.getProperty(this, 'scheduled');
+  // This is documented, but not on the object.
+  String get type => 'scheduled';
   int get scheduledTime => js_util.getProperty(this, 'scheduledTime');
 }

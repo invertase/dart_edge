@@ -6,7 +6,7 @@ class ScheduledEvent {
   ScheduledEvent._(this._delegate);
 
   String get cron => _delegate.cron;
-  String get scheduled => _delegate.scheduled;
+  String? get type => _delegate.type;
   DateTime get scheduledTime =>
       DateTime.fromMillisecondsSinceEpoch(_delegate.scheduledTime);
 }
