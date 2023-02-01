@@ -19,25 +19,25 @@ import '../public/scheduled_event.dart';
 import '../public/email_message.dart';
 import '../public/environment.dart';
 
-@JS('__dartFetchHandler')
+@JS('__dartCloudflareFetchHandler')
 external set globalDartFetchHandler(
     Promise<interop.Response> Function(interop.Request req,
             interop.Environment env, interop.ExecutionContext ctx)
         f);
 
-@JS('__dartScheduledHandler')
+@JS('__dartCloudflareScheduledHandler')
 external set globalDartScheduledHandler(
     Promise<void> Function(interop.ScheduledEvent event,
             interop.Environment env, interop.ExecutionContext ctx)
         f);
 
-@JS('__dartEmailHandler')
+@JS('__dartCloudflareEmailHandler')
 external set globalDartEmailHandler(
     Promise<void> Function(interop.EmailMessage message,
             interop.Environment env, interop.ExecutionContext ctx)
         f);
 
-@JS('__durableObjects')
+@JS('__dartCloudflareDurableObjects')
 external set globalDurableObjects(dynamic value);
 
 typedef CloudflareWorkersFetchEvent = FutureOr<Response> Function(

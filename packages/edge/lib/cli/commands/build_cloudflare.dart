@@ -72,18 +72,18 @@ final edgeFunctionEntryFileDefaultValue =
 
 export default {
   fetch: (request, env, ctx) => {
-    if (self.__dartFetchHandler !== undefined) {
-      return self.__dartFetchHandler(request, env, ctx);
+    if (self.__dartCloudflareFetchHandler !== undefined) {
+      return self.__dartCloudflareFetchHandler(request, env, ctx);
     }
   },
   scheduled: (event, env, ctx) => {
-    if (self.__dartScheduledHandler !== undefined) {
-      return self.__dartScheduledHandler(event, env, ctx);
+    if (self.__dartCloudflareScheduledHandler !== undefined) {
+      return self.__dartCloudflareScheduledHandler(event, env, ctx);
     }
   },
   email: (message, env, ctx) => {
-    if (self.__dartEmailHandler !== undefined) {
-      return self.__dartEmailHandler(message, env, ctx);
+    if (self.__dartCloudflareEmailHandler !== undefined) {
+      return self.__dartCloudflareEmailHandler(message, env, ctx);
     }
   },
 };
@@ -93,7 +93,7 @@ export default {
 final edgeFunctionDurableObjectValue = (String className) => '''
 export class $className {
   constructor(state, env) {
-    const instance = self.__durableObjects["$className"];
+    const instance = self.__dartCloudflareDurableObjects["$className"];
 
     if (!instance) {
       throw new Error(
