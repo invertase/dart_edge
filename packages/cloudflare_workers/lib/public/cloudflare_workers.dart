@@ -11,12 +11,13 @@ import '../interop/environment_interop.dart' as interop;
 import '../interop/scheduled_event_interop.dart' as interop;
 import '../interop/email_message_interop.dart' as interop;
 import '../interop/execution_context_interop.dart' as interop;
+import '../interop/durable_object_interop.dart' as interop;
 
+import '../public/do/durable_object.dart';
 import '../public/execution_context.dart';
 import '../public/scheduled_event.dart';
 import '../public/email_message.dart';
 import '../public/environment.dart';
-import '../public/do/durable_object.dart';
 
 @JS('__dartFetchHandler')
 external set globalDartFetchHandler(
@@ -92,6 +93,7 @@ void attachDurableObjects(Iterable<DurableObject> instances) {
   globalDurableObjects = js_util.jsify({
     for (final instance in instances)
       instance.name: instance.delegate
+        ..init = allowInterop(instance.init)
         ..fetch = allowInterop((fetchObj) {
           return futureToPromise(Future(() async {
             final r = await instance.fetch(requestFromJsObject(fetchObj));
@@ -103,7 +105,6 @@ void attachDurableObjects(Iterable<DurableObject> instances) {
             await instance.alarm();
           }));
         })
-        ..init = allowInterop(instance.init)
   });
 }
 

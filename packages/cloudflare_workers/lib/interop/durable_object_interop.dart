@@ -7,24 +7,39 @@ import 'package:v8_runtime/interop/promise_interop.dart';
 
 @anonymous
 @JS()
+@staticInterop
 class DurableObject {
-  external Function get init;
-  external set init(Function init);
-  external DurableObjectState get state;
-  external set state(DurableObjectState state);
-  external interop.Environment get env;
-  external set env(interop.Environment env);
-
-  external set fetch(
-      Promise<interop.Response> Function(interop.Request request) function);
-
-  external Promise<interop.Response> Function(interop.Request request)
-      get fetch;
-
-  external set alarm(Promise<void> Function() function);
-  external Promise<void> Function() get alarm;
-
   external factory DurableObject();
+}
+
+extension PropsDurableObject on DurableObject {
+  Function get init => js_util.getProperty(this, 'init');
+  set init(Function init) {
+    js_util.setProperty(this, 'init', init);
+  }
+
+  DurableObjectState get state => js_util.getProperty(this, 'state');
+  set state(DurableObjectState state) {
+    js_util.setProperty(this, 'state', state);
+  }
+
+  interop.Environment get env => js_util.getProperty(this, 'env');
+  set env(interop.Environment env) {
+    js_util.setProperty(this, 'env', env);
+  }
+
+  set fetch(
+      Promise<interop.Response> Function(interop.Request request) function) {
+    js_util.setProperty(this, 'fetch', function);
+  }
+
+  Promise<interop.Response> Function(interop.Request request) get fetch =>
+      js_util.getProperty(this, 'fetch');
+
+  Promise<void> Function() get alarm => js_util.getProperty(this, 'alarm');
+  set alarm(Promise<void> Function() function) {
+    js_util.setProperty(this, 'alarm', function);
+  }
 }
 
 @anonymous
