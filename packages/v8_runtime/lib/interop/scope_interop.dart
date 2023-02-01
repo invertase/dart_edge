@@ -12,6 +12,8 @@ external void addEventListener(
 @js.JS('fetch')
 external Promise<interop.Response> fetch(
   interop.Request request, [
+  // TODO: Using `interop.RequestInit` here causes a runtime error where
+  // null vs undefined is not handled correctly.
   Object? init,
 ]);
 

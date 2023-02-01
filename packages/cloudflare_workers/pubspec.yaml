@@ -6,7 +6,10 @@ environment:
 
 dependencies:
   v8_runtime: 0.0.1
-  js_bindings: ^0.0.10
+  js_bindings:
+    git:
+      url: https://github.com/jodinathan/js_bindings.git
+      ref: d30bb3a3c8eea3c6915658d8e0ee9f5f5657cab6
   js: ^0.6.5
 
 dev_dependencies:

@@ -20,13 +20,12 @@ class AbortSignal {
   AbortSignal._(this._delegate);
 
   static AbortSignal abort([Object? reason]) {
-    // TODO: This won't work, see https://github.com/jodinathan/js_bindings/issues/25
-    if (reason == null) return AbortSignal._(interop.PropsAbortSignal.abort());
-    return AbortSignal._(interop.PropsAbortSignal.abort(jsify(reason)));
+    if (reason == null) return AbortSignal._(interop.AbortSignal.abort());
+    return AbortSignal._(interop.AbortSignal.abort(jsify(reason)));
   }
 
   static AbortSignal timeout(int delay) {
-    return AbortSignal._(interop.PropsAbortSignal.timeout(delay));
+    return AbortSignal._(interop.AbortSignal.timeout(delay));
   }
 
   bool get aborted => _delegate.aborted;

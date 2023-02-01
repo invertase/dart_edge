@@ -26,23 +26,21 @@ class Response implements Body {
         );
 
   factory Response.error() {
-    // TODO: This won't work, see https://github.com/jodinathan/js_bindings/issues/25
-    return Response._(
-      interop.PropsResponse.error(),
-    );
+    return Response._(interop.Response.error());
   }
 
   factory Response.redirect(Uri url, [int? status = 302]) {
-    // TODO: This won't work, see https://github.com/jodinathan/js_bindings/issues/25
     return Response._(
-      interop.PropsResponse.redirect(url.toString(), status),
+      interop.Response.redirect(url.toString(), status),
     );
   }
 
   factory Response.json(Object? data, [ResponseInit? init]) {
-    // TODO: This won't work, see https://github.com/jodinathan/js_bindings/issues/25
     return Response._(
-      interop.PropsResponse.json(data, jsify(init?.toJson() ?? {})),
+      interop.Response.json(
+        data != null ? jsify(data) : null,
+        jsify(init?.toJson() ?? {}),
+      ),
     );
   }
 

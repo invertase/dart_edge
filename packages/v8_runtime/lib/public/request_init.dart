@@ -1,4 +1,5 @@
 import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:v8_runtime/interop/utils_interop.dart';
 
 import 'abort.dart';
 import 'headers.dart';
@@ -17,7 +18,6 @@ class RequestInit {
   final bool? keepalive;
   final AbortSignal? signal;
   final interop.RequestDuplex? duplex;
-  final interop.RequestPriority? priority;
 
   RequestInit({
     this.method = 'GET',
@@ -33,7 +33,6 @@ class RequestInit {
     this.keepalive,
     this.signal,
     this.duplex,
-    this.priority,
   });
 }
 
@@ -53,26 +52,27 @@ extension RequestInitExtension on RequestInit {
       if (keepalive != null) 'keepalive': keepalive,
       if (signal != null) 'signal': signal!.delegate,
       if (duplex != null) 'duplex': duplex!.value,
-      if (priority != null) 'priority': priority!.value,
     };
   }
 
+  // TODO: Using the delegate directly is currently broken due to `null` values
+  // not being valid in JS land. Use toJson until this is fixed.
   interop.RequestInit get delegate {
     return interop.RequestInit(
       method: method,
-      headers: headers?.delegate ?? interop.Headers(),
+      // Can't pass null here, has to be undefined.
+      headers: headers?.delegate ?? jsUndefined,
       body: body,
-      referrer: referrer ?? '',
-      referrerPolicy: referrerPolicy ?? interop.ReferrerPolicy.empty,
-      mode: mode ?? interop.RequestMode.cors,
-      credentials: credentials ?? interop.RequestCredentials.omit,
-      cache: cache ?? interop.RequestCache.valueDefault,
-      redirect: redirect ?? interop.RequestRedirect.follow,
-      integrity: integrity ?? '',
-      keepalive: keepalive ?? false,
+      referrer: referrer,
+      referrerPolicy: referrerPolicy,
+      mode: mode,
+      credentials: credentials,
+      cache: cache,
+      redirect: redirect,
+      integrity: integrity,
+      keepalive: keepalive,
       signal: signal?.delegate,
-      duplex: duplex ?? interop.RequestDuplex.half,
-      priority: priority ?? interop.RequestPriority.auto,
+      duplex: duplex,
     );
   }
 }

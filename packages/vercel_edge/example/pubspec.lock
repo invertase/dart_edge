@@ -59,10 +59,11 @@ packages:
   js_bindings:
     dependency: transitive
     description:
-      name: js_bindings
-      sha256: "2a6dbb828d712713c5ba7acea5ade862b96e56379e38935354d4e75b47984590"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: d30bb3a3c8eea3c6915658d8e0ee9f5f5657cab6
+      resolved-ref: d30bb3a3c8eea3c6915658d8e0ee9f5f5657cab6
+      url: "https://github.com/jodinathan/js_bindings.git"
+    source: git
     version: "0.0.10"
   json_annotation:
     dependency: transitive

@@ -30,7 +30,7 @@ class FormData {
   bool has(String name) => _delegate.has(name);
 
   FormDataEntryValue? get(String name) {
-    final value = _delegate.mGet(name);
+    final value = _delegate.get(name);
 
     if (value is String) {
       return FormDataEntryValue.string(value);
@@ -59,7 +59,7 @@ class FormData {
     value.when(file: (value) {
       throw UnimplementedError();
     }, string: (value) {
-      _delegate.mSet(
+      _delegate.set(
         name,
         interop.Blob(
           [value],

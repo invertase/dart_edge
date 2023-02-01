@@ -15,11 +15,11 @@ class Headers {
   void delete(String name) => _delegate.delete(name);
 
   operator []=(String name, String value) {
-    _delegate.mSet(name, value);
+    _delegate.set(name, value);
   }
 
-  dynamic operator [](String name) {
-    return _delegate.mGet(name);
+  String? operator [](String name) {
+    return _delegate.get(name);
   }
 }
 

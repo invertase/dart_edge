@@ -7,6 +7,10 @@ void main() {
         return Response('');
       }
 
+      // return Response.json({
+      //   'hello': 'world',
+      // });
+
       try {
         final r = await fetch(Resource('https://dummyjson.com/products/1'));
         print('got response');

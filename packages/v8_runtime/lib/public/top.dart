@@ -25,6 +25,7 @@ Future<Response> fetch(Resource resource, [RequestInit? init]) async {
     await promiseToFuture(
       interop.fetch(
         interop.requestFromResource(resource),
+        // Can't use init?.delegate - see RequestInit.delegate as to why.
         jsify(init?.toJson() ?? {}),
       ),
     ),
