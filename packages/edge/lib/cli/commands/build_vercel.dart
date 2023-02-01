@@ -149,8 +149,8 @@ const edgeFunctionConfigFileDefaultValue = '''{
 ''';
 
 const devAddEventListener = '''addEventListener("fetch", async (event) => {
-  if (self.__dartFetchHandler !== undefined) {
-    event.respondWith(self.__dartFetchHandler(event.request));
+  if (self.__dartVercelFetchHandler !== undefined) {
+    event.respondWith(self.__dartVercelFetchHandler(event.request));
   }
 });
 ''';
@@ -159,8 +159,8 @@ final edgeFunctionEntryFileDefaultValue =
     (String fileName) => '''import './${fileName}';
 
 export default (request) => {
-  if (self.__dartFetchHandler !== undefined) {
-    return self.__dartFetchHandler(request);
+  if (self.__dartVercelFetchHandler !== undefined) {
+    return self.__dartVercelFetchHandler(request);
   }
 };
 ''';

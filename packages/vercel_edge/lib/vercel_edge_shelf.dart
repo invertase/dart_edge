@@ -6,8 +6,8 @@ import 'package:js_bindings/js_bindings.dart' as interop;
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:edge/runtime/interop/promise_interop.dart';
 
-@JS('__dartFetchHandler')
-external set __dartFetchHandler(
+@JS('__dartVercelFetchHandler')
+external set __dartVercelFetchHandler(
     Promise<interop.Response> Function(interop.Request req) f);
 
 class VercelEdgeShelf {
@@ -17,7 +17,7 @@ class VercelEdgeShelf {
     this.fetch,
   }) {
     if (fetch != null) {
-      __dartFetchHandler = allowInterop((interop.Request request) {
+      __dartVercelFetchHandler = allowInterop((interop.Request request) {
         return futureToPromise(Future(() async {
           final clone = request.clone();
 

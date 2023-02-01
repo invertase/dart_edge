@@ -8,8 +8,8 @@ import 'package:js_bindings/js_bindings.dart' as interop;
 export 'package:edge/runtime.dart';
 export './public/request.dart';
 
-@JS('__dartFetchHandler')
-external set __dartFetchHandler(
+@JS('__dartVercelFetchHandler')
+external set __dartVercelFetchHandler(
     Promise<interop.Response> Function(interop.Request req) f);
 
 class VercelEdge {
@@ -19,7 +19,7 @@ class VercelEdge {
     this.fetch,
   }) {
     if (fetch != null) {
-      __dartFetchHandler = allowInterop((interop.Request request) {
+      __dartVercelFetchHandler = allowInterop((interop.Request request) {
         return futureToPromise(Future(() async {
           final response = await fetch!(requestFromJsObject(request));
           return response.delegate;
