@@ -3,6 +3,7 @@ name: cloudflare_workers
 repository: https://github.com/invertase/dart_workers
 
 packages:
+  - examples/**
   - packages/**
 
 command:

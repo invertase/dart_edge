@@ -1,0 +1,15 @@
+name = "cloudflare_durable_objects_example"
+compatibility_date = "2022-11-30"
+main = ".dart_tool/edge/entry.js"
+
+durable_objects.bindings = [
+  {name = "TEST", class_name = "TestClass"},
+]
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["TestClass"]
+
+[build]
+command = "dart run edge build cloudflare --dev"
+watch_dir = ["lib"]
