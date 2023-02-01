@@ -19,10 +19,10 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<Response> {
-		await caches.default.match(request, {
-			// @ts-ignore
-			cacheName: 'fooooo',
-		});
+		// await caches.default.match(request, {
+		// 	// @ts-ignore
+		// 	cacheName: 'fooooo',
+		// });
 
 		return new Response("Hello World!");
 	},

@@ -7,8 +7,10 @@ export 'public/top.dart';
 export 'public/abort.dart' show AbortController, AbortSignal;
 export 'public/blob.dart' show Blob, BlobPropertyBag;
 export 'public/body.dart' show Body;
-export 'public/cache_storage.dart' show CacheStorage, caches;
-export 'public/cache.dart' show Cache;
+export 'public/cache/cache_query_options.dart'
+    show CacheQueryOptions, MultiCacheQueryOptions;
+export 'public/cache/cache_storage.dart' show CacheStorage, caches;
+export 'public/cache/cache.dart' show Cache;
 export 'public/fetch_event.dart' show FetchEvent;
 export 'public/file.dart' show File;
 export 'public/form_data.dart' show FormData, FormDataEntryValue;
@@ -32,5 +34,4 @@ export 'package:js_bindings/bindings/fetch.dart'
         RequestCredentials,
         RequestDestination,
         RequestMode,
-        RequestRedirect,
-        RequestPriority;
+        RequestRedirect;
