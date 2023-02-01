@@ -1,6 +1,6 @@
 <p align="center">
-  <h1>Dart Edge (Experimental)</h1>
-  <span>Run Dart on on the Edge.</span>
+  <h1 align="center">Dart Edge (Experimental)</h1>
+  <span align="center">Run Dart on on the Edge.</span>
 </p>
 
 <p align="center">
