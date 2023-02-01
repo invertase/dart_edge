@@ -3,8 +3,8 @@ import 'dart:async';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
 
-import '../interop/promise_interop.dart';
-import '../interop/scope_interop.dart';
+import 'interop/promise_interop.dart';
+import 'interop/scope_interop.dart';
 import 'request.dart';
 import 'response.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import '../interop/crypto_interop.dart' as interop;
+import 'interop/crypto_interop.dart' as interop;
 
 export 'package:js_bindings/js_bindings.dart' show KeyFormat, KeyType;
 

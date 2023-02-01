@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:toml/toml.dart';
 
-import '../utils/compiler.dart';
+import '../compiler.dart';
 import 'base_command.dart';
 
 class CloudflareBuildCommand extends BaseCommand {

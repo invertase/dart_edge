@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
-import '../utils/compiler.dart';
-import '../utils/dev_server.dart';
+import '../compiler.dart';
 import 'base_command.dart';
 
 class NetlifyBuildCommand extends BaseCommand {

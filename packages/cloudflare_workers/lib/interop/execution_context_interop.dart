@@ -1,6 +1,6 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
-import 'package:v8_runtime/interop/promise_interop.dart';
+import 'package:edge/runtime/interop/promise_interop.dart';
 
 @JS()
 @staticInterop

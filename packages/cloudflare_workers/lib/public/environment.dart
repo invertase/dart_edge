@@ -1,6 +1,7 @@
-import '../interop/environment_interop.dart' as interop;
 import 'kv_namespace.dart';
 import 'do/durable_object_namespace.dart';
+
+import '../interop/environment_interop.dart' as interop;
 
 class Environment {
   final interop.Environment _delegate;

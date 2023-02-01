@@ -1,4 +1,4 @@
-import 'package:v8_runtime/public/request_init.dart';
+import 'package:edge/runtime/request_init.dart';
 
 import '../interop/request_init_interop.dart' as interop;
 

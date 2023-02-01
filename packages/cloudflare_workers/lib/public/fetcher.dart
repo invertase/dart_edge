@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:v8_runtime/public/request.dart';
-import 'package:v8_runtime/public/request_init.dart';
-import 'package:v8_runtime/public/response.dart';
+import 'package:edge/runtime/request.dart';
+import 'package:edge/runtime/request_init.dart';
+import 'package:edge/runtime/response.dart';
 import '../interop/durable_object_interop.dart' as interop;
 
 import 'socket.dart';

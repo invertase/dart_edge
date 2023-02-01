@@ -3,8 +3,8 @@ import 'package:js/js.dart' as js;
 
 import 'package:js_bindings/js_bindings.dart' as interop;
 
-import '../public/resource.dart';
-import '../public/request.dart';
+import '../resource.dart';
+import '../request.dart';
 
 interop.Request requestFromResource(Resource resource) {
   return resource.when(

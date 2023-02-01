@@ -1,5 +1,5 @@
 import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:v8_runtime/interop/utils_interop.dart';
+import 'package:edge/runtime/interop/utils_interop.dart';
 
 import 'abort.dart';
 import 'headers.dart';

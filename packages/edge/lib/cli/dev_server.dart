@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cli_util/cli_logging.dart';
-import 'package:edge/cli/utils/compiler.dart';
-import 'package:typed_data/typed_buffers.dart';
 import 'package:watcher/watcher.dart';
 import 'package:path/path.dart' as p;
+
+import 'compiler.dart';
 
 class DevServer {
   final Compiler compiler;

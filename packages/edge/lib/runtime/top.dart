@@ -2,8 +2,8 @@ import 'dart:js' as js;
 import 'dart:js_util';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import '../interop/scope_interop.dart' as interop;
-import '../interop/utils_interop.dart' as interop;
+import 'interop/scope_interop.dart' as interop;
+import 'interop/utils_interop.dart' as interop;
 
 import 'fetch_event.dart';
 import 'request_init.dart';

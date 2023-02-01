@@ -1,7 +1,7 @@
 import 'dart:js_util' show jsify;
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:v8_runtime/interop/utils_interop.dart';
+import 'package:edge/runtime/interop/utils_interop.dart';
 
 class AbortController {
   final interop.AbortController _delegate;

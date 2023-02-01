@@ -1,4 +1,4 @@
-import 'package:v8_runtime/v8_runtime.dart';
+import 'package:edge/runtime.dart';
 import 'package:test/test.dart';
 
 void main() {

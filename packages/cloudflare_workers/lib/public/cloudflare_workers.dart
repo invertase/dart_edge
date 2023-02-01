@@ -1,10 +1,10 @@
 import 'dart:js_util' as js_util;
 
 import 'package:js/js.dart';
-import 'package:v8_runtime/interop/promise_interop.dart';
-import 'package:v8_runtime/v8_runtime.dart';
-import 'package:v8_runtime/public/request.dart';
-import 'package:v8_runtime/public/response.dart';
+import 'package:edge/runtime/interop/promise_interop.dart';
+import 'package:edge/runtime.dart';
+import 'package:edge/runtime/request.dart';
+import 'package:edge/runtime/response.dart';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
 import '../interop/environment_interop.dart' as interop;

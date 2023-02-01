@@ -1,5 +1,5 @@
-import 'package:v8_runtime/v8_runtime.dart';
-import 'package:v8_runtime/public/cache/cache.dart';
+import 'package:edge/runtime/cache/cache.dart';
+import 'package:edge/runtime/cache/cache_storage.dart';
 
 import '../interop/cache_interop.dart' as interop;
 

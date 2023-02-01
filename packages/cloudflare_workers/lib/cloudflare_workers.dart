@@ -1,4 +1,4 @@
-export 'package:v8_runtime/v8_runtime.dart';
+export 'package:edge/runtime.dart';
 
 export './public/cloudflare_workers.dart'
     show

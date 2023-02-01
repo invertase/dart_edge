@@ -3,10 +3,8 @@ import 'dart:js_util' show jsify;
 import 'dart:typed_data';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import '../interop/utils_interop.dart' as interop;
 
-import '../interop/utils_interop.dart';
-import '../utils.dart';
+import './utils.dart';
 import 'blob.dart';
 import 'body.dart';
 import 'form_data.dart';

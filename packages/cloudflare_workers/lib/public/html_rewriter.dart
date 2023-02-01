@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:js';
 
-import 'package:v8_runtime/v8_runtime.dart';
-import 'package:v8_runtime/public/response.dart';
-import 'package:v8_runtime/interop/promise_interop.dart';
+import 'package:edge/runtime/response.dart';
+import 'package:edge/runtime/interop/promise_interop.dart';
 import '../interop/html_rewriter_interop.dart' as interop;
 
 class HTMLRewriter {

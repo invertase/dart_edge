@@ -1,7 +1,7 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:v8_runtime/interop/utils_interop.dart';
+import 'package:edge/runtime/interop/utils_interop.dart';
 
 extension CloudflareWorkersRequestInteropExtension on interop.RequestInit {
   set cf(RequestInitCfProperties properties) {
@@ -130,7 +130,8 @@ class RequestInitCfPropertiesImageDraw extends BasicImageTransformations {
   });
 }
 
-extension PropsRequestInitCfPropertiesImageDraw on RequestInitCfPropertiesImageDraw {
+extension PropsRequestInitCfPropertiesImageDraw
+    on RequestInitCfPropertiesImageDraw {
   set opacity(num? value) {
     js_util.setProperty(this, 'opacity', value ?? jsUndefined);
   }

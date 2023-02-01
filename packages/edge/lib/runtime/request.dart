@@ -4,7 +4,7 @@ import 'abort.dart';
 import 'blob.dart';
 import 'body.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
-import '../interop/utils_interop.dart' as interop;
+import 'interop/utils_interop.dart' as interop;
 
 import 'form_data.dart';
 import 'headers.dart';
