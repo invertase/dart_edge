@@ -10,8 +10,8 @@ import 'interop/context_interop.dart' as interop;
 export 'package:edge/runtime.dart';
 export './public/context.dart' hide netlifyContextFromJsObject;
 
-@JS('__dartFetchHandler')
-external set __dartFetchHandler(
+@JS('__dartNetlifyFetchHandler')
+external set __dartNetlifyFetchHandler(
     Promise<interop.Response> Function(
             interop.Request req, interop.NetlifyContext)
         f);
@@ -24,7 +24,7 @@ class NetlifyEdge {
     this.fetch,
   }) {
     if (fetch != null) {
-      __dartFetchHandler =
+      __dartNetlifyFetchHandler =
           allowInterop((interop.Request req, interop.NetlifyContext context) {
         return futureToPromise(Future(() async {
           final response = await fetch!(

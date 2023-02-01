@@ -107,8 +107,8 @@ class NetlifyBuildCommand extends BaseCommand {
 }
 
 const devAddEventListener = '''addEventListener("fetch", async (event) => {
-  if (self.__dartFetchHandler !== undefined) {
-    event.respondWith(self.__dartFetchHandler(event.request, {}));
+  if (self.__dartNetlifyFetchHandler !== undefined) {
+    event.respondWith(self.__dartNetlifyFetchHandler(event.request, {}));
   }
 });
 ''';
@@ -117,8 +117,8 @@ final edgeFunctionEntryFileDefaultValue =
     (String fileName) => '''import './${fileName}';
 
 export default (request, context) => {
-  if (self.__dartFetchHandler !== undefined) {
-    return self.__dartFetchHandler(request, context);
+  if (self.__dartNetlifyFetchHandler !== undefined) {
+    return self.__dartNetlifyFetchHandler(request, context);
   }
 }
 
