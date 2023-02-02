@@ -15,9 +15,4 @@ class BuildCommand extends BaseCommand {
     addSubcommand(VercelBuildCommand());
     addSubcommand(NetlifyBuildCommand());
   }
-
-  @override
-  void run() {
-    //
-  }
 }
