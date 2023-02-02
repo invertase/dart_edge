@@ -57,8 +57,8 @@ This project provides Dart bindings to the Edge runtime APIs, allowing you to wr
 
 We are working to enable Dart Edge to be deployed to many platforms as possible. Currently we support:
 
-- [Cloudflare Workers](https://workers.cloudflare.com/) - [Documentation](#)
-- [Vercel Edge Functions](https://vercel.com/features/edge-functions) - [Documentation](#)
+- [Cloudflare Workers](https://workers.cloudflare.com/) - [Documentation](https://docs.dartedge.dev/platform/cloudflare)
+- [Vercel Edge Functions](https://vercel.com/features/edge-functions) - [Documentation](https://docs.dartedge.dev/platform/vercel)
 
 > Please see the platform documentation for API status.
 
