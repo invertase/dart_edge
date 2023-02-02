@@ -1,0 +1,101 @@
+---
+title: Vercel - Dart Edge
+description: Write and deploy Dart to the Vercel Edge network.
+---
+
+# Vercel Edge
+
+The [Vercel Edge Network](https://vercel.com/features/edge-functions) network is a popular platform for deploying serverless Edge functions. Alongside the performant runtime environment, your code can be easily deployed and managed through your own Vercel account, providing access to preview builds, environment customization, and more.
+
+## Getting Started
+
+Before getting started, you need to install the [`vercel` CLI](https://vercel.com/docs/cli) globally.
+
+Next, either use the `edge` CLI command or setup manually:
+
+<Tabs
+  values={[
+    { label: 'Edge CLI', value: 'cli' },
+    { label: 'Manually', value: 'manually' },
+  ]}
+>
+  <TabItem value="cli">
+    Create a new project using the `edge` CLI command:
+
+    ```sh
+    mkdir vercel_example && cd vercel_example
+    edge new vercel
+    ```
+
+    This command will create a new barebones template in the current directory. Once complete, install the dependencies:
+
+    ```
+    dart pub get
+    ```
+
+    Open the `lib/main.dart` file to view the minimal HTTP request fetch handler.
+
+  </TabItem>
+  <TabItem value="manually">
+    Install the `vercel_edge` package:
+
+    ```bash
+    dart pub add vercel_edge
+    ```
+
+    Next, create a `vercel.json` file at the root of your project with the following configuration:
+
+    ```json
+    {
+      "buildCommand": "dart run edge build vercel",
+      "devCommand": "dart run edge build vercel --dev"
+    }
+    ```
+
+    Next create a `lib/main.dart` file, import the `vercel_edge` package and setup a `fetch` handler, to handle incoming HTTP requests:
+
+    ```dart
+    import 'package:vercel_edge/vercel_edge.dart';
+
+    void main() {
+      VercelEdge(fetch: (request) {
+        return Response("Hello from Vercel Edge!");
+      });
+    }
+    ```
+
+    Add the `.vercel` & `.dart_tool` directories to your `.gitignore` file.
+
+  </TabItem>
+</Tabs>
+
+## Local development
+
+To run your application locally, use the `vercel dev` command from the root of your project:
+
+```bash
+vercel dev
+# or vc dev
+```
+
+> If this is your first time running the command, you'll be prompted to login to your Vercel account and choose (or create) a project to link to.
+
+This command will start a development server where you can access your application, by default at `http://localhost:3000`. Any changes you make to your Dart code will trigger a hot-reload.
+
+You can change what port the application runs on by providing the `--listen 3001` argument to the dev command.
+
+## Deployment
+
+To deploy your application to Vercel, first build your application running the following command from the root of your project:
+
+```sh
+vercel build
+```
+
+Once built, you can deploy using the `deploy` command:
+
+```sh
+vercel deploy --prebuilt
+```
+
+The `--prebuilt` flag tells Vercel to skip the build step, as we've already built the application (since Vercel cannot compile Dart on their servers). We'll likely create a GitHub action to handle this process automatically in the future.

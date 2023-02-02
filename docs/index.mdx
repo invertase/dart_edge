@@ -1,0 +1,62 @@
+---
+title: Dart Edge
+description: Run Dart on on the Edge.
+---
+
+# Dart Edge
+
+Dart Edge is a project aimed at running Dart code on Edge functions, including support for platforms such as [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) (more to come).
+
+<Warning>
+  Dart Edge is an experimental project - it's probably not ready for production
+  usage unless you're okay with living on the 'egde'.
+</Warning>
+
+## How it works
+
+Dart Edge provides a runtime package which enables Dart to communicate with APIs found on Edge runtime environments. Your Dart code is compiled to JavaScript (and soon WASM), and deployed to a runtime environment, or platform such as Cloudflare Workers or Vercel Edge Functions.
+
+The package also provides additional platform specific bindings where possible, such as [Durable Objects](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/). Not everything is supported yet, we'll get there eventually.
+
+## Getting started
+
+The easiest way to get started is to install the `edge` CLI:
+
+```sh
+dart pub global activate edge
+```
+
+Next create a new project for your specific provider:
+
+<Tabs
+  values={[
+    { label: 'Vercel Edge', value: 'vercel' },
+    { label: 'Cloudflare Workers', value: 'cloudflare' },
+  ]}
+>
+  <TabItem value="vercel">
+    ```sh
+    edge new vercel
+    ```
+
+    View the [Vercel Edge](/platform/vercel) docs for more information on APIs, usage and deployment.
+
+  </TabItem>
+  <TabItem value="cloudflare">
+    ```sh
+    edge new cloudflare
+    ```
+
+    View the [Cloudflare Workers](/platform/cloudflare) docs for more information on APIs, usage and deployment.
+
+  </TabItem>
+</Tabs>
+
+## What next?
+
+Each platform is slightly different, so visit the platform specific documentation on how to work with platform specific APIs, handle local development and deployment.
+
+Some other useful resources:
+
+- [Runtime APIs](/apis)
+- [Usage with Shelf]('/shelf')

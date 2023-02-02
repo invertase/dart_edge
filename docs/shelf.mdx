@@ -1,0 +1,53 @@
+---
+title: Dart Edge with Shelf
+description: Use Shelf to handle requests and responses with Dart Edge.
+---
+
+# Shelf
+
+The [Shelf](https://pub.dev/packages/shelf) package is a popular Dart package which acts as a middleware
+for incoming HTTP requests. There is a rich ecosystem of packages around Shelf, including [routers](https://pub.dev/packages/shelf_router) and
+middleware.
+
+Dart Edge provides a lightweight wrapper for interfacing with a [Shelf Request](https://pub.dev/documentation/shelf/latest/shelf/Request-class.html) and handling a returned Shelf [Response](https://pub.dev/documentation/shelf/latest/shelf/Response-class.html), enalbing you take take advantage of this ecosystem of [Shelf packages](https://pub.dev/packages?q=shelf).
+
+## Usage
+
+### Vercel Edge
+
+Install the `shelf` and `shelf_router` packages from pub.dev:
+
+```sh
+dart pub add shelf
+dart pub add shelf_router
+```
+
+Import the `VercelEdgeShelf` class from the `vercel_edge/vercel_edge_shelf.dart` package, and route the request to a Shelf `Router`:
+
+```dart
+import 'package:vercel_edge/vercel_edge_shelf.dart';
+import 'package:shelf_router/shelf_router.dart';
+import 'package:shelf/shelf.dart';
+
+void main() {
+  VercelEdgeShelf(
+    fetch: (request) async {
+      final app = Router();
+
+      app.get('/', (request, String id) async {
+        return Response.ok('Welcome to Dart Edge!');
+      });
+
+      app.all('/<ignored|.*>', (request) {
+        return Response.notFound('Resource not found');
+      });
+
+      return app(request);
+    },
+  );
+}
+```
+
+Alternatively, you could return a [`Pipeline`](https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html) handler to apply middleware to your requests.
+
+

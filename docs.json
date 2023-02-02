@@ -1,0 +1,38 @@
+{
+  "name": "Dart Edge",
+  "theme": "#12B987",
+  "twitter": "invertaseio",
+  "anchors": [
+    {
+      "title": "Discord",
+      "icon": "discord",
+      "link": "https://invertase.link/discord"
+    }
+  ],
+  "sidebar": [
+    [
+      "Getting Started",
+      [
+        ["Getting Started", "/"],
+        ["Runtime APIs", "/apis"],
+        ["Usage with Shelf", "/shelf"]
+      ]
+    ],
+    [
+      "Vercel Edge",
+      [
+        ["Getting Started", "/platform/vercel"],
+        ["Request Properties", "/platform/vercel/request-properties"]
+      ]
+    ],
+    [
+      "Cloudflare Workers",
+      [
+        ["Getting Started", "/platform/cloudflare"],
+        ["Runtime APIs", "/platform/cloudflare/apis"],
+        ["Request Properties", "/platform/cloudflare/request-properties"],
+        ["Service Bindings", "/platform/cloudflare/service-bindings"]
+      ]
+    ]
+  ]
+}

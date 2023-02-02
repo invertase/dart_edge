@@ -1,0 +1,26 @@
+---
+title: Vercel Request Properties
+description: Learn about the properties available on the request object in Vercel Edge Functions.
+---
+
+# Vercel Request Properties
+
+When using the `vercel_edge` package, you can access a number of request properties about the incoming request, such as the users geolocation and IP address via the `vc` property:
+
+```dart
+import 'package:vercel_edge/vercel_edge.dart';
+
+void main() {
+  VercelEdge(fetch: (request) {
+    print('IP Adress: ${request.vc.ipAddress}');
+    print('City: ${request.vc.city}');
+    print('Country: ${request.vc.country}');
+    print('Region: ${request.vc.region}');
+    print('Country Region: ${request.vc.countryRegion}');
+    print('Latitude: ${request.vc.latitude}');
+    print('Longitude: ${request.vc.longitude}');
+
+    return Response("Hello, you are visiting from ${request.vc.city}!");
+  });
+}
+```

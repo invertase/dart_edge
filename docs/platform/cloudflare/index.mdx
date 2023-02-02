@@ -1,0 +1,110 @@
+---
+title: Cloudflare Workers - Dart Edge
+description: Write and deploy Dart to the Vercel Edge network.
+---
+
+# Vercel Edge
+
+[Cloudflare Workers](https://workers.cloudflare.com/) enable you to deploy serverless code across the globe.
+The Workers platform also comes with additional runtime APIs, such as [Durable Objects](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/) & [KV](https://developers.cloudflare.com/workers/runtime-apis/kv/) that allow you to build powerful applications. See [the API documentation](/platform/cloudflare/apis) for more information.
+
+## Getting Started
+
+Before getting started, you need to install the Cloudflare [`wrangler` CLI](https://developers.cloudflare.com/workers/wrangler/) globally.
+
+Next, either use the `edge` CLI command or setup manually:
+
+<Tabs
+  values={[
+    { label: 'Edge CLI', value: 'cli' },
+    { label: 'Manually', value: 'manually' },
+  ]}
+>
+  <TabItem value="cli">
+    Create a new project using the `edge` CLI command:
+
+    ```sh
+    mkdir cloudflare_workers_example && cd cloudflare_workers_example
+    edge new cloudflare
+    ```
+
+    This command will create a new barebones template in the current directory. Once complete, install the dependencies:
+
+    ```
+    dart pub get
+    ```
+
+    Open the `lib/main.dart` file to view the minimal HTTP request fetch handler.
+
+  </TabItem>
+  <TabItem value="manually">
+    Install the `cloudflare_workers` package:
+
+    ```bash
+    dart pub add cloudflare_workers
+    ```
+
+    Next, create a `wrangler.toml` file at the root of your project with the following configuration:
+
+    ```toml
+    name = "cloudflare_workers_example"
+    compatibility_date = "2022-11-30"
+    main = ".dart_tool/edge/entry.js"
+
+    [build]
+    command = "dart run edge build cloudflare --dev"
+    watch_dir = ["lib"]
+    ```
+
+    Next create a `lib/main.dart` file, import the `cloudflare_workers` package and setup a `fetch` handler, to handle incoming HTTP requests:
+
+    ```dart
+    import 'package:cloudflare_workers/cloudflare_workers.dart';
+
+    void main() {
+      CloudflareWorkers(fetch: (request, env, ctx) {
+        return Response("Hello from Vercel Edge!");
+      });
+    }
+    ```
+
+    Add the `.dart_tool` directory to your `.gitignore` file.
+
+  </TabItem>
+</Tabs>
+
+## Local development
+
+To run your application locally, use the `wrangler dev --local` command from the root of your project:
+
+```bash
+wrangler dev --local
+```
+
+> You can remove the `--local` flag to run your code directly on the Cloudflare Worker environment. This is useful for testing the production environment locally, however it will take longer to start up as your code is uploaded.
+
+This command will start a development server where you can access your application, by default at `http://127.0.0.1:8787`. Any changes you make to your Dart code will trigger a hot-reload.
+
+## Deployment
+
+To deploy your application to Cloudflare Workers, first remove the `--dev` flag from the `wrangler.toml` file:
+
+```diff
+[build]
+- command = "dart run edge build cloudflare --dev"
++ command = "dart run edge build cloudflare"
+```
+
+Removing the `--dev` flag will ensure that your application is built in production mode, which will result in a smaller bundle size and optimized code.
+
+<Info>
+  Please upvote [this feature
+  request](https://github.com/cloudflare/wrangler2/issues/2634) to help remove
+  this manual step!
+</Info>
+
+Next, run the `wrangler publish` command from the root of your project:
+
+```bash
+wrangler publish
+```

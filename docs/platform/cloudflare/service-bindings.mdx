@@ -1,0 +1,163 @@
+---
+title: Service Bindings
+description: Learn how to use Cloudflare Workers service bindings with Dart Edge.
+---
+
+# Service Bindings
+
+Cloudflare Workers provide additional runtime APIs on their platform, such as [Durable Objects](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/) & [KV](https://developers.cloudflare.com/workers/runtime-apis/kv/). You can access these bindings via the `env` property during a `fetch` event.
+
+## KV
+
+Workers KV is a global, low-latency, key-value data store. It stores data in a small number of centralized data centers, then caches that data in Cloudflare's data centers after access. KV supports exceptionally high read volumes with low latency, making it possible to build highly dynamic APIs and websites that respond as quickly as a cached static file would. While reads are periodically revalidated in the background, requests which are not in cache and need to hit the centralized back end can see high latencies. [Learn more](https://developers.cloudflare.com/workers/runtime-apis/kv/).
+
+To use KV, you must first create a KV namespace on your account. You can use the [`wranger` CLI](https://developers.cloudflare.com/workers/wrangler/cli-wrangler/commands/#getting-started) to create a new namespace.
+
+Once created, ensure it is referenced in your `wrangler.toml` file, for example:
+
+```toml
+kv_namespaces = [
+  { binding = "TODOS", id = "06779da6940b431db6e566b4846d64db" }
+]
+```
+
+Next, call the `getKVNamespace` method on the `Environment` class, referencing the KV namespace binding name (in this case "TODOS"). An error will be thrown if the namespace does not exist.
+
+```dart
+import 'package:cloudflare_workers/cloudflare_workers.dart';
+
+void main() {
+  CloudflareWorkers(
+    fetch: (request, env, ctx) async {
+      final todos = env.getKVNamespace('TODOS');
+      // ...
+    },
+  );
+}
+```
+
+You can then interact with your KV namespace. For example, to put a new value into KV:
+
+```dart
+await todos.put('write-docs', 'in-progress');
+```
+
+You can access values too:
+
+```dart
+final status = await todos.get('write-docs');
+```
+
+KV supports additional features, such as reading and writing metadata, JSON values, listing keys, writing buffers and much more.
+
+## Durable Objects
+
+Durable Objects provide low-latency coordination and consistent storage for the Workers platform. A given namespace can support essentially unlimited Durable Objects, with each Object having access to a transactionally consistent key-value storage API. [Learn more](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/).
+
+To use Durable Objects, first define the Durable Object `name` and `class_name` in your `wrangler.toml` file:
+
+```toml
+durable_objects.bindings = [
+  {name = "VIEWS", class_name = "ViewsDurableObject"},
+]
+```
+
+Next, create a new Dart class which extends the `DurableObject` class. You must implement the `fetch` class by default, however alarms are also supported.
+
+```dart
+import 'package:cloudflare_workers/cloudflare_workers.dart';
+
+class ViewsDurableObject extends DurableObject {
+  @override
+  Future<Response> fetch(Request request, DurableObjectEnv env) async {
+    // ...
+  }
+}
+```
+
+Define the class instance in the `CloudflareWorkers` instance, provinding a `Map` whose key is the `class_name` and a function returning a new instance of your class.
+
+```dart
+import 'package:cloudflare_workers/cloudflare_workers.dart';
+
+class ViewsDurableObject extends DurableObject { ... }
+
+void main() {
+  CloudflareWorkers(
+    durableObjects: {
+      'ViewsDurableObject': () => ViewsDurableObject(),
+    },
+    fetch: (request, env, ctx) async {
+      // ...
+    },
+  );
+}
+```
+
+You can then access the Durable Object namespace via the `Environment` during a `fetch` request, referencing the `name` of the namespace. If the namespace does not exist, an error will be thrown.
+
+```dart
+void main() {
+  CloudflareWorkers(
+    durableObjects: {
+      'ViewsDurableObject': () => ViewsDurableObject(),
+    },
+    fetch: (request, env, ctx) async {
+      final views = namespace.getDurableObjectNamespace('VIEWS');
+      final id = views.idFromName('...');
+      return views.get(id).fetch(request);
+    },
+  );
+}
+```
+
+### State, Storage & Alarms
+
+Each Durable Object instance has access to it's own state (and the environment). You can access Durable Object State via the `state` getter. The state instance provides access to the Durable Object's unique ID, as well as a [transaction storage API](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/#transactional-storage-api).
+
+To access the storage API, call the `storage` property on the `state` instance. Here you can manage persisted storage for this specific Durable Object:
+
+```dart
+class ViewsDurableObject extends DurableObject {
+  @override
+  Future<Response> fetch(Request request, DurableObjectEnv env) async {
+    final views = (await state.storage.get<int>('views') ?? 0) + 1;
+    await state.storage.put('views', views);
+    return Response.ok('This Durable Object has been requested $views times!');
+  }
+}
+```
+
+Additionally you can manage [alarms](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/#alarm-handler-method), enabling you to schedule events to occur at a specific time:
+
+```dart
+class ViewsDurableObject extends DurableObject {
+  @override
+  Future<Response> fetch(Request request, DurableObjectEnv env) async {
+    // Add some data to the DO storage.
+    await state.storage.put(
+      DateTime.now().toIso8601String(),
+      {
+        'job': '1234',
+        'data': {
+          'foo': 'bar',
+        }
+      }
+    );
+
+    // If not already set, set an alarm for 60 seconds from now.
+    if (await state.storage.getAlarm() == null) {
+      await state.storage.setAlarm(DateTime.now().add(Duration(seconds: 60)));
+    }
+
+    return Response.ok('Job queued!');
+  }
+
+  @override
+  FutureOr<void> alarm() {
+    print('Alarm triggered, processing jobs...');
+    final jobs = await state.storage.list();
+    // Process jobs...
+  }
+}
+```

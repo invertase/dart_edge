@@ -1,0 +1,26 @@
+---
+title: Cloudflare Workers Request Properties
+description: Learn about the properties available on the request object in Cloudflare Workers.
+---
+
+# Cloudflare Workers Request Properties
+
+When using the `cloudflare_workers` package, you can access a number of request properties about the incoming request, such as the users geolocation and IP address via the `cf` property:
+
+```dart
+import 'package:cloudflare_workers/cloudflare_workers.dart';
+
+void main() {
+  CloudflareWorkers(fetch: (request, env, ctx) {
+    print('IP Adress: ${request.cf.ipAddress}');
+    print('City: ${request.cf.city}');
+    print('Country: ${request.cf.country}');
+    print('Region: ${request.cf.region}');
+    print('Postal Code: ${request.cf.postalCode}');
+    print('Latitude: ${request.cf.latitude}');
+    print('Longitude: ${request.cf.longitude}');
+
+    return Response("Hello...");
+  });
+}
+```
