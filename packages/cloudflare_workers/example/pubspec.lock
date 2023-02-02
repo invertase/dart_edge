@@ -78,7 +78,7 @@ packages:
       path: "../../edge"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "0.0.2"
   freezed_annotation:
     dependency: transitive
     description:
