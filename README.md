@@ -28,7 +28,7 @@ void main() {
       return Response.json(await users.json());
     }
 
-    return Response('Not Found', ResponseInit(status: 404));
+    return Response('Not Found', status: 404);
   });
 }
 ```
