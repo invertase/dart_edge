@@ -1,6 +1,6 @@
 name: netlify_edge_example
 description: A Netlify Edge function written in Dart.
-version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ">=2.18.5 <3.0.0"

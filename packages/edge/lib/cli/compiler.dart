@@ -47,7 +47,7 @@ class Compiler {
     final process = await Process.run('dart', [
       'compile',
       'js',
-      '-O1',
+      '-${level.name}',
       '--no-frequency-based-minification',
       '--server-mode',
       '-o',

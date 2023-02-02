@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: edge,vercel_edge
+dependency_overrides:
+  edge:
+    path: ../../packages/edge
+  vercel_edge:
+    path: ../../packages/vercel_edge

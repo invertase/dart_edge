@@ -66,15 +66,16 @@ class VercelBuildCommand extends BaseCommand {
     );
 
     final edgeFunction = Directory(
-      p.join(vercelDirectory.path, 'functions', 'dart.func'),
+      p.join(vercelDirectory.path, 'output', 'functions', 'dart.func'),
     );
 
-    final compiledFile = await _compile(
+    await _compile(
       edgeFunction.path,
       level: CompilerLevel.O4,
     );
 
-    final configFile = File(p.join(vercelDirectory.path, 'config.json'));
+    final configFile =
+        File(p.join(vercelDirectory.path, 'output', 'config.json'));
 
     String configFileValue;
     if (await configFile.exists()) {
@@ -84,7 +85,7 @@ class VercelBuildCommand extends BaseCommand {
       // If there is no routes key, or it is not an iterable, create a new one.
       if (json['routes'] == null || json['routes'] is! Iterable) {
         json['routes'] = [
-          {'src': '/.*', 'dest': 'dart'}
+          {'src': '/*', 'dest': 'dart'}
         ];
       } else {
         // Otherwise, check if the route already exists.
@@ -97,7 +98,7 @@ class VercelBuildCommand extends BaseCommand {
         if (route == null) {
           json['routes'] = [
             ...json['routes'],
-            {'src': '/.*', 'dest': 'dart'},
+            {'src': '/*', 'dest': 'dart'},
           ];
         }
       }
@@ -120,7 +121,7 @@ class VercelBuildCommand extends BaseCommand {
 
     // Write the Edge Function config file.
     await File(p.join(edgeFunction.path, 'entry.js')).writeAsString(
-      edgeFunctionEntryFileDefaultValue(compiledFile),
+      edgeFunctionEntryFileDefaultValue('main.dart.js'),
     );
   }
 

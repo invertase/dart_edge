@@ -1,5 +1,6 @@
-name: vercel_edge_example
-description: An Vercel Edge function written in Dart.
+name: vercel_edge_shelf_example
+description: An example of using Vercel Edge with Shelf.
+version: 1.0.0
 publish_to: none
 
 environment:
