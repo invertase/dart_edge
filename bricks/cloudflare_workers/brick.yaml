@@ -1,5 +1,6 @@
-name: vercel
-description: Generate a Dart Edge Vercel project.
+name: cloudflare_workers
+description: Generate a Dart Edge project using Cloudflare Workers.
+
 
 version: 0.1.0+1
 

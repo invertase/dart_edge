@@ -21,7 +21,7 @@ class NewCommand extends BaseCommand {
 
 class VercelNewCommand extends BaseCommand {
   @override
-  final name = "vercel";
+  final name = "vercel_edge";
 
   @override
   final description = "Create a new Vercel project using Dart Edge.";
@@ -37,6 +37,30 @@ class VercelNewCommand extends BaseCommand {
   @override
   void run() async {
     return _BrickGenerator(brick: 'vercel', variables: {
+      'shelf': argResults!['shelf'] as bool,
+    }).generate();
+  }
+}
+
+class CloudflareNewCommand extends BaseCommand {
+  @override
+  final name = "cloudflare";
+
+  @override
+  final description =
+      "Create a new Cloudflare Workers project using Dart Edge.";
+
+  VercelNewCommand() {
+    argParser.addFlag(
+      'shelf',
+      help:
+          'Whether to use the shelf package for routing and handling requests.',
+    );
+  }
+
+  @override
+  void run() async {
+    return _BrickGenerator(brick: 'cloudflare_workers', variables: {
       'shelf': argResults!['shelf'] as bool,
     }).generate();
   }
