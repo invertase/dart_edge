@@ -10,36 +10,46 @@
 </p>
 
 <p align="center">
-  <a href="#">Documentation</a> &bull;
+  <a href="https://docs.dartedge.dev/">Documentation</a> &bull;
   <a href="https://github.com/invertase/dart_workers/LICENSE">License</a>
 </p>
 
 ## About
 
-Dart Edge is a project aimed at running Dart code on Edge functions, including support for platforms such as [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) (more to come). You can write and deploy code in a little as:
+Dart Edge is a project aimed at running Dart code on Edge functions, including support for platforms such as [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) (more to come).
 
 ```dart
-import 'package:vercel_edge/vercel_edge.dart';
+import 'package:vercel_edge/vercel_edge_shelf.dart';
+import 'package:shelf_router/shelf_router.dart';
+import 'package:shelf/shelf.dart';
 
 void main() {
-  VercelEdge(fetch: (request) {
-    if (request.url.path == '/users') {
-      final users = await fetch('https://example.com/users');
-      return Response.json(await users.json());
-    }
+  VercelEdgeShelf(
+    fetch: (request) async {
+      final app = Router();
 
-    return Response('Not Found', status: 404);
-  });
+      app.get('/user/<id>', (request, String id) async {
+        return Response.ok('Welcome, $id');
+      });
+
+      app.all('/<ignored|.*>', (request) {
+        return Response.notFound('Resource not found');
+      });
+
+      final handler = const Pipeline().addMiddleware(logRequests()).addHandler(app);
+      return handler(request);
+    },
+  );
 }
 ```
 
 Edge functions are serverless functions which run on Edge networks, providing a number of benefits to server based envirommnets (but also carried some limitations). Some of these benefits include:
 
-- **Decreased Latency**: Edge functions run close to your users, reducing request latency (rather than running in a region(s)).
-- **Code Boot Times**: Edge functions have minimal code boot times vs traditional serverless functions.
-- **Platform APIs**: Access powerful platform specific APIs, such as Cloudflare Workers [HTMLRewriter](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/), [KV](https://developers.cloudflare.com/workers/runtime-apis/kv/),
+- ⚡ **Decreased Latency**: Edge functions run close to your users, reducing request latency (rather than running in a region(s)).
+- ⏱ **Code Boot Times**: Edge functions have minimal code boot times vs traditional serverless functions.
+- ✨ **Platform APIs**: Access powerful platform specific APIs, such as Cloudflare Workers [HTMLRewriter](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/), [KV](https://developers.cloudflare.com/workers/runtime-apis/kv/),
   [Durable Objects](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/) & more.
-- **Runtime APIs**: Edge functions run on the [JavaScript V8 runtime](https://developers.google.com/apps-script/guides/v8-runtime), and provides a subset of standard Web APIs to access familar APIs such as Cache, Crypto, Fetch, etc.
+- 🌎 **Runtime APIs**: Edge functions run on the [JavaScript V8 runtime](https://developers.google.com/apps-script/guides/v8-runtime), and provides a subset of standard Web APIs to access familar APIs such as Cache, Crypto, Fetch, etc.
 
 This project provides Dart bindings to the Edge runtime APIs, allowing you to write Dart code which can be run on Edge functions. Your code is compiled to JavaScript and deployed to the Edge network (WASM support possible in the future).
 
@@ -56,15 +66,17 @@ Other platforms we'll likely add support for are; [Netlify Edge](https://www.net
 
 ## FAQs
 
-### Why is it experimental?
+### ❓ Why is it experimental?
 
-This project is a new concept, and we're still figuring out things such as the API, testing, best practices for local development & deployment and other complicated matters such as error handling and debugging (since Dart is compiled to minified JavaScript). We use this project in production ourselves as a dog-fooding excercise, however we'll keep it as experimental until we're happy we've covered all bases of what you'd expect from Dart development.
+This project is a new concept, and we're still figuring out things such as the public APIs, testing, best practices for local development & deployment and other complicated matters such as error handling and debugging (since Dart is compiled to minified JavaScript). We use this project in production ourselves as a dog-fooding excercise, however we'll keep it as experimental until we're happy we've covered all bases of what you'd expect from Dart development.
 
-### What is the motivation for this project?
+There's also some unimplemented APIs which we're working on. Please see the [API](https://docs.dartedge.dev/apis) documentation for more information.
 
-We are big fans of running serverless code, and are using both [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) on our own projects. Some of these projects (including [Zapp!](https://zapp.run/)) are mainly written in Dart. We wanted to be able to write Dart code and deploy it to these platforms to allow for code sharing & collaboration between the team, hence this project started.
+### ❓ What is the motivation for this project?
 
-### What are the limitations of Edge functions?
+We're big fans of serverless environments, and are using both [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) on our own projects. Some of these projects (including [Zapp!](https://zapp.run/)) are mainly written in Dart. We wanted to be able to write Dart code and deploy it to these platforms to allow for code sharing & collaboration between the team, hence this project started.
+
+### ❓ What are the limitations of Edge functions?
 
 If you're not familar with the concept of serverless functions, you should be aware of the limitations. Typically to run Dart as a backend service, you will most likely reach for [Shelf](https://github.com/dart-lang/shelf), (or use a framework such as as [ServerPod](https://serverpod.dev/), [Dart Frog](https://dartfrog.vgv.dev/) etc) which are deployed to services such as Google Cloud Run, AWS etc. These setups run your code in a container, running one or more long lived processed to keep your service running. You can access the file system, use a single database connection, establish a long-lived WebSocket connection, etc.
 
