@@ -10,10 +10,7 @@ environment:
 dependencies:
   freezed_annotation: ^2.2.0
   js: ^0.6.5
-  js_bindings:
-    git:
-      url: https://github.com/jodinathan/js_bindings.git
-      ref: b1e53c4a3d7e488e39e290044554493fc9b26576
+  js_bindings: ^0.1.0
   args: ^2.3.2
   cli_util: ^0.3.5
   path: ^1.8.3

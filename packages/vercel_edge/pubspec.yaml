@@ -9,14 +9,11 @@ environment:
 
 dependencies:
   edge: 0.0.1
-  js_bindings:
-    git:
-      url: https://github.com/jodinathan/js_bindings.git
-      ref: b1e53c4a3d7e488e39e290044554493fc9b26576
+  js_bindings: ^0.1.0
   js: ^0.6.5
   path: ^1.8.3
   shelf: ^1.4.0
-  
+
 dev_dependencies:
   lints: ^2.0.0
   test: ^1.16.0
