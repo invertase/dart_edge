@@ -1,13 +1,6 @@
 import 'package:cloudflare_workers/cloudflare_workers.dart';
 
 class TestClass extends DurableObject {
-  TestClass(super.name);
-
-  @override
-  void init() {
-    print('Durable Object Initialized');
-  }
-
   @override
   FutureOr<Response> fetch(Request request) async {
     // These calls are transactional.
@@ -19,7 +12,7 @@ class TestClass extends DurableObject {
       await state.storage.setAlarm(DateTime.now().add(Duration(seconds: 2)));
     }
 
-    return Response('Durable Object called $views times.');
+    return Response('Path "${request.url.path}" called $views times.');
   }
 
   @override
@@ -30,7 +23,9 @@ class TestClass extends DurableObject {
 
 void main() {
   CloudflareWorkers(
-    durableObjects: [TestClass('TestClass')],
+    durableObjects: {
+      'TestClass': () => TestClass(),
+    },
     fetch: (request, env, ctx) {
       // Ignore browser favicon requests.
       if (request.url.toString().contains('favicon.ico')) {
@@ -41,7 +36,7 @@ void main() {
       final namespace = env.getDurableObjectNamespace('TEST');
 
       // Get an ID for the DO (this can be based on the request, name, user ID etc)
-      final id = namespace.idFromName('test');
+      final id = namespace.idFromName(request.url.path);
 
       // Send the DO a request instance.
       return namespace.get(id).fetch(request);

@@ -18,6 +18,7 @@ import '../public/execution_context.dart';
 import '../public/scheduled_event.dart';
 import '../public/email_message.dart';
 import '../public/environment.dart';
+import 'do/durable_object_state.dart';
 
 @JS('__dartCloudflareFetchHandler')
 external set globalDartFetchHandler(
@@ -48,6 +49,8 @@ typedef CloudflareWorkersScheduledEvent = FutureOr<void> Function(
 
 typedef CloudflareWorkersEmailEvent = FutureOr<void> Function(
     EmailMessage message, Environment env, ExecutionContext ctx);
+
+typedef CloudflareWorkersDurableObjects = Map<String, DurableObject Function()>;
 
 void attachFetchHandler(CloudflareWorkersFetchEvent handler) {
   globalDartFetchHandler = allowInterop((interop.Request req,
@@ -89,27 +92,40 @@ void attachEmailHandler(CloudflareWorkersEmailEvent handler) {
   });
 }
 
-void attachDurableObjects(Iterable<DurableObject> instances) {
+void attachDurableObjects(CloudflareWorkersDurableObjects instances) {
   globalDurableObjects = js_util.jsify({
-    for (final instance in instances)
-      instance.name: instance.delegate
-        ..init = allowInterop(instance.init)
-        ..fetch = allowInterop((fetchObj) {
+    for (final instance in instances.entries)
+      instance.key: allowInterop(
+          (interop.DurableObjectState state, interop.Environment env) {
+        final cls = instance.value();
+
+        // Attach the state and environment to the delegate.
+        final delegate = cls.delegate;
+        delegate.state = state;
+        delegate.env = env;
+
+        // Call the instance fetch handler, and return the delegate request.
+        delegate.fetch = allowInterop((interop.Request requestObj) {
           return futureToPromise(Future(() async {
-            final r = await instance.fetch(requestFromJsObject(fetchObj));
-            return r.delegate;
+            final response = await cls.fetch(requestFromJsObject(requestObj));
+            return response.delegate;
           }));
-        })
-        ..alarm = allowInterop(() {
+        });
+
+        // Call the instance alarm handler.
+        delegate.alarm = allowInterop(() {
           return futureToPromise(Future(() async {
-            await instance.alarm();
+            await cls.alarm();
           }));
-        })
+        });
+
+        return delegate;
+      })
   });
 }
 
 class CloudflareWorkers {
-  final Iterable<DurableObject>? durableObjects;
+  final CloudflareWorkersDurableObjects? durableObjects;
 
   final CloudflareWorkersFetchEvent? fetch;
 
@@ -123,6 +139,9 @@ class CloudflareWorkers {
     this.email,
     this.durableObjects,
   }) {
+    // Setup the runtime environment.
+    setupRuntime();
+
     // Attach the fetch handler to the global object.
     if (fetch != null) {
       attachFetchHandler(fetch!);

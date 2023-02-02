@@ -101,10 +101,7 @@ export class $className {
       );
     }
 
-    instance.state = state;
-    instance.env = env;
-    instance.init();
-    this.delegate = instance;
+    this.delegate = instance(state, env);
   }
 
   fetch(request) {

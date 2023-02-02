@@ -23,6 +23,9 @@ class NetlifyEdge {
   NetlifyEdge({
     this.fetch,
   }) {
+    // Setup the runtime environment.
+    setupRuntime();
+
     if (fetch != null) {
       __dartNetlifyFetchHandler =
           allowInterop((interop.Request req, interop.NetlifyContext context) {

@@ -10,16 +10,13 @@ import 'durable_object_state.dart';
 abstract class DurableObject {
   final interop.DurableObject _delegate;
 
-  final String name;
-
   DurableObjectState get state =>
       durableObjectStateFromJsObject(_delegate.state);
 
   Environment get env => environmentFromJsObject(_delegate.env);
 
-  DurableObject(this.name) : _delegate = interop.DurableObject();
+  DurableObject() : _delegate = interop.DurableObject();
 
-  void init() {}
   FutureOr<Response> fetch(Request request);
   FutureOr<void> alarm() {}
 }

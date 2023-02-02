@@ -1,3 +1,5 @@
+import 'dart:js';
+
 export 'dart:async' show FutureOr;
 
 export 'runtime/top.dart';
@@ -32,3 +34,8 @@ export 'package:js_bindings/bindings/fetch.dart'
         RequestDestination,
         RequestMode,
         RequestRedirect;
+
+/// This should be called before any other platform code is run.
+void setupRuntime() {
+  context['window'] ??= context['self'];
+}

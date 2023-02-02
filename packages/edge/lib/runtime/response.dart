@@ -24,9 +24,9 @@ class Response implements Body {
   }) : _delegate = interop.Response(
           convertBody(body),
           interop.ResponseInit(
-            status: status,
-            statusText: statusText,
-            headers: headers?.delegate,
+            status: status ?? 200,
+            statusText: statusText ?? 'OK',
+            headers: headers?.delegate ?? interop.Headers(),
           ),
         );
 

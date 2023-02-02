@@ -18,6 +18,9 @@ class VercelEdge {
   VercelEdge({
     this.fetch,
   }) {
+    // Setup the runtime environment.
+    setupRuntime();
+
     if (fetch != null) {
       __dartVercelFetchHandler = allowInterop((interop.Request request) {
         return futureToPromise(Future(() async {
