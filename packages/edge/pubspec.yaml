@@ -1,5 +1,7 @@
 name: edge
 description: An Vercel Edge function written in Dart.
+homepage: https://dartedge.dev
+repository: https://github.com/invertase/dart_edge/tree/main/packages/edge
 version: 0.0.2
 
 environment:

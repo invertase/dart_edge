@@ -1,4 +1,7 @@
 name: netlify_edge
+description: Write and deploy Dart functions to the Netlify Edge network.
+homepage: https://dartedge.dev
+repository: https://github.com/invertase/dart_edge/tree/main/packages/netlify_edge
 version: 0.0.1
 
 environment:
