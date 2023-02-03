@@ -44,7 +44,7 @@ void main() {
 }
 ```
 
-Edge functions are serverless functions which run on Edge networks, providing a number of benefits to server based envirommnets (but also carried some limitations). Some of these benefits include:
+Edge functions are serverless functions which run on Edge networks, providing a number of benefits to server based environmnets (but also carried some limitations). Some of these benefits include:
 
 - ⚡ **Decreased Latency**: Edge functions run close to your users, reducing request latency (rather than running in a region(s)).
 - ⏱ **Code Boot Times**: Edge functions have minimal code boot times vs traditional serverless functions.
