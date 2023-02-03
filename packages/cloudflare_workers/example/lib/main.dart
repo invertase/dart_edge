@@ -1,25 +1,30 @@
 import 'package:cloudflare_workers/cloudflare_workers.dart';
-import 'package:cloudflare_workers/public/request_init.dart';
-
-class TestDo extends DurableObject {
-  @override
-  FutureOr<Response> fetch(Request request) {
-    print('in do');
-    return Response('');
-  }
-}
 
 void main() {
   CloudflareWorkers(
     durableObjects: {
-      'StatsWorker': () => TestDo(),
+      'MyDurableObject': () => MyDurableObject(),
     },
     fetch: (request, env, ctx) async {
-      final durable = env.getDurableObjectNamespace('ZAPP_STATS_WORKER');
-      final id = durable.idFromName('test');
-      await durable.get(id).fetch(request);
+      // Access the namespace of the Durable Object (defined in wrangler.toml)
+      final durable = env.getDurableObjectNamespace('FOO_BAR');
 
-      return Response('');
+      // Generate an ID for the Durable Object (can be any string).
+      final id = durable.idFromName(request.url.path);
+
+      // Send a request to the Durable Object.
+      return durable.get(id).fetch(request);
     },
   );
+}
+
+class MyDurableObject extends DurableObject {
+  @override
+  FutureOr<Response> fetch(Request request) async {
+    // These calls are transactional.
+    final views = (await state.storage.get<int>('views') ?? 0) + 1;
+    await state.storage.put('views', views);
+
+    return Response('This page has been viewed $views times.');
+  }
 }
