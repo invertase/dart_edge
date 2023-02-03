@@ -29,7 +29,6 @@ class VercelBuildCommand extends BaseCommand {
     final outFileName = 'main.dart.js';
 
     final compiler = Compiler(
-      logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: outputDirectory,
       outputFileName: outFileName,
@@ -46,10 +45,8 @@ class VercelBuildCommand extends BaseCommand {
     );
 
     final devServer = DevServer(
-      logger: logger,
       startScript: devAddEventListener,
       compiler: Compiler(
-        logger: logger,
         entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
         outputDirectory: edgeTool.path,
         outputFileName: 'main.dart.js',

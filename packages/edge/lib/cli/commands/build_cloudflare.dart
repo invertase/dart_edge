@@ -3,6 +3,7 @@ import 'package:path/path.dart' as p;
 import 'package:toml/toml.dart';
 
 import '../compiler.dart';
+import '../logger.dart';
 import 'base_command.dart';
 
 class CloudflareBuildCommand extends BaseCommand {
@@ -25,7 +26,7 @@ class CloudflareBuildCommand extends BaseCommand {
     final tomlFile = File(p.join(Directory.current.path, 'wrangler.toml'));
 
     if (!await tomlFile.exists()) {
-      logger.write('No wrangler.toml file found in the current directory.');
+      logger.error('No wrangler.toml file found in the current directory.');
       exit(1);
     }
 
@@ -44,7 +45,6 @@ class CloudflareBuildCommand extends BaseCommand {
     );
 
     final compiler = Compiler(
-      logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: edgeTool.path,
       outputFileName: 'main.dart.js',
@@ -55,7 +55,7 @@ class CloudflareBuildCommand extends BaseCommand {
 
     String entryFile = edgeFunctionEntryFileDefaultValue('main.dart.js');
 
-    logger.trace('Generating Durable Object exports: $durableObjectNames');
+    logger.verbose('Generating Durable Object exports: $durableObjectNames');
 
     // Add durable objects as exports.
     for (final durableObjectName in durableObjectNames) {

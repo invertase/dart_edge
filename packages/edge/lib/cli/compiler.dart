@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cli_util/cli_logging.dart';
 import 'package:path/path.dart' as p;
 
+import 'logger.dart';
+
 enum CompilerLevel {
   O1,
   O2,
@@ -11,8 +13,6 @@ enum CompilerLevel {
 }
 
 class Compiler {
-  final Logger logger;
-
   // The entry point of the application.
   final String entryPoint;
 
@@ -25,7 +25,6 @@ class Compiler {
   final String outputFileName;
 
   Compiler({
-    required this.logger,
     required this.entryPoint,
     required this.outputDirectory,
     required this.level,
@@ -36,7 +35,7 @@ class Compiler {
     final entry = File(entryPoint);
 
     if (!await entry.exists()) {
-      logger.write('No entry file found at "${entry.path}", aborting.');
+      logger.error('No entry file found at "${entry.path}", aborting.');
       exit(1);
     }
 
@@ -57,12 +56,12 @@ class Compiler {
 
     // compiling.finish(showTiming: true);
     if (process.exitCode != 0) {
-      logger.write('Failed to compile dart file.');
-      logger.write(process.stderr);
+      logger.error('Failed to compile dart file.');
+      logger.error(process.stderr);
       exit(1);
     }
 
-    logger.trace(process.stdout);
+    logger.verbose(process.stdout);
 
     // TODO: cleanup .deps, .map files?
 

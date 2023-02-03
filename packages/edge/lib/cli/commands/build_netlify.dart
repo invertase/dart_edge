@@ -28,7 +28,6 @@ class NetlifyBuildCommand extends BaseCommand {
     );
 
     final compiler = Compiler(
-      logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: netlifyEdge.path,
       level: CompilerLevel.O1,

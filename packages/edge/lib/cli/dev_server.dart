@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cli_util/cli_logging.dart';
 import 'package:watcher/watcher.dart';
 import 'package:path/path.dart' as p;
 
@@ -8,13 +7,11 @@ import 'compiler.dart';
 
 class DevServer {
   final Compiler compiler;
-  final Logger logger;
   final String startScript;
   final String? port;
 
   DevServer({
     required this.compiler,
-    required this.logger,
     required this.startScript,
     this.port,
   });
