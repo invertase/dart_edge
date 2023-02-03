@@ -33,8 +33,6 @@ Next, either use the `edge` CLI command or setup manually:
     dart pub get
     ```
 
-    Open the `lib/main.dart` file to view the minimal HTTP request fetch handler.
-
   </TabItem>
   <TabItem value="manually">
     Install the `cloudflare_workers` package:
@@ -71,6 +69,12 @@ Next, either use the `edge` CLI command or setup manually:
 
   </TabItem>
 </Tabs>
+
+Open the `lib/main.dart` file to view the minimal HTTP request fetch handler.
+
+Each incoming request to your edge function will be passed to the `fetch` handler, which is expected to return a `Response` instance. The `fetch` handler provides a `Request` instance which contains useful information about the incoming request, such as the method, URL, headers, body and more.
+
+Alongside the `Request` instance, you are also provided an `Environment` instance, enables you to access service bindings (e.g. Durable Objects). Additionally the `ExecutionContext` argument enables you to perform actions such as defining functions which can run after a response has been sent to the client.
 
 ## Local development
 

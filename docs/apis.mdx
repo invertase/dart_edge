@@ -23,50 +23,50 @@ it makes sense.
 
 ## Network APIs
 
-| API                     | Notes                                                      | Status |                                    MDN Reference                                    | API Reference |
-| ----------------------- | ---------------------------------------------------------- | :----: | :---------------------------------------------------------------------------------: | ------------- |
-| `addFetchEventListener` | <small>Mimics the `addEventListener('fetch')` api.</small> |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) |               |
-| `Fetch`                 |                                                            |   🟢   |          [📖](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)           |               |
-| `FetchEvent`            |                                                            |   🟢   |          [📖](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent)          |               |
-| `Headers`               |                                                            |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/Headers)            |               |
-| `Request`               |                                                            |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/Request)            |               |
-| `Response`              |                                                            |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/Response)           |               |
-| `FormData`              |                                                            |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/FormData)           |               |
+| API                     | Status |                                    MDN Reference                                    | API Reference |
+| ----------------------- | :----: | :---------------------------------------------------------------------------------: | ------------- |
+| `addFetchEventListener` |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) |               |
+| `Fetch`                 |   🟢   |          [📖](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)           |               |
+| `FetchEvent`            |   🟢   |          [📖](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent)          |               |
+| `Headers`               |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/Headers)            |               |
+| `Request`               |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/Request)            |               |
+| `Response`              |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/Response)           |               |
+| `FormData`              |   🟠   |           [📖](https://developer.mozilla.org/en-US/docs/Web/API/FormData)           |               |
 
 ## Encoding APIs
 
-| API           | Notes | Status |                              MDN Reference                               | API Reference |
-| ------------- | ----- | :----: | :----------------------------------------------------------------------: | ------------- |
-| `TextDecoder` |       |   🟠   |    [📖](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder)    |               |
-| `TextEncoder` |       |   🟠   |    [📖](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder)    |               |
-| `atob`        |       |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/atob) |               |
-| `btoa`        |       |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa) |               |
+| API           | Status |                              MDN Reference                               | API Reference |
+| ------------- | :----: | :----------------------------------------------------------------------: | ------------- |
+| `TextDecoder` |   🟠   |    [📖](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder)    |               |
+| `TextEncoder` |   🟠   |    [📖](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder)    |               |
+| `atob`        |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/atob) |               |
+| `btoa`        |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa) |               |
 
 ## Stream APIs
 
 The Streaming APIs are subject to change. Dart provides great support for Streams so we're still figuring out the best public API
 for interacting with these underlying APIs.
 
-| API                           | Notes | Status |                                   MDN Reference                                    | API Reference |
-| ----------------------------- | ----- | :----: | :--------------------------------------------------------------------------------: | ------------- |
-| `ReadableStream`              |       |   🔴   |       [📖](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream)        |               |
-| `ReadableStreamBYOBReader`    |       |   🔴   |  [📖](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamBYOBReader)   |               |
-| `ReadableStreamDefaultReader` |       |   🔴   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader) |               |
-| `TransformStream`             |       |   🔴   |       [📖](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream)       |               |
-| `WritableStream`              |       |   🔴   |       [📖](https://developer.mozilla.org/en-US/docs/Web/API/WritableStream)        |               |
-| `WritableStreamDefaultWriter` |       |   🔴   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/WritableStreamDefaultWriter) |               |
+| API                           | Status |                                   MDN Reference                                    | API Reference |
+| ----------------------------- | :----: | :--------------------------------------------------------------------------------: | ------------- |
+| `ReadableStream`              |   🔴   |       [📖](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream)        |               |
+| `ReadableStreamBYOBReader`    |   🔴   |  [📖](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamBYOBReader)   |               |
+| `ReadableStreamDefaultReader` |   🔴   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader) |               |
+| `TransformStream`             |   🔴   |       [📖](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream)       |               |
+| `WritableStream`              |   🔴   |       [📖](https://developer.mozilla.org/en-US/docs/Web/API/WritableStream)        |               |
+| `WritableStreamDefaultWriter` |   🔴   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/WritableStreamDefaultWriter) |               |
 
 ## Crypto APIs
 
-| API            | Notes | Status |                             MDN Reference                             | API Reference |
-| -------------- | ----- | :----: | :-------------------------------------------------------------------: | ------------- |
-| `crypto`       |       |   🟠   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) |               |
-| `CryptoKey`    |       |   🔴   |   [📖](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey)    |               |
-| `SubtleCrypto` |       |   🔴   |  [📖](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto)  |               |
+| API            | Status |                             MDN Reference                             | API Reference |
+| -------------- | :----: | :-------------------------------------------------------------------: | ------------- |
+| `crypto`       |   🟠   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) |               |
+| `CryptoKey`    |   🔴   |   [📖](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey)    |               |
+| `SubtleCrypto` |   🔴   |  [📖](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto)  |               |
 
 ## Standard APIs
 
-| API               | Notes | Status |                             MDN Reference                              | API Reference |
-| ----------------- | ----- | :----: | :--------------------------------------------------------------------: | ------------- |
-| `AbortController` |       |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) |               |
-| `Cache`           |       |   🟢   |      [📖](https://developer.mozilla.org/en-US/docs/Web/API/Cache)      |               |
+| API               | Status |                             MDN Reference                              | API Reference |
+| ----------------- | :----: | :--------------------------------------------------------------------: | ------------- |
+| `AbortController` |   🟢   | [📖](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) |               |
+| `Cache`           |   🟢   |      [📖](https://developer.mozilla.org/en-US/docs/Web/API/Cache)      |               |

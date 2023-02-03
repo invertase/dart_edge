@@ -32,8 +32,6 @@ Next, either use the `edge` CLI command or setup manually:
     dart pub get
     ```
 
-    Open the `lib/main.dart` file to view the minimal HTTP request fetch handler.
-
   </TabItem>
   <TabItem value="manually">
     Install the `vercel_edge` package:
@@ -67,6 +65,18 @@ Next, either use the `edge` CLI command or setup manually:
 
   </TabItem>
 </Tabs>
+
+Open the `lib/main.dart` file to view the minimal HTTP request fetch handler:
+
+```dart
+void main() {
+  VercelEdge(fetch: (request) {
+    return Response("Hello World!");
+  });
+}
+```
+
+Each incoming request to your edge function will be passed to the `fetch` handler, which is expected to return a `Response` instance. The `fetch` handler provides a `Request` instance which contains useful information about the incoming request, such as the method, URL, headers, body and more.
 
 ## Local development
 

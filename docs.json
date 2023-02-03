@@ -15,8 +15,20 @@
       [
         ["Getting Started", "/"],
         ["Runtime APIs", "/apis"],
-        ["Usage with Shelf", "/shelf"],
-        ["Examples", "https://github.com/invertase/dart_edge/tree/main/examples"]
+        [
+          "Examples",
+          "https://github.com/invertase/dart_edge/tree/main/examples"
+        ]
+      ]
+    ],
+    [
+      "Guides",
+      [
+        ["Usage with Shelf", "/guides/shelf"],
+        ["Request & Response", "/guides/request-and-response"],
+        ["HTTP Requests", "/guides/http-fetch"],
+        ["Headers", "/guides/headers"],
+        ["Form Data", "/guides/form-data"]
       ]
     ],
     [
