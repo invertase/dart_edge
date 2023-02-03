@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="https://docs.dartedge.dev/">Documentation</a> &bull;
+  <a href="https://github.com/invertase/dart_edge/tree/main/examples">Examples</a> &bull;
   <a href="https://github.com/invertase/dart_workers/LICENSE">License</a>
 </p>
 

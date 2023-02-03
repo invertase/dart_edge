@@ -15,7 +15,8 @@
       [
         ["Getting Started", "/"],
         ["Runtime APIs", "/apis"],
-        ["Usage with Shelf", "/shelf"]
+        ["Usage with Shelf", "/shelf"],
+        ["Examples", "https://github.com/invertase/dart_edge/tree/main/examples"]
       ]
     ],
     [
