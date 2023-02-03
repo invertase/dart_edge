@@ -9,12 +9,12 @@ import 'logger.dart';
 
 class DevServer {
   final Compiler compiler;
-  final String startScript;
+  final String? startScript;
   final String? port;
 
   DevServer({
     required this.compiler,
-    required this.startScript,
+    this.startScript,
     this.port,
   });
 
@@ -37,10 +37,12 @@ class DevServer {
   Future<String> _compile() async {
     final compiledFile = await compiler.compile();
 
-    await File(compiledFile).writeAsString(
-      startScript,
-      mode: FileMode.append,
-    );
+    if (startScript != null) {
+      await File(compiledFile).writeAsString(
+        startScript!,
+        mode: FileMode.append,
+      );
+    }
 
     return compiledFile;
   }
@@ -53,7 +55,14 @@ class DevServer {
         compiled,
       );
 
+      void kill(ProcessSignal signal) {
+        process.kill(signal);
+        exit(0);
+      }
+
       List<StreamSubscription> subscriptions = [
+        ProcessSignal.sigint.watch().listen(kill),
+        ProcessSignal.sigterm.watch().listen(kill),
         process.stdout.transform(utf8.decoder).listen(logger.write),
         process.stderr.transform(utf8.decoder).listen(logger.error),
       ];
@@ -69,13 +78,14 @@ class DevServer {
           if (!completer.isCompleted) completer.complete();
         });
       });
+
       try {
         await completer.future;
         await watcherSubscription.cancel();
         await Future.wait(subscriptions.map((e) => e.cancel()));
         compiled = await _compile();
       } finally {
-        process.kill(ProcessSignal.sigterm);
+        kill(ProcessSignal.sigterm);
       }
     }
   }
