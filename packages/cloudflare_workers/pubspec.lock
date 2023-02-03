@@ -116,10 +116,11 @@ packages:
   edge:
     dependency: "direct main"
     description:
-      path: "../edge"
-      relative: true
-    source: path
-    version: "0.0.1-dev.2"
+      name: edge
+      sha256: "464b7b8232e868dcc0a042b93a37c5b2826e2b3c06c7b754c77305fd4c7ab18f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   file:
     dependency: transitive
     description:

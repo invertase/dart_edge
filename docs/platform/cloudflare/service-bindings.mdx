@@ -7,6 +7,11 @@ description: Learn how to use Cloudflare Workers service bindings with Dart Edge
 
 Cloudflare Workers provide additional runtime APIs on their platform, such as [Durable Objects](https://developers.cloudflare.com/workers/runtime-apis/durable-objects/) & [KV](https://developers.cloudflare.com/workers/runtime-apis/kv/). You can access these bindings via the `env` property during a `fetch` event.
 
+**Table of contents**:
+
+- [KV](#kv) - low-latency, key-value data store.
+- [Durable Objects](#durable-objects) - low-latency coordination and consistent storage.
+
 ## KV
 
 Workers KV is a global, low-latency, key-value data store. It stores data in a small number of centralized data centers, then caches that data in Cloudflare's data centers after access. KV supports exceptionally high read volumes with low latency, making it possible to build highly dynamic APIs and websites that respond as quickly as a cached static file would. While reads are periodically revalidated in the background, requests which are not in cache and need to hit the centralized back end can see high latencies. [Learn more](https://developers.cloudflare.com/workers/runtime-apis/kv/).
