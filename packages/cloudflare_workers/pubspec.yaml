@@ -2,7 +2,7 @@ name: cloudflare_workers
 description: Write and deploy Dart functions to Cloudflare Workers.
 homepage: https://dartedge.dev
 repository: https://github.com/invertase/dart_edge/tree/main/packages/cloudflare_workers
-version: 0.0.1-dev.1
+version: 0.0.2
 
 environment:
   sdk: ">=2.18.5 <3.0.0"
