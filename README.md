@@ -70,11 +70,13 @@ Other platforms we'll likely add support for are; [Netlify Edge](https://www.net
 
 This project is a new concept, and we're still figuring out things such as the public APIs, testing, best practices for local development & deployment and other complicated matters such as error handling and debugging (since Dart is compiled to minified JavaScript). We use this project in production ourselves as a dog-fooding excercise, however we'll keep it as experimental until we're happy we've covered all bases of what you'd expect from Dart development.
 
+We will probably be making breaking changes without following semver until we're happy for a major release. So please be aware of this.
+
 There's also some unimplemented APIs which we're working on. Please see the [API](https://docs.dartedge.dev/apis) documentation for more information.
 
 ### ❓ What is the motivation for this project?
 
-We're big fans of serverless environments, and are using both [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) on our own projects. Some of these projects (including [Zapp!](https://zapp.run/)) are mainly written in Dart. We wanted to be able to write Dart code and deploy it to these platforms to allow for code sharing & collaboration between the team, hence this project started.
+We're big fans of serverless environments, and are using both [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) on our own projects. Some of these projects (including [Zapp!](https://zapp.run/)) are written in Dart. We wanted to be able to write Dart code and deploy it to these platforms to allow for code sharing & collaboration between the team, hence this project started.
 
 ### ❓ What are the limitations of Edge functions?
 
@@ -82,6 +84,8 @@ If you're not familar with the concept of serverless functions, you should be aw
 
 Serverless functions on the Edge are different. They are invoked once-per-request and are not long lived. You cannot access the file system, and in some cases cannot establish long-lived connections (depending on the platform). Netlify
 has a great [article](https://www.netlify.com/blog/edge-functions-explained/) explaining the differences.
+
+<hr />
 
 <p align="center">
   <a href="https://invertase.io/?utm_source=readme&utm_medium=footer&utm_campaign=edge">
