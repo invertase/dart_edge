@@ -23,8 +23,7 @@ Next, either use the `edge` CLI command or setup manually:
     Create a new project using the `edge` CLI command:
 
     ```sh
-    mkdir vercel_example && cd vercel_example
-    edge new vercel
+    edge new vercel_edge new_project
     ```
 
     This command will create a new barebones template in the current directory. Once complete, install the dependencies:
@@ -47,8 +46,8 @@ Next, either use the `edge` CLI command or setup manually:
 
     ```json
     {
-      "buildCommand": "dart run edge build vercel",
-      "devCommand": "dart run edge build vercel --dev"
+      "buildCommand": "dart run edge build vercel_edge",
+      "devCommand": "dart run edge build vercel_edge --dev"
     }
     ```
 

@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:watcher/watcher.dart';
 import 'package:path/path.dart' as p;
 
 import 'compiler.dart';
+import 'logger.dart';
 
 class DevServer {
   final Compiler compiler;
@@ -18,17 +20,18 @@ class DevServer {
 
   Future<Process> _startEdgeRuntime(String entryFile) {
     return Process.start(
-        'npx',
-        [
-          'edge-runtime',
-          '--listen',
-          entryFile,
-          '--port',
-          port ?? Platform.environment['PORT'] ?? '3000',
-        ],
-        runInShell: true,
-        includeParentEnvironment: true,
-        mode: ProcessStartMode.detachedWithStdio);
+      'npx',
+      [
+        'edge-runtime',
+        '--listen',
+        entryFile,
+        '--port',
+        port ?? Platform.environment['PORT'] ?? '3000',
+      ],
+      runInShell: true,
+      includeParentEnvironment: true,
+      mode: ProcessStartMode.detachedWithStdio,
+    );
   }
 
   Future<String> _compile() async {
@@ -50,6 +53,11 @@ class DevServer {
         compiled,
       );
 
+      List<StreamSubscription> subscriptions = [
+        process.stdout.transform(utf8.decoder).listen(logger.write),
+        process.stderr.transform(utf8.decoder).listen(logger.error),
+      ];
+
       final watcher = DirectoryWatcher(p.join(Directory.current.path, 'lib'));
       Timer? _debounce;
       StreamSubscription? watcherSubscription;
@@ -61,10 +69,14 @@ class DevServer {
           if (!completer.isCompleted) completer.complete();
         });
       });
-      await completer.future;
-      await watcherSubscription.cancel();
-      compiled = await _compile();
-      process.kill(ProcessSignal.sigterm);
+      try {
+        await completer.future;
+        await watcherSubscription.cancel();
+        await Future.wait(subscriptions.map((e) => e.cancel()));
+        compiled = await _compile();
+      } finally {
+        process.kill(ProcessSignal.sigterm);
+      }
     }
   }
 }

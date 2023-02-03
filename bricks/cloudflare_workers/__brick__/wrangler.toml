@@ -3,5 +3,5 @@ compatibility_date = "2022-11-30"
 main = ".dart_tool/edge/entry.js"
 
 [build]
-command = "dart run edge build cloudflare --dev"
+command = "dart run edge build cloudflare_workers --dev"
 watch_dir = ["lib"]

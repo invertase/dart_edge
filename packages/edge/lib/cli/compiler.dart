@@ -35,13 +35,22 @@ class Compiler {
     final entry = File(entryPoint);
 
     if (!await entry.exists()) {
-      logger.error('No entry file found at "${entry.path}", aborting.');
+      logger.error(
+          'Attempted to compile the entry file at ${entry.path}, but no file was found.');
+      logger.lineBreak();
+      logger.hint(
+          'Visit the docs for more information: https://docs.dartedge.dev');
       exit(1);
     }
 
     // final compiling = logger.progress('Compiling Dart entry point');
 
     final outputPath = p.join(outputDirectory, outputFileName);
+
+    logger.verbose(
+        'Compiling with optimization level ${level.name} ${entry.path} to $outputPath');
+
+    final progress = logger.progress('Compiling Dart entry file');
 
     final process = await Process.run('dart', [
       'compile',
@@ -54,16 +63,16 @@ class Compiler {
       entry.path,
     ]);
 
-    // compiling.finish(showTiming: true);
     if (process.exitCode != 0) {
-      logger.error('Failed to compile dart file.');
-      logger.error(process.stderr);
+      progress.cancel();
+      logger.error('Compilation of the Dart entry file failed:');
+      logger.lineBreak();
+      logger.error(process.stdout);
       exit(1);
     }
 
+    progress.finish(showTiming: true);
     logger.verbose(process.stdout);
-
-    // TODO: cleanup .deps, .map files?
 
     return outputPath;
   }

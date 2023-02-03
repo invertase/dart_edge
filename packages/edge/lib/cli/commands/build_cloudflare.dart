@@ -8,16 +8,17 @@ import 'base_command.dart';
 
 class CloudflareBuildCommand extends BaseCommand {
   @override
-  final name = "cloudflare";
+  final name = "cloudflare_workers";
 
   @override
-  final description = "TODO.";
+  final description =
+      "Builds a Dart Edge project for the Cloudflare Workers environment.";
 
   CloudflareBuildCommand() {
     argParser.addFlag(
       'dev',
       help:
-          'Runs Dart Edge in a local development environment with hot reload via Vercel CLI.',
+          'Compiles Dart code with low levels of minification, for faster compilation but less performant code.',
     );
   }
 
@@ -26,11 +27,22 @@ class CloudflareBuildCommand extends BaseCommand {
     final tomlFile = File(p.join(Directory.current.path, 'wrangler.toml'));
 
     if (!await tomlFile.exists()) {
-      logger.error('No wrangler.toml file found in the current directory.');
+      logger.error('No wrangler.toml exists in the current directory.');
+      logger.lineBreak();
+      logger.hint(
+        'To get started with Cloudflare Workers, vist the docs: https://docs.dartedge.dev/platform/cloudflare',
+      );
       exit(1);
     }
 
-    final toml = TomlDocument.parse(await tomlFile.readAsString()).toMap();
+    Map<String, dynamic> toml;
+
+    try {
+      toml = TomlDocument.parse(await tomlFile.readAsString()).toMap();
+    } catch (e) {
+      logger.error('Failed to parse wrangler.toml file.');
+      exit(1);
+    }
 
     final durableObjectBindings = toml['durable_objects']?['bindings'] ?? [];
     final Set<String> durableObjectNames = {
@@ -54,16 +66,22 @@ class CloudflareBuildCommand extends BaseCommand {
     await compiler.compile();
 
     String entryFile = edgeFunctionEntryFileDefaultValue('main.dart.js');
-
-    logger.verbose('Generating Durable Object exports: $durableObjectNames');
-
+    
     // Add durable objects as exports.
     for (final durableObjectName in durableObjectNames) {
       entryFile += edgeFunctionDurableObjectValue(durableObjectName);
     }
 
+    if (durableObjectNames.isNotEmpty) {
+    logger.verbose('Creating Durable Object exports: $durableObjectNames');
+    }
+
     // Update the entry file.
     await File(p.join(edgeTool.path, 'entry.js')).writeAsString(entryFile);
+
+    logger.verbose(
+      'Entry file generated at ${p.join(edgeTool.path, 'entry.js')}',
+    );
   }
 }
 

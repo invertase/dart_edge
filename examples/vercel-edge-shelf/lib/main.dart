@@ -8,7 +8,7 @@ void main() {
       final app = Router();
 
       app.get('/hello', (request) {
-        return Response.ok("world");
+        return Response.ok("world!");
       });
 
       app.get('/hello/<phrase>', (request, String phrase) {

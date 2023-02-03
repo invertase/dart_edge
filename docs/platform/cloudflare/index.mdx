@@ -24,8 +24,7 @@ Next, either use the `edge` CLI command or setup manually:
     Create a new project using the `edge` CLI command:
 
     ```sh
-    mkdir cloudflare_workers_example && cd cloudflare_workers_example
-    edge new cloudflare
+    edge new cloudflare_workers new_project
     ```
 
     This command will create a new barebones template in the current directory. Once complete, install the dependencies:
@@ -52,7 +51,7 @@ Next, either use the `edge` CLI command or setup manually:
     main = ".dart_tool/edge/entry.js"
 
     [build]
-    command = "dart run edge build cloudflare --dev"
+    command = "dart run edge build cloudflare_workers --dev"
     watch_dir = ["lib"]
     ```
 

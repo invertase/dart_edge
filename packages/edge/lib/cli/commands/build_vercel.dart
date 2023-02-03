@@ -9,7 +9,7 @@ import 'base_command.dart';
 
 class VercelBuildCommand extends BaseCommand {
   @override
-  final name = "vercel";
+  final name = "vercel_edge";
 
   @override
   final description = "Builds the project.";

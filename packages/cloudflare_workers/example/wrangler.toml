@@ -12,5 +12,5 @@ durable_objects.bindings = [
 ]
 
 [build]
-command = "dart run edge build cloudflare --dev"
+command = "dart run edge build cloudflare_workers --dev"
 watch_dir = ["lib", "../../packages"]

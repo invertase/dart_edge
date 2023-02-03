@@ -11,8 +11,7 @@ void main(List<String> args) {
 }
 
 class EdgeCommandRunner extends CommandRunner<void> {
-  EdgeCommandRunner()
-      : super("edge", "A dart implementation of distributed version control.") {
+  EdgeCommandRunner() : super("edge", "A CLI to manage Dart Edge projects.") {
     argParser.addFlag('verbose', abbr: 'v');
   }
 }

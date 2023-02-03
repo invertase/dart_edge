@@ -11,5 +11,5 @@ tag = "v1" # Should be unique for each entry
 new_classes = ["TestClass"]
 
 [build]
-command = "dart run edge build cloudflare --dev"
+command = "dart run edge build cloudflare_workers --dev"
 watch_dir = ["lib"]
