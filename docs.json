@@ -26,9 +26,13 @@
       [
         ["Usage with Shelf", "/guides/shelf"],
         ["Request & Response", "/guides/request-and-response"],
-        ["HTTP Requests", "/guides/http-fetch"],
+        ["Data Fetching", "/guides/fetch"],
         ["Headers", "/guides/headers"],
-        ["Form Data", "/guides/form-data"]
+        ["Form Data", "/guides/form-data"],
+        ["Caching", "/guides/caching"],
+        ["Streaming", "/guides/streaming"],
+        ["Data Encoding", "/guides/encoding"],
+        ["Cryptography", "/guides/cryptography"]
       ]
     ],
     [
