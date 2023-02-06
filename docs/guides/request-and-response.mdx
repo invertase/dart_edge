@@ -5,4 +5,125 @@ description: Learn how to use the Request and Response objects in Dart Edge.
 
 # Request & Response
 
-<Info>These docs are a work in progress, check back soon!</Info>
+The `Request` and `Response` classes are used to handle incoming HTTP requests, and deliver responses to the client. If you're not familar with this concept, this page will help you get started.
+
+## Request
+
+Each time a HTTP request is made to your Edge function, the `fetch` handler is invoked with a `Request` instance. This instance contains information about the request, such as the URL, method, headers, and body. Using this information, you can decide how to handle the request and deliver a `Response` back to the client.
+
+### URL & Method
+
+The `url` property of the `Request` is a Dart [`Uri`](https://api.dart.dev/stable/2.19.1/dart-core/Uri-class.html) class, contaning all of the relevant information about the request URL, such as the path and query parameters. The `method` property is a string containing the HTTP method used for the request, such a `GET`, `POST`, `DELETE` etc.
+
+Using a combination of these two properties, you can decide how to handle the request (commonly known as routing):
+
+```dart
+void main() {
+  VercelEdge(
+    fetch: (request) {
+      final url = request.url;
+      final method = request.method;
+
+      if (method == 'GET' && url.path == '/users') {
+        // A function which returns a `Response` instance.
+        return getUsers();
+      }
+
+      return Response('Not found', status: 404);
+    }
+  );
+}
+```
+
+The following code snippet shows how to access the URL and method of a request, and deliver a response if the request is a `GET` request to the `/users` path. Otherwise, a `404` response is returned.
+
+### Incoming data
+
+`GET` requests are usually used to retrieve data based on the incoming URL and query parameters (e.g. searching some data on your database). When a client sends other HTTP requests such as `POST`, `PUT` and `DELETE`, they are usually sending data (strings, blobs, json etc) to your function for you to handle.
+
+For example, if the client is sending JSON data within a `POST` request, the `json()` method on the `Request` instance can be used to parse the data into a Dart object:
+
+```dart
+void main() {
+  VercelEdge(
+    fetch: (request) {
+      final url = request.url;
+      final method = request.method;
+
+      if (method == 'POST' && url.path == '/settings') {
+        final json = await request.json();
+        return updateUserSettings(json);
+      }
+
+      return Response('Not found', status: 404);
+    }
+  );
+}
+```
+
+Other methods exist to parse the incoming data into different formats, such as `text()` and [`formData()`](https://docs.dartedge.dev/guides/form-data).
+
+### Headers
+
+An HTTP header is a field of an HTTP request or response that passes additional context and metadata about the request or response. Such metadata might be a JWT token used to authenticate a user.
+
+The `headers` property of the `Request` instance is a `Headers` instance, which allows you to access, by name, the values of the headers sent by the client:
+
+```dart
+fetch: (request) {
+  final headers = request.headers;
+
+  if (headers.has('Authorization')) {
+    final token = headers['Authorization'];
+    await validateUser(request, token);
+  }
+
+  // ...
+}
+```
+
+<Info>Getting and setting header keys is a case-insensitive operation.</Info>
+
+To learn more, view the [Headers](/guides/headers) guide.
+
+## Response
+
+Every `fetch` handler expects that a `Response` instance will be returned. The `Response` class is used to deliver a response back to the client, and can be used to set the status code, headers, and body of the response.
+
+### Status code
+
+The status code of a response tells the client how the request was handled. For example, a `200` status code means that the request was successful, while a `404` status code means that the requested resource was not found. You can view all possible status codes on the [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) page.
+
+To set a status code, use the `status` property of the `Response` class:
+
+```dart
+return Response('Not found', status: 404);
+```
+
+### Headers
+
+Much like incoming HTTP headers, they can also be sent back to a client. Headers can be used to inform the client to set a cookie, cache a response or inform the client of the type of data being sent back (e.g. JSON, HTML, plain text etc).
+
+To set a header, use the `headers` property of the `Response` class:
+
+```dart
+return Response(jsonEncode({ 'message': 'Hello world' }), headers: {
+  'Content-Type': 'application/json'
+});
+```
+
+### Returning JSON
+
+Many developers return JSON from their Edge functions, to provide a structured response to the client. To make this easier, the `Response` class has a static `json()` method, which accepts a Dart object and returns a `Response` instance with the `Content-Type` header set to `application/json`:
+
+```dart
+return Response.json({ 'message': 'Hello world' });
+```
+
+You can additional provide a status code or additional headers to the `json()` method:
+
+```dart
+return Response.json({ 'message': 'Authorization token has expired' }, status: 401, headers: {
+  'X-My-Custom-Header': 'Hello world'
+});
+```
