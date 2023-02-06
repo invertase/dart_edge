@@ -1,4 +1,24 @@
+import 'dart:async';
+import 'dart:js';
+
 import 'package:edge/runtime.dart';
+
+StreamController<dynamic> _fetchEvents = StreamController.broadcast();
+
+Stream<dynamic> get fetchEvents async* {
+  num count = 0;
+  while (context['dartSw'] != 'ready') {
+    print(context['dartSw']);
+    count++;
+    await Future.delayed(Duration(milliseconds: 100));
+
+    if (count > 100) {
+      throw Exception('Timeout waiting for service worker registration.');
+    }
+  }
+
+  yield* _fetchEvents.stream;
+}
 
 Request serverRequest(
   String path, {

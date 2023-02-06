@@ -1,9 +1,25 @@
+import 'dart:async';
+import 'dart:js';
+
 import 'package:edge/runtime.dart';
 import 'package:test/test.dart';
 
+import 'utils.dart';
+
 void main() {
   group('Request', () {
-    test('.method', () {
+    test('.method', () async {
+      expect(
+        fetchEvents,
+        emitsInOrder([
+          expectAsync1<void, Request>((p0) {
+            expect(p0.method, 'GET');
+          })
+        ]),
+      );
+
+      await fetch(Resource('https://foo.com'));
+
       final resource = Resource('https://foo.com');
 
       expect(
