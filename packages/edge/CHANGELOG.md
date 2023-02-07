@@ -1,3 +1,9 @@
+## 0.0.3
+
+ - **REFACTOR**: move edge runtime to separate package. ([95d4fab7](https://github.com/invertase/dart_edge/commit/95d4fab74cc7c3902bd737659dfee06d7feab353))
+ - **FIX**: Uint8List as valid body type. ([a4be0591](https://github.com/invertase/dart_edge/commit/a4be0591679af3d4ce22c9aa05e663b1732ca4d7))
+ - **FEAT**: add `dev` command & example. ([8936f513](https://github.com/invertase/dart_edge/commit/8936f5131c0d6621264138e89370cd6ee6fdc828))
+
 ## 0.0.2
 
  - **REFACTOR**: restructure runtime location. ([3b4407e4](https://github.com/invertase/dart_edge/commit/3b4407e400b73a6583fb96d724871d068f4e944e))

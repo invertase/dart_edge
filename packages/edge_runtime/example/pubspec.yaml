@@ -2,11 +2,11 @@ name: edge_example
 description: A basic example of using the edge package.
 homepage: https://dartedge.dev
 repository: https://github.com/invertase/dart_edge/tree/main/packages/edge
-version: 0.0.2
+version: 0.0.2+1
 
 environment:
   sdk: ">=2.18.5 <3.0.0"
 
 dependencies:
-  edge: ^0.0.2
-  edge_runtime: ^0.0.1
+  edge: ^0.0.3
+  edge_runtime: ^0.0.1+1

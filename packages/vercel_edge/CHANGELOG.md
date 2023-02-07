@@ -1,3 +1,8 @@
+## 0.0.2+1
+
+ - **REFACTOR**: move edge runtime to separate package. ([95d4fab7](https://github.com/invertase/dart_edge/commit/95d4fab74cc7c3902bd737659dfee06d7feab353))
+ - **DOCS**: add service bindings table of contents. ([7da0b111](https://github.com/invertase/dart_edge/commit/7da0b111e61915cf278f170ec5f150dc2df250b1))
+
 ## 0.0.2
 
  - **REFACTOR**: restructure runtime location. ([3b4407e4](https://github.com/invertase/dart_edge/commit/3b4407e400b73a6583fb96d724871d068f4e944e))
