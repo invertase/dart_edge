@@ -1,5 +1,5 @@
 <h1 align="center">Dart Edge (Experimental)</h1>
-<p align="center">Run Dart on on the Edge - supporting Vercel & Cloudflare Workers (more coming soon).</p>
+<p align="center">Run Dart on the Edge - supporting Vercel & Cloudflare Workers (more coming soon).</p>
 
 <p align="center">
   <a href="https://github.com/invertase/melos#readme-badge"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square" alt="Melos" /></a>
@@ -69,7 +69,7 @@ Other platforms we'll likely add support for are; [Netlify Edge](https://www.net
 
 ### ❓ Why is it experimental?
 
-This project is a new concept, and we're still figuring out things such as the public APIs, testing, best practices for local development & deployment and other complicated matters such as error handling and debugging (since Dart is compiled to minified JavaScript). We use this project in production ourselves as a dog-fooding excercise, however we'll keep it as experimental until we're happy we've covered all bases of what you'd expect from Dart development.
+This project is a new concept, and we're still figuring out things such as the public APIs, testing, best practices for local development & deployment and other complicated matters such as error handling and debugging (since Dart is compiled to minified JavaScript). We use this project in production ourselves as a dog-fooding exercise, however we'll keep it as experimental until we're happy we've covered all bases of what you'd expect from Dart development.
 
 We will probably be making breaking changes without following semver until we're happy for a major release. So please be aware of this.
 
