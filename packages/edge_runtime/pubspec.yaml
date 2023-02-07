@@ -19,6 +19,3 @@ dev_dependencies:
   test: ^1.16.0
   shelf: ^1.4.0
   shelf_router: ^1.1.3
-
-executables:
-  edge:
