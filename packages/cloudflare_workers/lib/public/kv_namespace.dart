@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:edge/runtime/interop/utils_interop.dart';
-import 'package:edge/runtime/readable_stream.dart';
+import 'package:edge_runtime/src/interop/utils_interop.dart';
+import 'package:edge_runtime/src/readable_stream.dart';
 
 import '../interop/kv_namespace_interop.dart' as interop;
 

@@ -1,6 +1,8 @@
-# melos_managed_dependency_overrides: cloudflare_workers,edge
+# melos_managed_dependency_overrides: cloudflare_workers,edge,edge_runtime
 dependency_overrides:
   cloudflare_workers:
     path: ..
   edge:
     path: ../../edge
+  edge_runtime:
+    path: ../../edge_runtime

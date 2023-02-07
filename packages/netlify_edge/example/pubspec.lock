@@ -87,7 +87,14 @@ packages:
       path: "../../edge"
       relative: true
     source: path
-    version: "0.0.1-dev.2"
+    version: "0.0.2"
+  edge_runtime:
+    dependency: "direct overridden"
+    description:
+      path: "../../edge_runtime"
+      relative: true
+    source: path
+    version: "0.0.1"
   freezed_annotation:
     dependency: transitive
     description:

@@ -84,10 +84,17 @@ packages:
   edge:
     dependency: "direct main"
     description:
-      path: ".."
+      path: "../../edge"
       relative: true
     source: path
     version: "0.0.2"
+  edge_runtime:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   freezed_annotation:
     dependency: transitive
     description:

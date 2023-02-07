@@ -1,4 +1,4 @@
-export 'package:edge/runtime.dart' hide fetch;
+export 'package:edge_runtime/edge_runtime.dart' hide fetch;
 
 export './public/cloudflare_workers.dart'
     show

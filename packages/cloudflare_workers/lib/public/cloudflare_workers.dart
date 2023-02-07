@@ -1,10 +1,10 @@
 import 'dart:js_util' as js_util;
 
+import 'package:edge_runtime/edge_runtime.dart';
 import 'package:js/js.dart';
-import 'package:edge/runtime/interop/promise_interop.dart';
-import 'package:edge/runtime.dart';
-import 'package:edge/runtime/request.dart';
-import 'package:edge/runtime/response.dart';
+import 'package:edge_runtime/src/interop/promise_interop.dart';
+import 'package:edge_runtime/src/request.dart';
+import 'package:edge_runtime/src/response.dart';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
 import '../interop/environment_interop.dart' as interop;
@@ -18,7 +18,6 @@ import '../public/execution_context.dart';
 import '../public/scheduled_event.dart';
 import '../public/email_message.dart';
 import '../public/environment.dart';
-import 'do/durable_object_state.dart';
 
 @JS('__dartCloudflareFetchHandler')
 external set globalDartFetchHandler(

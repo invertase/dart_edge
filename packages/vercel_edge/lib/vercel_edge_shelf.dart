@@ -1,10 +1,10 @@
-import 'package:edge/runtime/response.dart';
 import 'package:js/js.dart';
-import 'package:edge/runtime.dart';
+import 'package:edge_runtime/edge_runtime.dart';
 import 'dart:js_util' as js_util;
 import 'package:js_bindings/js_bindings.dart' as interop;
 import 'package:shelf/shelf.dart' as shelf;
-import 'package:edge/runtime/interop/promise_interop.dart';
+import 'package:edge_runtime/src/interop/promise_interop.dart';
+import 'package:edge_runtime/src/response.dart';
 
 @JS('__dartVercelFetchHandler')
 external set __dartVercelFetchHandler(

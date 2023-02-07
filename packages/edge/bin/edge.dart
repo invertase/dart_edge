@@ -1,4 +1,5 @@
-import 'package:edge/cli/cli.dart' as cli;
+import 'package:edge/edge.dart' as cli;
+
 void main(List<String> args) {
   return cli.main(args);
 }

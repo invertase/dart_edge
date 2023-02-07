@@ -1,4 +1,4 @@
-import 'package:edge/runtime/request.dart';
+import 'package:edge_runtime/src/request.dart';
 
 import '../interop/request_interop.dart' as interop;
 

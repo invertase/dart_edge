@@ -1,6 +1,6 @@
-import 'package:edge/runtime/headers.dart';
-import 'package:edge/runtime/readable_stream.dart';
-import 'package:edge/runtime.dart' show Headers, ReadableStream;
+import 'package:edge_runtime/src/headers.dart';
+import 'package:edge_runtime/src/readable_stream.dart';
+import 'package:edge_runtime/edge_runtime.dart' show Headers, ReadableStream;
 import '../interop/email_message_interop.dart' as interop;
 
 class EmailMessage {

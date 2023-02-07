@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:edge/runtime/abort.dart';
-import 'package:edge/runtime/headers.dart';
+import 'package:edge_runtime/src/abort.dart';
+import 'package:edge_runtime/src/headers.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
-import 'package:edge/runtime/request.dart';
-import 'package:edge/runtime/response.dart';
+import 'package:edge_runtime/src/request.dart';
+import 'package:edge_runtime/src/response.dart';
 import '../interop/durable_object_interop.dart' as interop;
 
 import 'socket.dart';

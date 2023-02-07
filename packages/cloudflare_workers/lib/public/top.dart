@@ -1,13 +1,13 @@
 import 'dart:js_util';
 
-import 'package:edge/runtime.dart' hide fetch;
-import 'package:edge/runtime/headers.dart';
-import 'package:edge/runtime/response.dart';
-import 'package:edge/runtime/abort.dart';
+import 'package:edge_runtime/edge_runtime.dart' hide fetch;
+import 'package:edge_runtime/src/headers.dart';
+import 'package:edge_runtime/src/response.dart';
+import 'package:edge_runtime/src/abort.dart';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:edge/runtime/interop/utils_interop.dart' as interop;
-import 'package:edge/runtime/interop/scope_interop.dart' as interop;
+import 'package:edge_runtime/src/interop/utils_interop.dart' as interop;
+import 'package:edge_runtime/src/interop/scope_interop.dart' as interop;
 
 import 'request_init.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
-import 'package:edge/runtime/interop/utils_interop.dart';
+import 'package:edge_runtime/src/interop/utils_interop.dart';
 
 @anonymous
 @JS()

@@ -1,4 +1,4 @@
-import 'package:edge/runtime.dart';
+import 'package:edge_runtime/edge_runtime.dart';
 
 void main() {
   // Setup the runtime environment.
