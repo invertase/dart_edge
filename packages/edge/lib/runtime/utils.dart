@@ -1,4 +1,4 @@
-import 'dart:typed_data' show ByteBuffer;
+import 'dart:typed_data' show ByteBuffer, Uint8List;
 
 Object? convertBody(Object? body) {
   if (body == null) {
@@ -9,6 +9,10 @@ Object? convertBody(Object? body) {
     return body;
   }
 
+  if (body is Uint8List) {
+    return body;
+  }
+
   if (body is ByteBuffer) {
     return body;
   }
@@ -16,6 +20,6 @@ Object? convertBody(Object? body) {
   throw ArgumentError.value(
     body,
     'body',
-    'Body must be an nullable instance of [String] or [Uint8List]',
+    'Body must be an nullable instance of [String], [ByteBuffer] or [Uint8List].',
   );
 }
