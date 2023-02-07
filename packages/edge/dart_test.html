@@ -2,28 +2,23 @@
 <html lang="en">
 <head>
   <script type="module">
-    await navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      for(let registration of registrations) {
-        registration.unregister();
-      } 
-    });
+    const workers = await window.navigator.serviceWorker.getRegistrations();
+    await Promise.all(workers.map((worker) => worker.unregister()));
 
     let worker;
-
-    try {
-      const channel = new MessageChannel('dart_test');
-      await window.navigator.serviceWorker.register('./sw.js');
-      worker = await window.navigator.serviceWorker.ready;
-    } catch {
-      window.dartSw = 'error';
-    }
+    const channel = new MessageChannel();
+    await window.navigator.serviceWorker.register('sw.js');
+    worker = await window.navigator.serviceWorker.ready;
       
     channel.port1.onmessage = (event) => {
       if (event.data === 'init') {
         window.dartSw = 'ready';
       }
+      if (event.data.type === 'fetch') {
+        window.__fetchEvent('elliot');
+      }
     };
-
+    
     worker.active.postMessage('init', [channel.port2]);
   </script>
   <script src="packages/test/dart.js"></script>

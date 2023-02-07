@@ -11,11 +11,7 @@ void main() {
     test('.method', () async {
       expect(
         fetchEvents,
-        emitsInOrder([
-          expectAsync1<void, Request>((p0) {
-            expect(p0.method, 'GET');
-          })
-        ]),
+        emitsInOrder(['elliot']),
       );
 
       await fetch(Resource('https://foo.com'));

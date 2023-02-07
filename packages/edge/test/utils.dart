@@ -6,9 +6,14 @@ import 'package:edge/runtime.dart';
 StreamController<dynamic> _fetchEvents = StreamController.broadcast();
 
 Stream<dynamic> get fetchEvents async* {
+  if (context['__fetchEvent'] == null) {
+    context['__fetchEvent'] = allowInterop((dynamic event) {
+      _fetchEvents.add(event);
+    });
+  }
+
   num count = 0;
   while (context['dartSw'] != 'ready') {
-    print(context['dartSw']);
     count++;
     await Future.delayed(Duration(milliseconds: 100));
 
