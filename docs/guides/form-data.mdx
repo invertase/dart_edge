@@ -5,4 +5,75 @@ description: Handle incoming form data requests to your application.
 
 # Form Data
 
-<Info>These docs are a work in progress, check back soon!</Info>
+In order to handle incoming form data requests to your application, you will need to use the `FormData` class. This class is used to parse incoming form data requests.
+
+Form data is a common way to send data to a server. For example, when you submit a form in a web browser, the form data is sent to the server as a string of key/value pairs. Alternatively applications can construct a request programatically with form data and send it to the server. When sending form data, clients can specify the content type as `application/x-www-form-urlencoded` or `multipart/form-data` via the `Content-Type` header.
+
+## Parsing Form Data
+
+The `Request` instance provides a `formData()` method that returns a `FormData` instance. This instance can be used to parse the incoming form data request.
+
+```dart
+void main() {
+  VercelEdge(
+    fetch: (request) {
+      final form = await request.formData();
+      // ...
+```
+
+Once accessed, the `FormData` instance allows you to perform various operations on the form data. For example, you can check whether specific fields are present in the form data, or you can retrieve the values of specific fields.
+
+```dart
+final form = await request.formData();
+
+print(form.has('name')); // boolean
+print(form['name']); // FormDataEntryValue?
+```
+
+When accessing a field on the `FormData` instance, the value is returned as a `FormDataEntryValue` instance. This class provides union access to the type of value (either a `String` or `File`). Note, it's possible for forms to contain multiple values per key. In this case you can access a list of values via the `getAll()` method.
+
+```dart
+final name = form['name']!;
+
+name.when(
+  file: (file) {
+    print('File: ${file.name}');
+  },
+  string: (value) {
+    print('String: $value');
+  },
+);
+```
+
+The `FormDataEntryValue` instance is a [`freezed`](https://pub.dev/packages/freezed#when) instance with `when` pattern matching enabled.
+
+## File uploads
+
+Forms which send files must have their `Content-Type` header set to `multipart/form-data`. 
+
+For example, the following HTML Form sets the encoding type and enables users to upload a file:
+
+```html
+<!-- Note: enctype="multipart/form-data" -->
+<form action="https://your-edge-function-url.com" method="POST" enctype="multipart/form-data">
+  <input type="text" name="email" />
+  <input type="file" name="cv" />
+</form>
+```
+
+This form can then be handled by the following Dart code:
+
+```dart
+final name = form['name']!;
+final cv = form['cv']!;
+
+cv.maybeWhen(
+  file: (value) async {
+    print('File Name: ${value.name}');
+    print('File Size: ${value.size} (bytes)');
+    final content = await value.readAsBytes();
+  },
+  orElse: () {
+    throw Exception('CV Should be a file!');
+  });
+```
