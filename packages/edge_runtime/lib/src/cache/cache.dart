@@ -25,9 +25,9 @@ class Cache {
     await _delegate.delete(request.delegate, options?.delegate);
   }
 
-  Future<Response?> match(Request requst, [CacheQueryOptions? options]) async {
+  Future<Response?> match(Request request, [CacheQueryOptions? options]) async {
     final obj = await promiseToFuture(
-        _delegate.match(requst.delegate, options?.delegate));
+        _delegate.match(request.delegate, options?.delegate));
     return obj == null ? null : responseFromJsObject(obj);
   }
 
