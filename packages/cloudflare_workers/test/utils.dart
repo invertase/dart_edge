@@ -15,7 +15,7 @@ final entryFile = path.join(toolPath, 'test_file_entry.js');
 final _fs = fs;
 final _childProcess = childProcess;
 
-Future<Response> runOnMiniflare(String code) async {
+Future<Miniflare> runOnMiniflare(String code) async {
   // Wrap the test code to reduce test boilerplate.
   final actual = '''
 import 'package:cloudflare_workers/cloudflare_workers.dart';
@@ -72,9 +72,7 @@ export default {
   // Dispose of this instance when the test is done.
   addTearDown(() => mf.dispose());
 
-  // Dispatch a fetch request to the entry file.
-  // Note; the Response here is not the same as our edge_runtime one.
-  return await mf.dispatchFetch('http://localhost:8787/');
+  return mf;
 }
 
 MiniflareExport get requireMiniflare => require('miniflare');
@@ -100,6 +98,10 @@ class Response {
 
 extension ResponseExtension on Response {
   bool get ok => js_util.getProperty(this, 'ok');
+
+  Future<Response> clone() =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'clone', []));
+
   Future<String> text() => js_util.promiseToFuture(
         js_util.callMethod(this, 'text', []),
       );
@@ -133,9 +135,9 @@ class Miniflare {
 }
 
 extension MiniflareExtension on Miniflare {
-  Future<Response> dispatchFetch(String url) {
-    return js_util
-        .promiseToFuture(js_util.callMethod(this, 'dispatchFetch', [url]));
+  Future<Response> dispatchFetch([String? path]) {
+    return js_util.promiseToFuture(js_util.callMethod(
+        this, 'dispatchFetch', ['http://localhost:8787${path ?? '/'}']));
   }
 
   Future<void> dispose() {
