@@ -10,10 +10,10 @@ class KVNamespace {
 
   KVNamespace._(this._delegate);
 
-  Future<String> get(String name, [KVNamespaceGetOptions? options]) =>
+  Future<String?> get(String name, [KVNamespaceGetOptions? options]) =>
       _delegate.get(name, options?.delegate('text'));
 
-  Future<KVNamespaceGetWithMetadataResult<String>> getWithMetadata(
+  Future<KVNamespaceGetWithMetadataResult<String?>> getWithMetadata(
     String name, [
     KVNamespaceGetOptions? options,
   ]) async {
@@ -30,7 +30,7 @@ class KVNamespace {
     return dartify(json) as Map<K, V>;
   }
 
-  Future<KVNamespaceGetWithMetadataResult<Map<K, V>>> getJsonWithMetadata<K, V>(
+  Future<KVNamespaceGetWithMetadataResult<Map<K, V>?>> getJsonWithMetadata<K, V>(
     String name, [
     KVNamespaceGetOptions? options,
   ]) async {
@@ -40,11 +40,11 @@ class KVNamespace {
     );
   }
 
-  Future<ByteBuffer> getBuffer(String name, [KVNamespaceGetOptions? options]) =>
+  Future<ByteBuffer?> getBuffer(String name, [KVNamespaceGetOptions? options]) =>
       _delegate.get(
           name, (options ?? KVNamespaceGetOptions()).delegate('arrayBuffer'));
 
-  Future<KVNamespaceGetWithMetadataResult<ByteBuffer>> getBufferWithMetadata(
+  Future<KVNamespaceGetWithMetadataResult<ByteBuffer?>> getBufferWithMetadata(
     String name, [
     KVNamespaceGetOptions? options,
   ]) async {
@@ -54,14 +54,14 @@ class KVNamespace {
     );
   }
 
-  Future<ReadableStream> getStream(String name,
+  Future<ReadableStream?> getStream(String name,
       [KVNamespaceGetOptions? options]) async {
     final stream = await _delegate.get(
         name, (options ?? KVNamespaceGetOptions()).delegate('stream'));
     return readableStreamFromJsObject(stream);
   }
 
-  Future<KVNamespaceGetWithMetadataResult<ReadableStream>>
+  Future<KVNamespaceGetWithMetadataResult<ReadableStream?>>
       getStreamWithMetadata(
     String name, [
     KVNamespaceGetOptions? options,

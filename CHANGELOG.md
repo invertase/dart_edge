@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-02-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cloudflare_workers` - `v0.0.2+2`](#cloudflare_workers---v0022)
+ - [`edge_runtime` - `v0.0.1+2`](#edge_runtime---v0012)
+ - [`netlify_edge` - `v0.0.1-dev.3`](#netlify_edge---v001-dev3)
+ - [`vercel_edge` - `v0.0.2+2`](#vercel_edge---v0022)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.3`
+ - `vercel_edge` - `v0.0.2+2`
+
+---
+
+#### `cloudflare_workers` - `v0.0.2+2`
+
+ - **FIX**: KV now returns nullable values. ([f1dba996](https://github.com/invertase/dart_edge/commit/f1dba9960570e1f2d4cc57b5ccf82257eaee12ac))
+
+#### `edge_runtime` - `v0.0.1+2`
+
+ - **FIX**: update request typo. ([18f13184](https://github.com/invertase/dart_edge/commit/18f13184999aae3c32a47c2ea9cbee3673aa9dec))
+
+
 ## 2023-02-07
 
 ### Changes
