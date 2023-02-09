@@ -3,5 +3,7 @@
   "cSpell.words": [
     "dartify",
     "jsify"
-  ]
+  ],
+  "deno.enable": true,
+  "deno.unstable": true
 }

@@ -1,0 +1,18 @@
+name: supabase_functions
+description: Write and deploy Dart functions to Supabase Functions.
+homepage: https://dartedge.dev
+repository: https://github.com/invertase/dart_edge/tree/main/packages/supabase_functions
+version: 0.0.1
+
+environment:
+  sdk: ">=2.18.5 <3.0.0"
+
+dependencies:
+  edge: ^0.0.3
+  edge_runtime: ^0.0.1+2
+  js_bindings: ^0.1.0
+  js: ^0.6.5
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0
