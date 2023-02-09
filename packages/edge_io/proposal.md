@@ -63,3 +63,13 @@ void main() {
 - `MemoryFsAdapter` - an all in memory file system adapter.
 - `ZipFsAdapter` - a readonly FS that mounts an Archive
 - `ReadOnlyFsAdapter` - not a full implementation, provides an abstract class that only exposes file read methods, any methods that 'write' are pre-stubbed to throw an error. Other adapters such as `ZipFsAdapter` could implement this.
+- `DelegatingFsAdapter` - an adapter that can take multiple adapters and bind each to specific paths, e.g.:
+
+```dart
+DelegatingFsAdapter(
+  {
+    '/foo/bar': MemoryFsAdapter(),
+    '/foo/zip': ZipFsAdapter(archive),
+  }
+)
+```
