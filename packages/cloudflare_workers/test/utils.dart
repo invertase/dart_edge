@@ -1,3 +1,4 @@
+import 'package:cloudflare_workers/cloudflare_workers.dart';
 import 'package:js/js.dart';
 import 'package:node_interop/child_process.dart';
 import 'package:node_interop/fs.dart';
@@ -18,6 +19,7 @@ final _childProcess = childProcess;
 Future<Miniflare> runOnMiniflare(String code) async {
   // Wrap the test code to reduce test boilerplate.
   final actual = '''
+import 'dart:async';
 import 'package:cloudflare_workers/cloudflare_workers.dart';
 
 void main() {
@@ -67,6 +69,7 @@ export default {
   final mf = requireMiniflare.miniflare(Options(
     scriptPath: entryFile,
     modules: true,
+    kvNamespaces: ['TEST_KV'],
   ));
 
   // Dispose of this instance when the test is done.
@@ -105,6 +108,8 @@ extension ResponseExtension on Response {
   Future<String> text() => js_util.promiseToFuture(
         js_util.callMethod(this, 'text', []),
       );
+
+  ReadableStream? get body => js_util.getProperty(this, 'body');
 }
 
 @JS()

@@ -46,9 +46,9 @@ class KVNamespaceGetWithMetadataResult<T> {
 
 extension PropsKVNamespaceGetWithMetadataResult<T>
     on KVNamespaceGetWithMetadataResult {
-  T get value => js_util.getProperty(this, 'value');
+  T? get value => js_util.getProperty(this, 'value');
 
-  Object get metadata => js_util.getProperty(this, 'metadata');
+  Object? get metadata => js_util.getProperty(this, 'metadata');
 }
 
 @anonymous
