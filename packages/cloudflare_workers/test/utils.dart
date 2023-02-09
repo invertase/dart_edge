@@ -2,7 +2,7 @@ import 'package:cloudflare_workers/cloudflare_workers.dart';
 import 'package:js/js.dart';
 import 'package:node_interop/child_process.dart';
 import 'package:node_interop/fs.dart';
-import 'package:node_interop/node.dart' hide Process;
+import 'package:node_interop/node.dart';
 import 'dart:js_util' as js_util;
 
 import 'package:node_interop/path.dart';
@@ -143,6 +143,16 @@ extension MiniflareExtension on Miniflare {
   Future<Response> dispatchFetch([String? path]) {
     return js_util.promiseToFuture(js_util.callMethod(
         this, 'dispatchFetch', ['http://localhost:8787${path ?? '/'}']));
+  }
+
+  Future<Object?> waitUntil() {
+    return js_util.promiseToFuture(js_util.callMethod(this, 'waitUntil', []));
+  }
+
+  Future<Object?> dispatchScheduled([int? delay]) {
+    return js_util.promiseToFuture(
+      js_util.callMethod(this, 'dispatchScheduled', [delay]),
+    );
   }
 
   Future<void> dispose() {

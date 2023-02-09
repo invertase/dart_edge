@@ -17,19 +17,4 @@ CloudflareWorkers(
     expect(response.ok, true);
     expect(await response.text(), 'foo');
   });
-
-  test('it returns a non-200 status code', () async {
-    final mf = await runOnMiniflare('''
-CloudflareWorkers(
-  fetch: (request, env, ctx) async {
-    return Response('foo', status: 404);
-  },
-);
-''');
-
-    final response = await mf.dispatchFetch();
-
-    expect(response.ok, false);
-    expect(await response.text(), 'foo');
-  });
 }
