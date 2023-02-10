@@ -10,4 +10,4 @@ environment:
 
 dependencies:
   edge: ^0.0.3
-  edge_runtime: ^0.0.1+2
+  edge_runtime: ^0.0.1+3
