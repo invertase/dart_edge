@@ -4,7 +4,7 @@ import 'package:js_bindings/js_bindings.dart' as interop;
 import 'package:edge_runtime/src/interop/utils_interop.dart';
 
 extension CloudflareWorkersRequestInteropExtension on interop.RequestInit {
-  set cf(RequestInitCfProperties properties) {
+  set cf(CloudflareRequestInit properties) {
     js_util.setProperty(this, 'cf', properties);
   }
 }
@@ -12,11 +12,11 @@ extension CloudflareWorkersRequestInteropExtension on interop.RequestInit {
 @anonymous
 @JS()
 @staticInterop
-class RequestInitCfProperties {
-  external factory RequestInitCfProperties();
+class CloudflareRequestInit {
+  external factory CloudflareRequestInit();
 }
 
-extension PropsRequestInitCfProperties on RequestInitCfProperties {
+extension PropsCloudflareRequestInit on CloudflareRequestInit {
   set cacheEverything(bool? value) {
     js_util.setProperty(this, 'cacheEverything', value ?? jsUndefined);
   }
