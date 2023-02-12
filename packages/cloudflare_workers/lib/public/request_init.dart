@@ -31,8 +31,8 @@ class CloudflareRequestInit {
 }
 
 extension CloudflareRequestInitExtension on CloudflareRequestInit {
-  interop.RequestInitCfProperties get delegate {
-    return interop.RequestInitCfProperties()
+  interop.CloudflareRequestInit get delegate {
+    return interop.CloudflareRequestInit()
       ..cacheEverything = cacheEverything
       ..cacheKey = cacheKey
       ..cacheTags = cacheTags
