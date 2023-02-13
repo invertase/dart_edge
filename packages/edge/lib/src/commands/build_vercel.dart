@@ -17,9 +17,27 @@ class VercelBuildCommand extends BaseCommand {
   VercelBuildCommand() {
     argParser.addFlag(
       'dev',
+      defaultsTo: false,
+      negatable: false,
       help:
           'Runs Dart Edge in a local development environment with hot reload via Vercel CLI.',
     );
+
+    argParser.addFlag(
+      'use-filesystem',
+      defaultsTo: false,
+      negatable: false,
+      help:
+          'Instructs Vercel to match requests against the file system (for use when assets are required). This has no effect in development mode.',
+    );
+  }
+
+  bool get isDev {
+    return argResults!['dev'] as bool;
+  }
+
+  bool get useFilesystem {
+    return argResults!['use-filesystem'] as bool;
   }
 
   Future<String> _compile(
@@ -82,9 +100,28 @@ class VercelBuildCommand extends BaseCommand {
       // If there is no routes key, or it is not an iterable, create a new one.
       if (json['routes'] == null || json['routes'] is! Iterable) {
         json['routes'] = [
+          if (useFilesystem) {'handle': 'filesystem'},
           {'src': '/*', 'dest': 'dart'}
         ];
       } else {
+        final hasFileSystemHandler = (json['routes'] as Iterable).firstWhere(
+          (route) => route['handle'] == 'filesystem',
+          orElse: () => null,
+        );
+
+        if (useFilesystem && hasFileSystemHandler == null) {
+          json['routes'] = [
+            {'handle': 'filesystem'},
+            ...json['routes'],
+          ];
+        }
+
+        if (!useFilesystem && hasFileSystemHandler != null) {
+          json['routes'] = (json['routes'] as Iterable)
+              .skipWhile((value) => value['handle'] == 'filesystem')
+              .toList();
+        }
+
         // Otherwise, check if the route already exists.
         final route = (json['routes'] as Iterable).firstWhere(
           (route) => route['dest'] == 'dart',
@@ -102,7 +139,10 @@ class VercelBuildCommand extends BaseCommand {
       configFileValue = jsonEncode(json);
     } else {
       // Otherwise create a new config file.
-      configFileValue = configFileDefaultValue;
+      configFileValue = configFileDefaultValue([
+        if (useFilesystem) {'handle': 'filesystem'},
+        {'src': '/*', 'dest': 'dart'}
+      ]);
     }
 
     // Write the config file.
@@ -124,8 +164,6 @@ class VercelBuildCommand extends BaseCommand {
 
   @override
   void run() async {
-    final isDev = argResults!['dev'] as bool;
-
     if (isDev) {
       await runDev();
     } else {
@@ -134,9 +172,9 @@ class VercelBuildCommand extends BaseCommand {
   }
 }
 
-const configFileDefaultValue = '''{
+configFileDefaultValue(Iterable<dynamic> routes) => '''{
   "version": 3,
-  "routes": [{ "src": "/.*", "dest": "dart" }]
+  "routes": ${jsonEncode(routes)}
 }
 ''';
 
