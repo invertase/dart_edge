@@ -2,6 +2,7 @@
   "name": "Dart Edge",
   "theme": "#12B987",
   "twitter": "invertaseio",
+  "plausibleAnalytics": true,
   "anchors": [
     {
       "title": "Discord",

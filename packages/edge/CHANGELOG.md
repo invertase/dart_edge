@@ -1,3 +1,7 @@
+## 0.0.4
+
+ - **FEAT**: add use-filesystem flag for prod vercel builds. ([ea9a6d12](https://github.com/invertase/dart_edge/commit/ea9a6d1216ded86439585b34a919bb3ccec6c025))
+
 ## 0.0.3
 
  - **REFACTOR**: move edge runtime to separate package. ([95d4fab7](https://github.com/invertase/dart_edge/commit/95d4fab74cc7c3902bd737659dfee06d7feab353))
