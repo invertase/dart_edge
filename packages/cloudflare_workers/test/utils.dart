@@ -1,4 +1,5 @@
-import 'package:cloudflare_workers/cloudflare_workers.dart';
+import 'package:edge/src/platforms/cloudflare_workers.dart';
+import 'package:edge_runtime/edge_runtime.dart';
 import 'package:js/js.dart';
 import 'package:node_interop/child_process.dart';
 import 'package:node_interop/fs.dart';
@@ -8,24 +9,17 @@ import 'dart:js_util' as js_util;
 import 'package:node_interop/path.dart';
 import 'package:test/test.dart';
 
+// These break when called multiple times.
+final _fs = fs;
+final _childProcess = childProcess;
+
 final toolPath = path.join(process.cwd(), '.dart_tool');
 final inputFile = path.join(toolPath, 'test_file_input.dart');
 final outputFile = path.join(toolPath, 'test_file_output.js');
 final entryFile = path.join(toolPath, 'test_file_entry.js');
 
-final _fs = fs;
-final _childProcess = childProcess;
-
 Future<Miniflare> runOnMiniflare(String code) async {
-  // Wrap the test code to reduce test boilerplate.
-  final actual = '''
-import 'dart:async';
-import 'package:cloudflare_workers/cloudflare_workers.dart';
-
-void main() {
-  $code
-}
-''';
+  final workers = CloudflareWorkers();
 
   try {
     js_util.callMethod(_fs, 'unlinkSync', [inputFile]);
@@ -35,10 +29,19 @@ void main() {
     // ignore
   }
 
-  js_util.callMethod(_fs, 'writeFileSync', [inputFile, actual]);
+  js_util.callMethod(_fs, 'writeFileSync', [
+    inputFile,
+    '''
+import 'dart:async';
+import 'package:cloudflare_workers/cloudflare_workers.dart';
+
+void main() {
+  $code
+}
+'''
+  ]);
 
   // Compile the test dart input file.
-  // TODO: Handle errors from compilation.
   js_util.callMethod(
     _childProcess,
     'execSync',
@@ -47,29 +50,18 @@ void main() {
     ],
   );
 
-  // Write a module entry file to mimic the behavior of the Cloudflare Workers.
-  // TODO: Handle Durable Objects, Scheduled Events, etc - probably need to make the edge
-  // package have this as exportable logic
-  js_util.callMethod(_fs, 'writeFileSync', [
-    entryFile,
-    '''
-import './test_file_output.js';
+  String entryFileJs = workers.generateEntryFile('test_file_output.js');
+  entryFileJs += workers.generateDurableObjectExport('TestDurableObject');
 
-export default {
-  async fetch(request, env, ctx) {
-    if (self.__dartCloudflareFetchHandler !== undefined) {
-      return self.__dartCloudflareFetchHandler(request, env, ctx);
-    }
-  },
-};
-'''
-  ]);
+  // Write a module entry file to mimic the behavior of the Cloudflare Workers.
+  js_util.callMethod(_fs, 'writeFileSync', [entryFile, entryFileJs]);
 
   // Start miniflare with the entry file.
   final mf = requireMiniflare.miniflare(Options(
     scriptPath: entryFile,
     modules: true,
     kvNamespaces: ['TEST_KV'],
+    durableObjects: {'TEST_DO': 'TestDurableObject'},
   ));
 
   // Dispose of this instance when the test is done.
@@ -88,6 +80,7 @@ class Options {
     String? script,
     String? scriptPath,
     List<String>? kvNamespaces,
+    Map<String, String>? durableObjects,
     bool? modules,
   });
 }
