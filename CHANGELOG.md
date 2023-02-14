@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-02-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`edge` - `v0.0.4`](#edge---v004)
+ - [`netlify_edge` - `v0.0.1-dev.5`](#netlify_edge---v001-dev5)
+ - [`cloudflare_workers` - `v0.0.2+4`](#cloudflare_workers---v0024)
+ - [`vercel_edge` - `v0.0.2+4`](#vercel_edge---v0024)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.5`
+ - `cloudflare_workers` - `v0.0.2+4`
+ - `vercel_edge` - `v0.0.2+4`
+
+---
+
+#### `edge` - `v0.0.4`
+
+ - **FEAT**: add use-filesystem flag for prod vercel builds. ([ea9a6d12](https://github.com/invertase/dart_edge/commit/ea9a6d1216ded86439585b34a919bb3ccec6c025))
+
+
+## 2023-02-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cloudflare_workers` - `v0.0.2+3`](#cloudflare_workers---v0023)
+ - [`edge_runtime` - `v0.0.1+3`](#edge_runtime---v0013)
+ - [`netlify_edge` - `v0.0.1-dev.4`](#netlify_edge---v001-dev4)
+ - [`vercel_edge` - `v0.0.2+3`](#vercel_edge---v0023)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.4`
+ - `vercel_edge` - `v0.0.2+3`
+
+---
+
+#### `cloudflare_workers` - `v0.0.2+3`
+
+ - **FIX**: correctly construct RequestInit object when calling `fetch`. ([c75720b1](https://github.com/invertase/dart_edge/commit/c75720b1f2af10021b869c561d5b17f82049aba0))
+
+#### `edge_runtime` - `v0.0.1+3`
+
+ - **FIX**: correctly construct RequestInit object when calling `fetch`. ([c75720b1](https://github.com/invertase/dart_edge/commit/c75720b1f2af10021b869c561d5b17f82049aba0))
+
+
 ## 2023-02-08
 
 ### Changes
