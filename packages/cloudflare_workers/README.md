@@ -19,3 +19,17 @@ edge new cloudflare_workers new_project
 ```
 
 To learn more, visit the [documentation](https://docs.dartedge.dev).
+
+## Testing
+
+To run the tests, install the Node dependencies:
+
+```bash
+npm install
+```
+
+Then run the tests:
+
+```bash
+dart test -p node
+```

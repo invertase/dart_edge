@@ -1,3 +1,7 @@
+## 0.0.2+4
+
+ - Update a dependency to the latest release.
+
 ## 0.0.2+3
 
  - **FIX**: correctly construct RequestInit object when calling `fetch`. ([c75720b1](https://github.com/invertase/dart_edge/commit/c75720b1f2af10021b869c561d5b17f82049aba0))

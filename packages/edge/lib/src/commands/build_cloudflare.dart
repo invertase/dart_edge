@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
-import 'package:toml/toml.dart';
 
 import '../compiler.dart';
 import '../logger.dart';
 import 'base_command.dart';
 
+import '../platforms/cloudflare_workers.dart';
+
 class CloudflareBuildCommand extends BaseCommand {
+  CloudflareWorkers workers = CloudflareWorkers();
+
   @override
   final name = "cloudflare_workers";
 
@@ -22,11 +25,11 @@ class CloudflareBuildCommand extends BaseCommand {
     );
   }
 
+  bool get isDev => argResults!['dev'] as bool;
+
   @override
   void run() async {
-    final tomlFile = File(p.join(Directory.current.path, 'wrangler.toml'));
-
-    if (!await tomlFile.exists()) {
+    if (!await workers.tomlFile.exists()) {
       logger.error('No wrangler.toml exists in the current directory.');
       logger.lineBreak();
       logger.hint(
@@ -35,99 +38,34 @@ class CloudflareBuildCommand extends BaseCommand {
       exit(1);
     }
 
-    Map<String, dynamic> toml;
-
-    try {
-      toml = TomlDocument.parse(await tomlFile.readAsString()).toMap();
-    } catch (e) {
-      logger.error('Failed to parse wrangler.toml file.');
-      exit(1);
-    }
-
-    final durableObjectBindings = toml['durable_objects']?['bindings'] ?? [];
-    final Set<String> durableObjectNames = {
-      for (final binding in durableObjectBindings)
-        if (binding['class_name'] != null) binding['class_name']
-    };
-
-    final isDev = argResults!['dev'] as bool;
-
-    final edgeTool = Directory(
-      p.join(Directory.current.path, '.dart_tool', 'edge'),
-    );
-
     final compiler = Compiler(
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
-      outputDirectory: edgeTool.path,
+      outputDirectory: workers.edgeToolDirectory.path,
       outputFileName: 'main.dart.js',
       level: isDev ? CompilerLevel.O1 : CompilerLevel.O4,
     );
 
     await compiler.compile();
 
-    String entryFile = edgeFunctionEntryFileDefaultValue('main.dart.js');
-    
+    final durableObjectBindings = workers.getDurableObjectNames();
+
+    String entryFile = workers.generateEntryFile('main.dart.js');
+
     // Add durable objects as exports.
-    for (final durableObjectName in durableObjectNames) {
-      entryFile += edgeFunctionDurableObjectValue(durableObjectName);
+    for (final durableObjectName in durableObjectBindings) {
+      entryFile += workers.generateDurableObjectExport(durableObjectName);
     }
 
-    if (durableObjectNames.isNotEmpty) {
-    logger.verbose('Creating Durable Object exports: $durableObjectNames');
+    if (durableObjectBindings.isNotEmpty) {
+      logger.verbose('Creating Durable Object exports: $durableObjectBindings');
     }
 
     // Update the entry file.
-    await File(p.join(edgeTool.path, 'entry.js')).writeAsString(entryFile);
+    await File(p.join(workers.edgeToolDirectory.path, 'entry.js'))
+        .writeAsString(entryFile);
 
     logger.verbose(
-      'Entry file generated at ${p.join(edgeTool.path, 'entry.js')}',
+      'Entry file generated at ${p.join(workers.edgeToolDirectory.path, 'entry.js')}',
     );
   }
 }
-
-final edgeFunctionEntryFileDefaultValue =
-    (String fileName) => '''import './${fileName}';
-
-export default {
-  fetch: (request, env, ctx) => {
-    if (self.__dartCloudflareFetchHandler !== undefined) {
-      return self.__dartCloudflareFetchHandler(request, env, ctx);
-    }
-  },
-  scheduled: (event, env, ctx) => {
-    if (self.__dartCloudflareScheduledHandler !== undefined) {
-      return self.__dartCloudflareScheduledHandler(event, env, ctx);
-    }
-  },
-  email: (message, env, ctx) => {
-    if (self.__dartCloudflareEmailHandler !== undefined) {
-      return self.__dartCloudflareEmailHandler(message, env, ctx);
-    }
-  },
-};
-
-''';
-
-final edgeFunctionDurableObjectValue = (String className) => '''
-export class $className {
-  constructor(state, env) {
-    const instance = self.__dartCloudflareDurableObjects["$className"];
-
-    if (!instance) {
-      throw new Error(
-        `No Dart Durable object instance named '$className' found.`
-      );
-    }
-
-    this.delegate = instance(state, env);
-  }
-
-  fetch(request) {
-    return this.delegate.fetch(request);
-  }
-
-  alarm() {
-    return this.delegate.alarm();
-  }
-}
-''';
