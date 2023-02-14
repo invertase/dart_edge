@@ -30,9 +30,16 @@ class Deno {
   // Multiple types
   static resolveDns() => {};
 
-  static cwd(Uri uri) => {};
+  static Uri cwd(Uri uri) => Uri.parse(interop.cwd());
 
-  static readDir(Uri uri) => {};
+  static Stream<DirEntry> readDir(Uri uri) async* {
+    final asyncIterator = interop.readDir(uri.toString());
+    while (true) {
+      final result = await asyncIterator.next();
+      if (result.done) break;
+      yield DirEntry._(result.value);
+    }
+  }
 
   static readFile(Uri uri) => {};
 
@@ -71,3 +78,13 @@ class Env {
 }
 
 class TcpConn {}
+
+class DirEntry {
+  final interop.DirEntry _delegate;
+
+  DirEntry._(this._delegate);
+  String get name => _delegate.name;
+  bool get isFile => _delegate.isFile;
+  bool get isDirectory => _delegate.isDirectory;
+  bool get isSymlink => _delegate.isSymlink;
+}

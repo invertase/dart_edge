@@ -1,5 +1,5 @@
 import 'dart:js_util' as js_util;
-import 'package:js/js.dart' as js;
+import 'package:js/js.dart';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
 
@@ -14,14 +14,14 @@ interop.Request requestFromResource(Resource resource) {
   );
 }
 
-@js.JS('Object.keys')
+@JS('Object.keys')
 external List<Object?> objectKeys(Object? object);
 
-@js.JS('undefined')
+@JS('undefined')
 external Object get jsUndefined;
 
-@js.anonymous
-@js.JS()
+@anonymous
+@JS()
 class JavaScriptObject {
   external factory JavaScriptObject();
 }
@@ -32,6 +32,8 @@ extension PropsJavaScriptObject on JavaScriptObject {
     js_util.setProperty(this, key, value);
   }
 }
+
+
 
 bool isBasicType(value) {
   if (value == null || value is num || value is bool || value is String) {
