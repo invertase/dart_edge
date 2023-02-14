@@ -63,7 +63,7 @@ packages:
       path: "../../packages/cloudflare_workers"
       relative: true
     source: path
-    version: "0.0.2+2"
+    version: "0.0.2+4"
   collection:
     dependency: transitive
     description:
@@ -94,14 +94,14 @@ packages:
       path: "../../packages/edge"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   edge_runtime:
     dependency: "direct overridden"
     description:
       path: "../../packages/edge_runtime"
       relative: true
     source: path
-    version: "0.0.1+2"
+    version: "0.0.1+3"
   freezed_annotation:
     dependency: transitive
     description:

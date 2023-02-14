@@ -1,9 +1,28 @@
 part of edge_io.memory;
 
+/// A file in the memory file system.
 class MemoryFile extends MemoryFsEntity implements File {
+  /// The path to the file.
   final String path;
 
-  MemoryFile(super.overrides, this.path);
+  /// Creates a new file.
+  MemoryFile._(super.overrides, this.path);
+
+  /// Cached list of segments in the path.
+  List<String>? _cachedSegments;
+
+  /// Returns the segments in the path.
+  List<String> get _segments => _cachedSegments ??= path.split('/');
+
+  /// Returns the parent node of the file.
+  MemoryFsImplementation? get _parentNode {
+    if (_segments.length == 1) {
+      return null;
+    }
+
+    final parentPath = _segments.sublist(0, _segments.length - 1).join('/');
+    return overrides._entities.get<MemoryFsImplementation>(parentPath);
+  }
 
   @override
   Future<File> rename(String newPath) {
@@ -14,11 +33,21 @@ class MemoryFile extends MemoryFsEntity implements File {
   File renameSync(String newPath) {
     final existing = overrides._entities.get<MemoryFileImplementation>(path);
 
+    if (existing == null) {
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Cannot rename file to '$newPath",
+      );
+    }
+
     overrides._entities.remove(path); // Remove the old file.
-    overrides._entities.set(newPath, existing ?? MemoryFileImplementation());
-    return this;
+    overrides._entities.set(newPath, existing);
+
+    return MemoryFile._(overrides, newPath);
   }
 
+  // TODO should this use Directory.current, which uses basePath?
   @override
   File get absolute => this;
 
@@ -31,8 +60,16 @@ class MemoryFile extends MemoryFsEntity implements File {
   File copySync(String newPath) {
     final existing = overrides._entities.get<MemoryFileImplementation>(path);
 
-    overrides._entities.set(newPath, existing ?? MemoryFileImplementation());
-    return this;
+    if (existing == null) {
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Cannot copy file to '$newPath",
+      );
+    }
+
+    overrides._entities.set(newPath, existing);
+    return MemoryFile._(overrides, newPath);
   }
 
   @override
@@ -43,7 +80,28 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   void createSync({bool recursive = false, bool exclusive = false}) {
-    throw UnimplementedError('TODO');
+    // If recursive is false, we should check whether this file has a parent,
+    // and if not, throw an error.
+    if (!recursive && _segments.length > 1 && _parentNode == null) {
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Cannot create file at '$path",
+      );
+    }
+
+    final existing = overrides._entities.get<MemoryFileImplementation>(path);
+
+    // If the file exists, and we're in exclusive mode, throw an error.
+    if (existing != null && exclusive) {
+      throw FileSystemException(
+        "Cannot create file",
+        path,
+        OSError("File exists", 17),
+      );
+    }
+
+    overrides._entities.set(path, MemoryFileImplementation());
   }
 
   @override
@@ -56,7 +114,11 @@ class MemoryFile extends MemoryFsEntity implements File {
     final file = overrides._entities.get<MemoryFileImplementation>(path);
 
     if (file == null) {
-      throw FileSystemException('Cannot access file', path);
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Cannot retrieve access time",
+      );
     }
 
     return file.lastAccessed;
@@ -72,7 +134,11 @@ class MemoryFile extends MemoryFsEntity implements File {
     final file = overrides._entities.get<MemoryFileImplementation>(path);
 
     if (file == null) {
-      throw FileSystemException('Cannot access file', path);
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Cannot retrieve modification time",
+      );
     }
 
     return file.lastModified;
@@ -118,6 +184,7 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   Uint8List readAsBytesSync() {
+    // TODO: This should probably use open()?
     final file = overrides._entities.get<MemoryFileImplementation>(path);
 
     if (file is MemoryFileImplementation) {
@@ -158,7 +225,11 @@ class MemoryFile extends MemoryFsEntity implements File {
     final file = overrides._entities.get<MemoryFileImplementation>(path);
 
     if (file == null) {
-      throw FileSystemException('Cannot access file', path);
+      throw FileSystemException(
+        'Failed to set file access time',
+        path,
+        OSError('No such file or directory', 2),
+      );
     }
 
     file.lastAccessed = time;
@@ -174,10 +245,14 @@ class MemoryFile extends MemoryFsEntity implements File {
     final file = overrides._entities.get<MemoryFileImplementation>(path);
 
     if (file == null) {
-      throw FileSystemException('Cannot access file', path);
+      throw FileSystemException(
+        'Failed to set file modification time',
+        path,
+        OSError('No such file or directory', 2),
+      );
     }
 
-    file.lastAccessed = time;
+    file.lastModified = time;
   }
 
   @override
@@ -190,8 +265,9 @@ class MemoryFile extends MemoryFsEntity implements File {
   @override
   void writeAsBytesSync(List<int> bytes,
       {FileMode mode = FileMode.write, bool flush = false}) {
-    // TODO - handle `flush`
     final existing = overrides._entities.get<MemoryFileImplementation>(path);
+
+    // TODO try open the file - it should error if it can't
 
     final file = existing ?? MemoryFileImplementation();
 

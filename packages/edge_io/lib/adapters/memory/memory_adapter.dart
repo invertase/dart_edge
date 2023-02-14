@@ -18,6 +18,10 @@ class MemoryFsOverrides extends IOOverrides {
     String? basePath,
   }) : _entities = Entities(basePath ?? '/');
 
+  void clear() {
+    _entities.clear();
+  }
+
   @override
   Directory createDirectory(String path) {
     // return MemoryDirectory(this, path);
@@ -26,7 +30,7 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   File createFile(String path) {
-    return MemoryFile(this, path);
+    return MemoryFile._(this, path);
   }
 
   @override
@@ -138,6 +142,10 @@ class Entities {
 
   Map<String, MemoryFsImplementation?> _entities = {};
 
+  void clear() {
+    _entities.clear();
+  }
+
   String join(String path) {
     return p.join(basePath, path);
   }
@@ -158,7 +166,8 @@ class Entities {
     }
 
     if (impl is! T) {
-      throw FileSystemException('Entity at path is not a ${T.runtimeType}', path);
+      throw FileSystemException(
+          'Entity at path is not a ${T.runtimeType}', path);
     }
 
     return impl;
