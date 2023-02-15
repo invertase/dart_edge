@@ -1,43 +1,51 @@
-// part of edge_io.memory;
+part of edge_io.memory;
 
-// class MemoryDirectory extends MemoryFsEntity implements Directory {
-//   final String _path;
-//   final Iterable<String> _segments;
+class MemoryDirectory extends MemoryFsEntity implements Directory {
+  MemoryDirectory._(super.overrides, super.path);
 
-//   MemoryDirectory(super.overrides, this._path) : _segments = _path.split('/');
+  @override
+  Future<Directory> rename(String newPath) {
+    return Future.value(renameSync(newPath));
+  }
 
-//   @override
-//   Future<Directory> create({bool recursive = false}) async {
-//     createSync(recursive: recursive);
-//     return this;
-//   }
+  @override
+  Directory renameSync(String newPath) {
+    throw UnimplementedError();
+  }
 
-//   @override
-//   void createSync({bool recursive = false}) {
-    
-//   }
+  @override
+  Directory get absolute => throw UnimplementedError();
 
-//   @override
-//   Future<Directory> createTemp([String? prefix]) async {
-//     return Future.value(createTempSync(prefix));
-//   }
+  @override
+  Future<Directory> create({bool recursive = false}) async {
+    createSync(recursive: recursive);
+    return this;
+  }
 
-//   @override
-//   Directory createTempSync([String? prefix]) {
-//     // TODO: implement createTempSync
-//   }
+  @override
+  void createSync({bool recursive = false}) {}
 
-//   @override
-//   Stream<FileSystemEntity> list(
-//       {bool recursive = false, bool followLinks = true}) {
-//     // TODO: implement list
-//     throw UnimplementedError();
-//   }
+  @override
+  Future<Directory> createTemp([String? prefix]) async {
+    return Future.value(createTempSync(prefix));
+  }
 
-//   @override
-//   List<FileSystemEntity> listSync(
-//       {bool recursive = false, bool followLinks = true}) {
-//     // TODO: implement listSync
-//     throw UnimplementedError();
-//   }
-// }
+  @override
+  Directory createTempSync([String? prefix]) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<FileSystemEntity> list(
+      {bool recursive = false, bool followLinks = true}) {
+    // TODO: implement list
+    throw UnimplementedError();
+  }
+
+  @override
+  List<FileSystemEntity> listSync(
+      {bool recursive = false, bool followLinks = true}) {
+    // TODO: implement listSync
+    throw UnimplementedError();
+  }
+}

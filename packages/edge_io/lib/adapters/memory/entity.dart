@@ -2,8 +2,25 @@ part of edge_io.memory;
 
 class MemoryFsEntity implements FileSystemEntity {
   final MemoryFsOverrides overrides;
+  final String path;
 
-  MemoryFsEntity(this.overrides);
+  MemoryFsEntity(this.overrides, this.path);
+
+  /// Cached list of segments in the path.
+  List<String>? _cachedSegments;
+
+  /// Returns the segments in the path.
+  List<String> get _segments => _cachedSegments ??= path.split('/');
+
+  /// Returns the parent node of the file.
+  MemoryFsImplementation? get _parentNode {
+    if (_segments.length == 1) {
+      return null;
+    }
+
+    final parentPath = _segments.sublist(0, _segments.length - 1).join('/');
+    return overrides._entities.get<MemoryFsImplementation>(parentPath);
+  }
 
   @override
   // TODO: implement absolute
@@ -35,9 +52,6 @@ class MemoryFsEntity implements FileSystemEntity {
 
   @override
   Directory get parent => throw UnimplementedError();
-
-  @override
-  String get path => throw UnimplementedError();
 
   @override
   Future<FileSystemEntity> rename(String newPath) {

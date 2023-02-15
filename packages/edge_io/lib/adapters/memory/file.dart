@@ -2,27 +2,8 @@ part of edge_io.memory;
 
 /// A file in the memory file system.
 class MemoryFile extends MemoryFsEntity implements File {
-  /// The path to the file.
-  final String path;
-
   /// Creates a new file.
-  MemoryFile._(super.overrides, this.path);
-
-  /// Cached list of segments in the path.
-  List<String>? _cachedSegments;
-
-  /// Returns the segments in the path.
-  List<String> get _segments => _cachedSegments ??= path.split('/');
-
-  /// Returns the parent node of the file.
-  MemoryFsImplementation? get _parentNode {
-    if (_segments.length == 1) {
-      return null;
-    }
-
-    final parentPath = _segments.sublist(0, _segments.length - 1).join('/');
-    return overrides._entities.get<MemoryFsImplementation>(parentPath);
-  }
+  MemoryFile._(super.overrides, super.path);
 
   @override
   Future<File> rename(String newPath) {

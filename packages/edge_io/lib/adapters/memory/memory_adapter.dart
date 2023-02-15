@@ -8,7 +8,7 @@ import 'impl/implementation.dart';
 import 'impl/file_impl.dart';
 
 part 'entity.dart';
-// part 'directory.dart';
+part 'directory.dart';
 part 'file.dart';
 
 class MemoryFsOverrides extends IOOverrides {
@@ -24,8 +24,7 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   Directory createDirectory(String path) {
-    // return MemoryDirectory(this, path);
-    throw UnimplementedError();
+    return MemoryDirectory._(this, path);
   }
 
   @override
