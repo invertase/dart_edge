@@ -1,11 +1,10 @@
 import 'package:args/command_runner.dart';
-import 'package:cli_util/cli_logging.dart';
-
-import '../logger.dart';
+import 'package:mason_logger/mason_logger.dart';
 
 abstract class BaseCommand extends Command {
-  BaseCommand() {
-    final verbose = argResults?['verbose'] ?? false;
-    initLogger(verbose ? Logger.verbose() : Logger.standard());
-  }
+  final Logger logger;
+
+  BaseCommand({
+    required this.logger,
+  });
 }

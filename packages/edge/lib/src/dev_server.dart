@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:mason_logger/mason_logger.dart';
 import 'package:watcher/watcher.dart';
 import 'package:path/path.dart' as p;
 
 import 'compiler.dart';
-import 'logger.dart';
 
 class DevServer {
+  final Logger logger;
   final Compiler compiler;
   final String? startScript;
   final String? port;
 
   DevServer({
+    required this.logger,
     required this.compiler,
     this.startScript,
     this.port,
@@ -64,7 +66,7 @@ class DevServer {
         ProcessSignal.sigint.watch().listen(kill),
         ProcessSignal.sigterm.watch().listen(kill),
         process.stdout.transform(utf8.decoder).listen(logger.write),
-        process.stderr.transform(utf8.decoder).listen(logger.error),
+        process.stderr.transform(utf8.decoder).listen(logger.err),
       ];
 
       final watcher = DirectoryWatcher(p.join(Directory.current.path, 'lib'));
