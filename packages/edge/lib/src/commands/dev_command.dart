@@ -13,7 +13,9 @@ class DevCommand extends BaseCommand {
   @override
   final description = "Runs a local development environment with hot reload.";
 
-  DevCommand() {
+  DevCommand({
+    required super.logger,
+  }) {
     argParser.addOption('port', abbr: 'p', defaultsTo: '3000');
   }
 
@@ -24,8 +26,10 @@ class DevCommand extends BaseCommand {
     );
 
     final devServer = DevServer(
+      logger: logger,
       port: argResults!['port'],
       compiler: Compiler(
+        logger: logger,
         entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
         outputDirectory: edgeTool.path,
         outputFileName: 'main.dart.js',
