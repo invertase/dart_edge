@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
-import '../compiler.dart';
-import 'base_command.dart';
+import '../../compiler.dart';
+import '../base_command.dart';
 
 class NetlifyBuildCommand extends BaseCommand {
   @override
@@ -12,7 +12,9 @@ class NetlifyBuildCommand extends BaseCommand {
   @override
   final description = "TODO.";
 
-  NetlifyBuildCommand() {
+  NetlifyBuildCommand({
+    required super.logger,
+  }) {
     argParser.addOption('port',
         help: 'The port to run the dev server on.', defaultsTo: '4000');
     argParser.addFlag(
@@ -28,6 +30,7 @@ class NetlifyBuildCommand extends BaseCommand {
     );
 
     final compiler = Compiler(
+      logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: netlifyEdge.path,
       level: CompilerLevel.O1,
