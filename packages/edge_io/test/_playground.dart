@@ -6,15 +6,22 @@ File tempFile(File file) {
   return File(p.join(tmp.path, file.path));
 }
 
-void main() async {
-  await absolute();
-  // await copy();
-  // await create();
-  // await metadata();
-  // await read();
+Directory tempDir(Directory directory) {
+  final tmp = Directory.systemTemp.createTempSync();
+  return Directory(p.join(tmp.path, directory.path));
 }
 
-Future absolute() async {
+void main() async {
+  // await fileAbsolute();
+  // await fileCopy();
+  // await fileCreate();
+  // await fileMetadata();
+  // await fileRead();
+
+  await dirRename();
+}
+
+Future fileAbsolute() async {
   final file1 = File('file1.txt');
   print(file1.absolute.path);
 }
@@ -27,7 +34,7 @@ Future rename() async {
   print(file2.path);
 }
 
-Future copy() async {
+Future fileCopy() async {
   final file1 = tempFile(File('file1.txt'));
   await file1.create();
   final file2 = await file1.copySync('newPath.txt');
@@ -35,14 +42,14 @@ Future copy() async {
   print(file2.path);
 }
 
-Future create() async {
+Future fileCreate() async {
   final file1 = tempFile(File('foo/file1.txt'));
   await file1.create(recursive: true);
   await file1.create(exclusive: true);
   print(file1.path);
 }
 
-Future metadata() async {
+Future fileMetadata() async {
   final file1 = tempFile(File('file1.txt'));
   // await file1.create(recursive: true);
   // file1.setLastAccessedSync(DateTime.now());
@@ -53,9 +60,16 @@ Future metadata() async {
   print(file1.path);
 }
 
-Future read() async {
+Future fileRead() async {
   final file1 = tempFile(File('foo/file1.txt'));
   // await file1.create(recursive: true);
   await file1.writeAsString('Hello World');
   print(await file1.readAsString());
+}
+
+Future dirRename() async {
+  final dir1 = tempDir(Directory('foo'));
+  await dir1.create(recursive: true);
+  print(dir1.listSync());
+  print(dir1.path);
 }

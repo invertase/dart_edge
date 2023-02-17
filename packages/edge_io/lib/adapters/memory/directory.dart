@@ -10,7 +10,21 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
 
   @override
   Directory renameSync(String newPath) {
-    throw UnimplementedError();
+    final existing =
+        overrides._entities.get<MemoryDirectoryImplementation>(path);
+
+    if (existing == null) {
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Rename failed",
+      );
+    }
+
+    overrides._entities.remove(path); // Remove the old directory.
+    overrides._entities.set(newPath, existing);
+
+    return MemoryDirectory._(overrides, newPath);
   }
 
   @override
@@ -23,7 +37,26 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
   }
 
   @override
-  void createSync({bool recursive = false}) {}
+  void createSync({bool recursive = false}) {
+    // If recursive is false, we should check whether this directory has a parent,
+    // and if not, throw an error.
+    if (!recursive && _segments.length > 1 && _parentNode == null) {
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Creation failed",
+      );
+    }
+
+    final existing =
+        overrides._entities.get<MemoryDirectoryImplementation>(path);
+
+    if (existing != null) {
+      return;
+    }
+
+    overrides._entities.set(path, MemoryDirectoryImplementation());
+  }
 
   @override
   Future<Directory> createTemp([String? prefix]) async {
@@ -38,14 +71,33 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
   @override
   Stream<FileSystemEntity> list(
       {bool recursive = false, bool followLinks = true}) {
-    // TODO: implement list
-    throw UnimplementedError();
+    return Stream.fromIterable(
+        listSync(recursive: recursive, followLinks: followLinks));
   }
 
   @override
   List<FileSystemEntity> listSync(
       {bool recursive = false, bool followLinks = true}) {
-    // TODO: implement listSync
-    throw UnimplementedError();
+    final existing =
+        overrides._entities.get<MemoryDirectoryImplementation>(path);
+
+    if (existing == null) {
+      throw PathNotFoundException(
+        path,
+        OSError("No such file or directory", 2),
+        "Directory listing failed",
+      );
+    }
+
+    final map = overrides._entities.toMap();
+    final entities = <FileSystemEntity>[];
+
+    if (_parentNode == null) {
+      return entities;
+    }
+
+    // TODO implement me
+
+    return entities;
   }
 }

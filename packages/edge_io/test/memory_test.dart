@@ -151,5 +151,28 @@ void main() {
         });
       });
     });
+
+    group('Directory', () {
+      group('rename', () {
+        test('it renames a directory and removes the original', () {
+          final dir1 = Directory('dir1');
+
+          dir1.createSync();
+          final renamed = dir1.renameSync('dir2');
+
+          expect(renamed.path, 'dir2');
+          expect(dir1.existsSync(), false);
+        });
+
+        test('it errors when renaming if the directory does not exist', () {
+          final dir1 = Directory('foo');
+
+          expect(
+            () => dir1.renameSync('bar'),
+            throwsA(TypeMatcher<PathNotFoundException>()),
+          );
+        });
+      });
+    });
   });
 }

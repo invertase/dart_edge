@@ -3,6 +3,7 @@ library edge_io.memory;
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:edge_io/adapters/memory/impl/directory_impl.dart';
 import 'package:path/path.dart' as p;
 import 'impl/implementation.dart';
 import 'impl/file_impl.dart';
@@ -139,7 +140,7 @@ class Entities {
 
   Entities(this.basePath);
 
-  Map<String, MemoryFsImplementation?> _entities = {};
+  final Map<String, MemoryFsImplementation?> _entities = {};
 
   void clear() {
     _entities.clear();
@@ -170,5 +171,9 @@ class Entities {
     }
 
     return impl;
+  }
+
+  Map<String, MemoryFsImplementation?> toMap() {
+    return _entities;
   }
 }
