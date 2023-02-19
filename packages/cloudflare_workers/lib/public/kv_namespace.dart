@@ -10,80 +10,145 @@ class KVNamespace {
 
   KVNamespace._(this._delegate);
 
-  Future<String?> get(String name, [KVNamespaceGetOptions? options]) =>
-      _delegate.get(name, options?.delegate('text'));
+  Future<String?> get(
+    String name, {
+    int? cacheTtl,
+  }) =>
+      _delegate.get(
+        name,
+        interop.KVNamespaceGetOptions()
+          ..type = 'text'
+          ..cacheTtl = cacheTtl,
+      );
 
   Future<KVNamespaceGetWithMetadataResult<String?>> getWithMetadata(
-    String name, [
-    KVNamespaceGetOptions? options,
-  ]) async {
+    String name, {
+    int? cacheTtl,
+  }) async {
     return KVNamespaceGetWithMetadataResult._(
       await _delegate.getWithMetadata(
-          name, (options ?? KVNamespaceGetOptions()).delegate('text')),
+        name,
+        interop.KVNamespaceGetOptions()
+          ..type = 'text'
+          ..cacheTtl = cacheTtl,
+      ),
     );
   }
 
-  Future<Map<K, V>> getJson<K, V>(String name,
-      [KVNamespaceGetOptions? options]) async {
+  Future<Map<K, V>> getJson<K, V>(
+    String name, {
+    int? cacheTtl,
+  }) async {
     final json = await _delegate.get(
-        name, (options ?? KVNamespaceGetOptions()).delegate('json'));
+      name,
+      interop.KVNamespaceGetOptions()
+        ..type = 'json'
+        ..cacheTtl = cacheTtl,
+    );
+
     return dartify(json) as Map<K, V>;
   }
 
-  Future<KVNamespaceGetWithMetadataResult<Map<K, V>?>> getJsonWithMetadata<K, V>(
-    String name, [
-    KVNamespaceGetOptions? options,
-  ]) async {
+  Future<KVNamespaceGetWithMetadataResult<Map<K, V>?>>
+      getJsonWithMetadata<K, V>(
+    String name, {
+    int? cacheTtl,
+  }) async {
     return KVNamespaceGetWithMetadataResult._(
       await _delegate.getWithMetadata(
-          name, (options ?? KVNamespaceGetOptions()).delegate('json')),
+        name,
+        interop.KVNamespaceGetOptions()
+          ..type = 'json'
+          ..cacheTtl = cacheTtl,
+      ),
     );
   }
 
-  Future<ByteBuffer?> getBuffer(String name, [KVNamespaceGetOptions? options]) =>
+  Future<ByteBuffer?> getBuffer(
+    String name, {
+    int? cacheTtl,
+  }) =>
       _delegate.get(
-          name, (options ?? KVNamespaceGetOptions()).delegate('arrayBuffer'));
+        name,
+        interop.KVNamespaceGetOptions()
+          ..type = 'arrayBuffer'
+          ..cacheTtl = cacheTtl,
+      );
 
   Future<KVNamespaceGetWithMetadataResult<ByteBuffer?>> getBufferWithMetadata(
-    String name, [
-    KVNamespaceGetOptions? options,
-  ]) async {
+    String name, {
+    int? cacheTtl,
+  }) async {
     return KVNamespaceGetWithMetadataResult._(
       await _delegate.getWithMetadata(
-          name, (options ?? KVNamespaceGetOptions()).delegate('arrayBuffer')),
+        name,
+        interop.KVNamespaceGetOptions()
+          ..type = 'arrayBuffer'
+          ..cacheTtl = cacheTtl,
+      ),
     );
   }
 
-  Future<ReadableStream?> getStream(String name,
-      [KVNamespaceGetOptions? options]) async {
+  Future<ReadableStream?> getStream(
+    String name, {
+    int? cacheTtl,
+  }) async {
     final stream = await _delegate.get(
-        name, (options ?? KVNamespaceGetOptions()).delegate('stream'));
+      name,
+      interop.KVNamespaceGetOptions()
+        ..type = 'stream'
+        ..cacheTtl = cacheTtl,
+    );
+
     return readableStreamFromJsObject(stream);
   }
 
   Future<KVNamespaceGetWithMetadataResult<ReadableStream?>>
       getStreamWithMetadata(
-    String name, [
-    KVNamespaceGetOptions? options,
-  ]) async {
+    String name, {
+    int? cacheTtl,
+  }) async {
     return KVNamespaceGetWithMetadataResult._(
       await _delegate.getWithMetadata(
-          name, (options ?? KVNamespaceGetOptions()).delegate('stream')),
+        name,
+        interop.KVNamespaceGetOptions()
+          ..type = 'stream'
+          ..cacheTtl = cacheTtl,
+      ),
     );
   }
 
   Future<void> put(
     String key,
-    Object value, [
-    KVNamespacePutOptions? options,
-  ]) =>
-      _delegate.put(key, value, (options ?? KVNamespacePutOptions()).delegate);
+    Object value, {
+    DateTime? expiration,
+    int? expirationTtl,
+    Object? metadata,
+  }) =>
+      _delegate.put(
+        key,
+        value,
+        interop.KVNamespacePutOptions()
+          ..expiration = expiration
+          ..expirationTtl = expirationTtl
+          ..metadata = metadata,
+      );
 
   Future<void> delete(Iterable<String> keys) => _delegate.delete(keys);
 
-  Future<KVNamespaceListResult> list([KVNamespaceListOptions? options]) async =>
+  Future<KVNamespaceListResult> list({
+    int? limit,
+    String? prefix,
+    String? cursor,
+  }) async =>
       KVNamespaceListResult._(
-          await _delegate.list((options ?? KVNamespaceListOptions()).delegate));
+        await _delegate.list(
+          interop.KVNamespaceListOptions()
+            ..limit = limit
+            ..prefix = prefix
+            ..cursor = cursor,
+        ),
+      );
 }
 
 KVNamespace kvNamespaceFromJsObject(interop.KVNamespace obj) =>
@@ -94,43 +159,6 @@ class KVNamespaceGetWithMetadataResult<T> {
   KVNamespaceGetWithMetadataResult._(this._delegate);
   T get value => dartify(_delegate.value);
   Object? get metadata => dartify(_delegate.metadata);
-}
-
-class KVNamespaceGetOptions {
-  int? cacheTtl;
-
-  KVNamespaceGetOptions({
-    this.cacheTtl,
-  });
-}
-
-extension on KVNamespaceGetOptions {
-  interop.KVNamespaceGetOptions delegate(String type) {
-    return interop.KVNamespaceGetOptions()
-      ..type = type
-      ..cacheTtl = cacheTtl;
-  }
-}
-
-class KVNamespacePutOptions {
-  DateTime? expiration;
-  int? expirationTtl;
-  Object? metadata;
-
-  KVNamespacePutOptions({
-    this.expiration,
-    this.expirationTtl,
-    this.metadata,
-  });
-}
-
-extension on KVNamespacePutOptions {
-  interop.KVNamespacePutOptions get delegate {
-    return interop.KVNamespacePutOptions()
-      ..expiration = expiration
-      ..expirationTtl = expirationTtl
-      ..metadata = metadata;
-  }
 }
 
 class KVNamespaceListResult {
@@ -153,25 +181,4 @@ class KVNamespaceListKey {
   KVNamespaceListKey._(this._delegate);
   String get name => _delegate.name;
   Object? get metadata => _delegate.metadata;
-}
-
-class KVNamespaceListOptions {
-  int? limit;
-  String? prefix;
-  String? cursor;
-
-  KVNamespaceListOptions({
-    this.limit,
-    this.prefix,
-    this.cursor,
-  });
-}
-
-extension on KVNamespaceListOptions {
-  interop.KVNamespaceListOptions get delegate {
-    return interop.KVNamespaceListOptions()
-      ..limit = limit
-      ..prefix = prefix
-      ..cursor = cursor;
-  }
 }

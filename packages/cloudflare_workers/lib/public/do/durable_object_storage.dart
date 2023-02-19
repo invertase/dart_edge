@@ -2,27 +2,37 @@ import 'dart:async';
 import 'dart:js_util';
 
 import '../../interop/durable_object_interop.dart' as interop;
-import './durable_object_storage_options.dart';
 
 class DurableObjectStorage {
   final interop.DurableObjectStorage _delegate;
 
   DurableObjectStorage._(this._delegate);
 
-  Future<T?> get<T>(String key, [DurableObjectGetOptions? options]) async {
+  Future<T?> get<T>(
+    String key, {
+    bool? allowConcurrency,
+    bool? noCache,
+  }) async {
     final obj = await _delegate.get(
       key,
-      options?.delegate ?? interop.DurableObjectGetOptions(),
+      interop.DurableObjectGetOptions()
+        ..allowConcurrency = allowConcurrency
+        ..noCache = noCache,
     );
 
     return obj == null ? null : dartify(obj) as T;
   }
 
-  Future<Map<String, T>> getEntries<T>(Iterable<String> keys,
-      [DurableObjectGetOptions? options]) async {
+  Future<Map<String, T>> getEntries<T>(
+    Iterable<String> keys, {
+    bool? allowConcurrency,
+    bool? noCache,
+  }) async {
     final obj = await _delegate.get(
       keys,
-      options?.delegate ?? interop.DurableObjectGetOptions(),
+      interop.DurableObjectGetOptions()
+        ..allowConcurrency = allowConcurrency
+        ..noCache = noCache,
     );
 
     return dartify(obj) as Map<String, T>;
@@ -30,50 +40,99 @@ class DurableObjectStorage {
 
   Future<void> put<T>(
     String key,
-    T value, [
-    DurableObjectPutOptions? options,
-  ]) async {
+    T value, {
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+    bool? noCache,
+  }) async {
     return _delegate.put(
       key,
       value,
-      options?.delegate ?? interop.DurableObjectPutOptions(),
+      interop.DurableObjectPutOptions()
+        ..allowConcurrency = allowConcurrency
+        ..allowUnconfirmed = allowUnconfirmed
+        ..noCache = noCache,
     );
   }
 
-  Future<void> putEntries<T>(Map<Object, T> entries,
-      [DurableObjectPutOptions? options]) async {
+  Future<void> putEntries<T>(
+    Map<Object, T> entries, {
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+    bool? noCache,
+  }) async {
     return _delegate.putEntries<T>(
       entries,
-      options?.delegate ?? interop.DurableObjectPutOptions(),
+      interop.DurableObjectPutOptions()
+        ..allowConcurrency = allowConcurrency
+        ..allowUnconfirmed = allowUnconfirmed
+        ..noCache = noCache,
     );
   }
 
-  Future<bool> delete(String key, [DurableObjectPutOptions? options]) async {
+  Future<bool> delete(
+    String key, {
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+    bool? noCache,
+  }) async {
     return _delegate.delete(
       key,
-      options?.delegate ?? interop.DurableObjectPutOptions(),
+      interop.DurableObjectPutOptions()
+        ..allowConcurrency = allowConcurrency
+        ..allowUnconfirmed = allowUnconfirmed
+        ..noCache = noCache,
     );
   }
 
-  Future<void> deleteAll([DurableObjectPutOptions? options]) async {
+  Future<void> deleteAll({
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+    bool? noCache,
+  }) async {
     return _delegate.deleteAll(
-      options?.delegate ?? interop.DurableObjectPutOptions(),
+      interop.DurableObjectPutOptions()
+        ..allowConcurrency = allowConcurrency
+        ..allowUnconfirmed = allowUnconfirmed
+        ..noCache = noCache,
     );
   }
 
   Future<bool> deleteEntries(
-    Iterable<String> keys, [
-    DurableObjectPutOptions? options,
-  ]) async {
+    Iterable<String> keys, {
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+    bool? noCache,
+  }) async {
     return _delegate.deleteEntries(
       keys,
-      options?.delegate ?? interop.DurableObjectPutOptions(),
+      interop.DurableObjectPutOptions()
+        ..allowConcurrency = allowConcurrency
+        ..allowUnconfirmed = allowUnconfirmed
+        ..noCache = noCache,
     );
   }
 
-  Future<Map<String, T>> list<T>([DurableObjectListOptions? options]) async {
+  Future<Map<String, T>> list<T>({
+    String? start,
+    String? startAfter,
+    String? end,
+    String? prefix,
+    bool? reverse,
+    bool? limit,
+    bool? allowConcurrency,
+    bool? noCache,
+  }) async {
     final obj = await _delegate.list(
-      options?.delegate ?? interop.DurableObjectListOptions(),
+      interop.DurableObjectListOptions()
+        ..start = start
+        ..startAfter = startAfter
+        ..end = end
+        ..prefix = prefix
+        ..reverse = reverse
+        ..limit = limit
+        ..allowConcurrency = allowConcurrency
+        ..noCache = noCache,
     );
 
     return dartify(obj) as Map<String, T>;
@@ -86,23 +145,34 @@ class DurableObjectStorage {
     });
   }
 
-  Future<int?> getAlarm([DurableObjectGetAlarmOptions? options]) async {
+  Future<int?> getAlarm({bool? allowConcurrency}) async {
     return _delegate.getAlarm(
-      options?.delegate ?? interop.DurableObjectGetAlarmOptions(),
+      interop.DurableObjectGetAlarmOptions()
+        ..allowConcurrency = allowConcurrency,
     );
   }
 
-  Future<void> setAlarm(DateTime scheduledTime,
-      [DurableObjectSetAlarmOptions? options]) async {
+  Future<void> setAlarm(
+    DateTime scheduledTime, {
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+  }) async {
     return _delegate.setAlarm(
       scheduledTime,
-      options?.delegate ?? interop.DurableObjectSetAlarmOptions(),
+      interop.DurableObjectSetAlarmOptions()
+        ..allowConcurrency = allowConcurrency
+        ..allowUnconfirmed = allowUnconfirmed,
     );
   }
 
-  Future<void> deleteAlarm([DurableObjectSetAlarmOptions? options]) async {
+  Future<void> deleteAlarm({
+    bool? allowConcurrency,
+    bool? allowUnconfirmed,
+  }) async {
     return _delegate.deleteAlarm(
-      options?.delegate ?? interop.DurableObjectSetAlarmOptions(),
+      interop.DurableObjectSetAlarmOptions()
+        ..allowConcurrency = allowConcurrency
+        ..allowUnconfirmed = allowUnconfirmed,
     );
   }
 
