@@ -1,3 +1,8 @@
+## 0.0.2+5
+
+ - **REFACTOR**: prefer named arguments on DO/KV apis. ([c6e07055](https://github.com/invertase/dart_edge/commit/c6e0705553b1607637fcdd21ee7b316a29dbd2ca))
+ - **REFACTOR**: update cli implementation ([#18](https://github.com/invertase/dart_edge/issues/18)). ([86802207](https://github.com/invertase/dart_edge/commit/868022075012814679e68a3a3e48003068db6bb6))
+
 ## 0.0.2+4
 
  - Update a dependency to the latest release.

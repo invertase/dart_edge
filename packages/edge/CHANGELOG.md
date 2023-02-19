@@ -1,3 +1,9 @@
+## 0.0.4+1
+
+ - **REFACTOR**: prefer named arguments on DO/KV apis. ([c6e07055](https://github.com/invertase/dart_edge/commit/c6e0705553b1607637fcdd21ee7b316a29dbd2ca))
+ - **REFACTOR**: update cli implementation ([#18](https://github.com/invertase/dart_edge/issues/18)). ([86802207](https://github.com/invertase/dart_edge/commit/868022075012814679e68a3a3e48003068db6bb6))
+ - **REFACTOR**: extract cloudflare_workers logic to standalone class. ([4ab0c13c](https://github.com/invertase/dart_edge/commit/4ab0c13cd62d83bf52067a57ae4f06444aec1c42))
+
 ## 0.0.4
 
  - **FEAT**: add use-filesystem flag for prod vercel builds. ([ea9a6d12](https://github.com/invertase/dart_edge/commit/ea9a6d1216ded86439585b34a919bb3ccec6c025))
