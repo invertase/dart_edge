@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
-import '../compiler.dart';
-import '../dev_server.dart';
-import 'base_command.dart';
+import '../../compiler.dart';
+import '../../dev_server.dart';
+import '../base_command.dart';
 
 class VercelBuildCommand extends BaseCommand {
   @override
@@ -14,7 +14,9 @@ class VercelBuildCommand extends BaseCommand {
   @override
   final description = "Builds the project.";
 
-  VercelBuildCommand() {
+  VercelBuildCommand({
+    required super.logger,
+  }) {
     argParser.addFlag(
       'dev',
       defaultsTo: false,
@@ -47,6 +49,7 @@ class VercelBuildCommand extends BaseCommand {
     final outFileName = 'main.dart.js';
 
     final compiler = Compiler(
+      logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: outputDirectory,
       outputFileName: outFileName,
@@ -63,8 +66,10 @@ class VercelBuildCommand extends BaseCommand {
     );
 
     final devServer = DevServer(
+      logger: logger,
       startScript: devAddEventListener,
       compiler: Compiler(
+        logger: logger,
         entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
         outputDirectory: edgeTool.path,
         outputFileName: 'main.dart.js',

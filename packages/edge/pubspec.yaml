@@ -10,13 +10,13 @@ environment:
 dependencies:
   ansi_styles: ^0.3.2+1
   args: ^2.3.2
-  cli_util: ^0.3.5
   path: ^1.8.3
   hotreloader: ^3.0.5
   toml: ^0.13.1
   mason: ^0.1.0-dev.41
   watcher: ^1.0.2
   prompts: ^2.0.0
+  mason_logger: ^0.2.5
 
 executables:
   edge:

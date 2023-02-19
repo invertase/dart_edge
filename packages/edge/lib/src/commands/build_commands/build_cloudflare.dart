@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:edge/src/logger.dart';
+import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as p;
 
-import '../compiler.dart';
-import '../logger.dart';
-import 'base_command.dart';
+import '../../compiler.dart';
+import '../base_command.dart';
 
-import '../platforms/cloudflare_workers.dart';
+import '../../platforms/cloudflare_workers.dart';
 
 class CloudflareBuildCommand extends BaseCommand {
   CloudflareWorkers workers = CloudflareWorkers();
@@ -17,7 +18,9 @@ class CloudflareBuildCommand extends BaseCommand {
   final description =
       "Builds a Dart Edge project for the Cloudflare Workers environment.";
 
-  CloudflareBuildCommand() {
+  CloudflareBuildCommand({
+    required super.logger,
+  }) {
     argParser.addFlag(
       'dev',
       help:
@@ -30,15 +33,22 @@ class CloudflareBuildCommand extends BaseCommand {
   @override
   void run() async {
     if (!await workers.tomlFile.exists()) {
-      logger.error('No wrangler.toml exists in the current directory.');
+      logger.err('No wrangler.toml exists in the current directory.');
       logger.lineBreak();
-      logger.hint(
-        'To get started with Cloudflare Workers, vist the docs: https://docs.dartedge.dev/platform/cloudflare',
+
+      final docs = link(
+        uri: Uri.parse('https://docs.dartedge.dev/platform/cloudflare'),
+        message: 'https://docs.dartedge.dev/platform/cloudflare',
+      );
+
+      logger.info(
+        'To get started with Cloudflare Workers, vist the docs: $docs',
       );
       exit(1);
     }
 
     final compiler = Compiler(
+      logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: workers.edgeToolDirectory.path,
       outputFileName: 'main.dart.js',
@@ -57,14 +67,14 @@ class CloudflareBuildCommand extends BaseCommand {
     }
 
     if (durableObjectBindings.isNotEmpty) {
-      logger.verbose('Creating Durable Object exports: $durableObjectBindings');
+      logger.detail('Creating Durable Object exports: $durableObjectBindings');
     }
 
     // Update the entry file.
     await File(p.join(workers.edgeToolDirectory.path, 'entry.js'))
         .writeAsString(entryFile);
 
-    logger.verbose(
+    logger.detail(
       'Entry file generated at ${p.join(workers.edgeToolDirectory.path, 'entry.js')}',
     );
   }
