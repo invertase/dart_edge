@@ -6,6 +6,7 @@ import 'package:edge_runtime/src/response.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 
 export 'package:edge_runtime/edge_runtime.dart';
+export 'package:deno_deploy/deno_deploy.dart';
 
 @JS('__dartSupabaseFetchHandler')
 external set __dartSupabaseFetchHandler(
