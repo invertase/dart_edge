@@ -1,7 +1,16 @@
+import 'dart:typed_data';
+
+import 'package:edge_runtime/src/abort.dart';
+
 import 'interop/deno_interop.dart' as interop;
 
+import 'env.dart';
+import 'fs.dart';
+
 class Deno {
-  static get env => Env._(interop.Env());
+  /// An interface containing methods to interact with the process
+  /// environment variables.
+  static Env get env => envFromJsObject(interop.Deno.env);
 
   static Future<TcpConn> connect({
     required int port,
@@ -30,21 +39,34 @@ class Deno {
   // Multiple types
   static resolveDns() => {};
 
-  static Uri cwd(Uri uri) => Uri.parse(interop.cwd());
+  /// Return a Uri representing the current working directory.
+  ///
+  /// If the current directory can be reached via multiple paths
+  /// (due to symbolic links), cwd() may return any one of them.
+  static Uri cwd() => Uri.parse(interop.Deno.cwd());
 
-  static Stream<DirEntry> readDir(Uri uri) async* {
-    final asyncIterator = interop.readDir(uri.toString());
-    while (true) {
-      final result = await asyncIterator.next();
-      if (result.done) break;
-      yield DirEntry._(result.value);
-    }
+  /// Reads the directory given by path and returns a [Stream] of [DirEntry].
+  static Stream<DirEntry> readDir(Uri uri) {
+    return interop.Deno.readDir(uri.toString()).map(dirEntryFromJsObject);
   }
 
-  static readFile(Uri uri) => {};
+  static Future<ByteBuffer> readFile(
+    Uri uri, {
+    AbortSignal? signal,
+  }) =>
+      interop.Deno.readFile(
+        uri.toString(),
+        interop.ReadFileOptions(signal: signal?.delegate),
+      );
 
-  // Options
-  static readTextFile(Uri uri) => {};
+  static Future<String> readTextFile(
+    Uri uri, {
+    AbortSignal? signal,
+  }) =>
+      interop.Deno.readTextFile(
+        uri.toString(),
+        interop.ReadFileOptions(signal: signal?.delegate),
+      );
 
   static open(
     Uri uri, {
@@ -56,35 +78,13 @@ class Deno {
     bool createNew = false,
     num? mode,
   }) =>
-      {};
+      throw UnimplementedError();
 
-  static stat(Uri uri) => {};
-  static lstat(Uri uri) => {};
-  static Future<String> realPath(Uri uri) async => 'todo';
+  static stat(Uri uri) => throw UnimplementedError();
+  static lstat(Uri uri) => throw UnimplementedError();
+  static Future<String> realPath(Uri uri) =>
+      interop.Deno.realPath(uri.toString());
   static Future<String> readLink(Uri uri) async => 'todo';
 }
 
-class Env {
-  final interop.Env _delegate;
-  Env._(this._delegate);
-
-  String? get(String key) => _delegate.get(key);
-  void set(String key, String value) => _delegate.set(key, value);
-  void delete(String key) => _delegate.delete(key);
-  bool has(String key) => _delegate.has(key);
-
-  // Probs needs dartify
-  Map<String, String> toJson() => _delegate.toObject();
-}
-
 class TcpConn {}
-
-class DirEntry {
-  final interop.DirEntry _delegate;
-
-  DirEntry._(this._delegate);
-  String get name => _delegate.name;
-  bool get isFile => _delegate.isFile;
-  bool get isDirectory => _delegate.isDirectory;
-  bool get isSymlink => _delegate.isSymlink;
-}

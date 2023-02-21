@@ -26,14 +26,13 @@ class JavaScriptObject {
   external factory JavaScriptObject();
 }
 
+
 extension PropsJavaScriptObject on JavaScriptObject {
   T get<T>(String key) => js_util.getProperty(this, key);
   void set(String key, dynamic value) {
     js_util.setProperty(this, key, value);
   }
 }
-
-
 
 bool isBasicType(value) {
   if (value == null || value is num || value is bool || value is String) {

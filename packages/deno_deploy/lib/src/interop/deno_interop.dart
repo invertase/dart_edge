@@ -1,57 +1,29 @@
+import 'dart:typed_data';
+
 import 'package:js/js.dart';
 import 'dart:js_util' as js_util;
 
-@anonymous
-@JS()
-@staticInterop
-class AsyncIterator<T> {
-  external factory AsyncIterator();
-}
-
-extension PropsAsyncIterator<T> on AsyncIterator {
-  Future<IteratorResult<T>> next() => js_util.promiseToFuture(
-        js_util.callMethod(this, 'next', []),
-      );
-}
-
-@anonymous
-@JS()
-@staticInterop
-class IteratorResult<T> {
-  external factory IteratorResult();
-}
-
-extension PropsIteratorResult<T> on IteratorResult {
-  bool get done => js_util.getProperty(this, 'done');
-  T get value => js_util.getProperty(this, 'value');
-}
-
-@JS('Deno.env')
-@staticInterop
-external Env get env;
-
-@JS('Deno.cwd')
-@staticInterop
-external String cwd();
-
-@JS('Deno.readDir')
-@staticInterop
-external AsyncIterator<DirEntry> readDir(String path);
+import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:edge_runtime/src/interop/utils_interop.dart';
+import 'package:edge_runtime/src/interop/promise_interop.dart';
+import 'package:edge_runtime/src/interop/async_iterator_interop.dart';
 
 @JS()
-@anonymous
 @staticInterop
+@anonymous
 class Env {
   external factory Env();
 }
 
 extension PropsEnv on Env {
   String? get(String key) => js_util.callMethod(this, 'get', [key]);
+
   void set(String key, String value) =>
       js_util.callMethod(this, 'set', [key, value]);
   void delete(String key) => js_util.callMethod(this, 'delete', [key]);
   bool has(String key) => js_util.callMethod(this, 'has', [key]);
-  dynamic toObject() => js_util.callMethod(this, 'toObject', []);
+  Map<String, String> toObject() => Map<String, String>.from(
+      dartify(js_util.callMethod(this, 'toObject', [])));
 }
 
 @JS()
@@ -66,4 +38,65 @@ extension PropsDirEntry on DirEntry {
   bool get isFile => js_util.getProperty(this, 'isFile');
   bool get isDirectory => js_util.getProperty(this, 'isDirectory');
   bool get isSymlink => js_util.getProperty(this, 'isSymlink');
+}
+
+@JS('Deno.env')
+@staticInterop
+external Env get _env;
+
+@JS('Deno.cwd')
+@staticInterop
+external String _cwd();
+
+@JS('Deno.readDir')
+@staticInterop
+external AsyncIterator<DirEntry> _readDir(String path);
+
+@JS('Deno.readFile')
+@staticInterop
+external Promise<ByteBuffer> _readFile(String path, ReadFileOptions options);
+
+@JS('Deno.readTextFile')
+@staticInterop
+external Promise<String> _readTextFile(String path, ReadFileOptions options);
+
+@JS('Deno.realPath')
+@staticInterop
+external Promise<String> _realPath(String path);
+
+@JS('Deno.readLink')
+@staticInterop
+external Promise<String> _readLink(String path);
+
+class Deno {
+  static Env get env => _env;
+  static String cwd() => _cwd();
+  static Stream<DirEntry> readDir(String path) {
+    return _readDir(path).toStream<DirEntry>();
+  }
+
+  static Future<ByteBuffer> readFile(String path, ReadFileOptions options) {
+    return js_util.promiseToFuture(_readFile(path, options));
+  }
+
+  static Future<String> readTextFile(String path, ReadFileOptions options) {
+    return js_util.promiseToFuture(_readTextFile(path, options));
+  }
+
+  static Future<String> realPath(String path) {
+    return js_util.promiseToFuture(_realPath(path));
+  }
+
+  static Future<String> readLink(String path) {
+    return js_util.promiseToFuture(_readLink(path));
+  }
+}
+
+@JS()
+@staticInterop
+@anonymous
+class ReadFileOptions {
+  external factory ReadFileOptions({
+    interop.AbortSignal? signal,
+  });
 }

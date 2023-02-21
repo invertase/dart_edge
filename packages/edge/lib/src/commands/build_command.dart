@@ -1,6 +1,7 @@
 import 'base_command.dart';
 import 'build_commands/build_vercel.dart';
 import 'build_commands/build_cloudflare.dart';
+import 'build_commands/build_supabase.dart';
 
 class BuildCommand extends BaseCommand {
   @override
@@ -15,5 +16,6 @@ class BuildCommand extends BaseCommand {
   }) {
     addSubcommand(CloudflareBuildCommand(logger: logger));
     addSubcommand(VercelBuildCommand(logger: logger));
+    addSubcommand(SupabaseBuildCommand(logger: logger));
   }
 }

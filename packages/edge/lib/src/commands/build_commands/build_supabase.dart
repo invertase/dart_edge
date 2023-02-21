@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
-import '../compiler.dart';
-import '../watcher.dart';
-import 'base_command.dart';
+import '../../compiler.dart';
+import '../../watcher.dart';
+import '../base_command.dart';
 
 class SupabaseBuildCommand extends BaseCommand {
   @override
