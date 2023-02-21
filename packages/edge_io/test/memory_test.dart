@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:edge_io/edge_io.dart' show MemoryFsOverrides;
+import 'package:edge_io/memory.dart';
 
 void main() {
+  // TODO swap out based on args?
   final overrides = MemoryFsOverrides();
   IOOverrides.global = overrides;
 
@@ -11,7 +12,7 @@ void main() {
     overrides.clear();
   });
 
-  group('MemoryFsOverrides', () {
+  group('Overrides', () {
     group('File', () {
       group('rename', () {
         test('it renames a file and removes the original', () {
