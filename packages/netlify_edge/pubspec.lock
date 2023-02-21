@@ -109,18 +109,18 @@ packages:
     dependency: "direct main"
     description:
       name: edge
-      sha256: a6f291b804f004226d7f2939e89f0691d5edadbf87b05f3af3596e64326d9259
+      sha256: "2f5559d9cfbefd7ee4a02c75a15c938ec56372651ae5a4a0e5e103154aa44fc5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.4+1"
+    version: "0.0.5"
   edge_runtime:
     dependency: "direct main"
     description:
       name: edge_runtime
-      sha256: "2b6f719f7d72dd28a59085fa3d979a62509686579f3b4f426a54ad42f359103d"
+      sha256: f2a82827201ae7d1cc29453afa0d34a9aaa6a54e5960079a4886ef99f452e3d7
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1+4"
+    version: "0.0.2"
   file:
     dependency: transitive
     description:
