@@ -55,7 +55,7 @@ packages:
       path: "../../packages/cloudflare_workers"
       relative: true
     source: path
-    version: "0.0.2+4"
+    version: "0.0.3"
   collection:
     dependency: transitive
     description:
@@ -86,14 +86,14 @@ packages:
       path: "../../packages/edge"
       relative: true
     source: path
-    version: "0.0.4"
+    version: "0.0.5"
   edge_runtime:
     dependency: "direct overridden"
     description:
       path: "../../packages/edge_runtime"
       relative: true
     source: path
-    version: "0.0.1+3"
+    version: "0.0.2"
   file:
     dependency: transitive
     description:

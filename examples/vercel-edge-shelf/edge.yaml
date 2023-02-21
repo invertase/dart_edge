@@ -1,0 +1,3 @@
+vercel_edge:
+  entrypoints:
+    lib/main.dart:

@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
+import 'package:edge/src/config/edge_config.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 
 import 'src/commands/dev_command.dart';
 import 'src/commands/build_command.dart';
@@ -23,10 +28,35 @@ class EdgeCommandRunner extends CommandRunner<void> {
       abbr: 'v',
       help: 'Enables verbose logging.',
     );
-
+    print(config);
     addCommand(NewCommand(logger: _logger));
     addCommand(DevCommand(logger: _logger));
     addCommand(BuildCommand(logger: _logger));
+  }
+
+  EdgeConfig? _config;
+
+  EdgeConfig get config {
+    if (_config != null) {
+      return _config!;
+    }
+
+    final configFile = File(p.join(Directory.current.path, 'edge.yaml'));
+    if (!configFile.existsSync()) {
+      return EdgeConfig.empty();
+    }
+
+    try {
+      final yamlMap = loadYaml(configFile.readAsStringSync()) as YamlMap;
+      _config = EdgeConfig.fromJson(Map<String, dynamic>.from(yamlMap.value).cast<String, dynamic>());
+      return _config!;
+    } catch (e, s) {
+      _logger.err(
+          'Failed to parse the edge.yaml file. Please check that the config file is in the correct format.');
+      _logger.err(e.toString());
+      _logger.err(s.toString());
+      exit(1);
+    }
   }
 
   @override
