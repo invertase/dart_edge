@@ -1,18 +1,5 @@
-# Dart Edge Runtime
+# Deno Deploy - Dart Edge
 
-This package provides a Dart runtime for the Edge framework. It can either be used as a standalone
-package or part of a platform runtime, such as [`vercel_edge`](https://pub.dev/packages/vercel_edge).
+The package provides a Dart API to build [Deno Deploy](https://deno.com/deploy) applications.
 
-## Usage
-
-A simple usage example:
-
-```dart
-import 'package:edge_runtime/edge_runtime.dart';
-
-void main() {
-  addFetchEventListener((event) {
-    event.respondWith(Response.ok('Hello, world!'));
-  });
-}
-```
+> This package is in early development and is not yet ready for production use.
