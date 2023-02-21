@@ -13,7 +13,9 @@ class SupabaseBuildCommand extends BaseCommand {
   @override
   final description = "Builds the project for Supabase Edge Functions.";
 
-  SupabaseBuildCommand() {
+  SupabaseBuildCommand({
+    required super.logger,
+  }) {
     argParser.addFlag(
       'dev',
       help:
@@ -35,6 +37,7 @@ class SupabaseBuildCommand extends BaseCommand {
     );
 
     final compiler = Compiler(
+      logger: logger,
       entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
       outputDirectory: functionDirectory.path,
       outputFileName: 'main.dart.js',
