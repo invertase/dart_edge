@@ -1,3 +1,7 @@
+## 0.0.1-dev.7
+
+ - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))
+
 ## 0.0.1-dev.6
 
  - **REFACTOR**: prefer named arguments on DO/KV apis. ([c6e07055](https://github.com/invertase/dart_edge/commit/c6e0705553b1607637fcdd21ee7b316a29dbd2ca))

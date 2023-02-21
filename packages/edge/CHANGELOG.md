@@ -1,3 +1,7 @@
+## 0.0.5
+
+ - **FEAT**: add working supabase example. ([c9544bb0](https://github.com/invertase/dart_edge/commit/c9544bb0a408a25cc977017ecae74ed06a92f3d4))
+
 ## 0.0.4+1
 
  - **REFACTOR**: prefer named arguments on DO/KV apis. ([c6e07055](https://github.com/invertase/dart_edge/commit/c6e0705553b1607637fcdd21ee7b316a29dbd2ca))

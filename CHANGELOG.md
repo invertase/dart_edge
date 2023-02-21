@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-02-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cloudflare_workers` - `v0.0.3`](#cloudflare_workers---v003)
+ - [`deno_deploy` - `v0.0.1-dev.1`](#deno_deploy---v001-dev1)
+ - [`edge` - `v0.0.5`](#edge---v005)
+ - [`edge_runtime` - `v0.0.2`](#edge_runtime---v002)
+ - [`netlify_edge` - `v0.0.1-dev.7`](#netlify_edge---v001-dev7)
+ - [`supabase_functions` - `v0.0.1-dev.2`](#supabase_functions---v001-dev2)
+ - [`vercel_edge` - `v0.0.3`](#vercel_edge---v003)
+
+---
+
+#### `cloudflare_workers` - `v0.0.3`
+
+ - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))
+
+#### `deno_deploy` - `v0.0.1-dev.1`
+
+ - **FEAT**: update deno_deploy implementation. ([5c855c65](https://github.com/invertase/dart_edge/commit/5c855c6524d4aba5e7304712d20854417adadd7d))
+ - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))
+
+#### `edge` - `v0.0.5`
+
+ - **FEAT**: add working supabase example. ([c9544bb0](https://github.com/invertase/dart_edge/commit/c9544bb0a408a25cc977017ecae74ed06a92f3d4))
+
+#### `edge_runtime` - `v0.0.2`
+
+ - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))
+
+#### `netlify_edge` - `v0.0.1-dev.7`
+
+ - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))
+
+#### `supabase_functions` - `v0.0.1-dev.2`
+
+ - **FEAT**: update deno_deploy implementation. ([5c855c65](https://github.com/invertase/dart_edge/commit/5c855c6524d4aba5e7304712d20854417adadd7d))
+ - **FEAT**: add working supabase example. ([c9544bb0](https://github.com/invertase/dart_edge/commit/c9544bb0a408a25cc977017ecae74ed06a92f3d4))
+
+#### `vercel_edge` - `v0.0.3`
+
+ - **FEAT**: add working supabase example. ([c9544bb0](https://github.com/invertase/dart_edge/commit/c9544bb0a408a25cc977017ecae74ed06a92f3d4))
+
+
 ## 2023-02-19
 
 ### Changes
