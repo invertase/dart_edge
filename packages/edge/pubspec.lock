@@ -49,14 +49,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
-  cli_util:
-    dependency: "direct main"
-    description:
-      name: cli_util
-      sha256: "66f86e916d285c1a93d3b79587d94bd71984a66aac4ff74e524cfa7877f1395c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.5"
   collection:
     dependency: transitive
     description:
@@ -146,13 +138,13 @@ packages:
     source: hosted
     version: "0.1.0-dev.41"
   mason_logger:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: mason_logger
-      sha256: "893b47be5628aa97ec802111e64799b90bfeaf74f03976b0ca0fc19ecd0044c9"
+      sha256: ca34d14e998cd7a7738e7320b102aa45fb363aa49a290084b211ababf75bb7ee
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.4"
+    version: "0.2.5"
   meta:
     dependency: transitive
     description:

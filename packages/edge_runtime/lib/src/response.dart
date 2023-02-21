@@ -10,6 +10,7 @@ import 'body.dart';
 import 'form_data.dart';
 import 'headers.dart';
 import 'readable_stream.dart';
+import 'interop/utils_interop.dart';
 
 class Response implements Body {
   final interop.Response _delegate;
@@ -25,8 +26,8 @@ class Response implements Body {
           convertBody(body),
           interop.ResponseInit(
             status: status ?? 200,
-            statusText: statusText ?? 'OK',
-            headers: headers?.delegate ?? interop.Headers(),
+            statusText: statusText ?? '',
+            headers: headers?.delegate ?? jsUndefined,
           ),
         );
 
@@ -50,9 +51,9 @@ class Response implements Body {
       interop.Response.json(
         data != null ? jsify(data) : null,
         interop.ResponseInit(
-          status: status,
-          statusText: statusText,
-          headers: headers?.delegate,
+          status: status ?? 200,
+          statusText: statusText ?? '',
+          headers: headers?.delegate ?? jsUndefined,
         ),
       ),
     );
