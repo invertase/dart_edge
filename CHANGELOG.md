@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-02-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`deno_deploy` - `v0.0.1-dev.2`](#deno_deploy---v001-dev2)
+ - [`edge_runtime` - `v0.0.3`](#edge_runtime---v003)
+ - [`supabase_functions` - `v0.0.1-dev.3`](#supabase_functions---v001-dev3)
+ - [`cloudflare_workers` - `v0.0.3+1`](#cloudflare_workers---v0031)
+ - [`netlify_edge` - `v0.0.1-dev.8`](#netlify_edge---v001-dev8)
+ - [`vercel_edge` - `v0.0.3+1`](#vercel_edge---v0031)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `supabase_functions` - `v0.0.1-dev.3`
+ - `cloudflare_workers` - `v0.0.3+1`
+ - `netlify_edge` - `v0.0.1-dev.8`
+ - `vercel_edge` - `v0.0.3+1`
+
+---
+
+#### `deno_deploy` - `v0.0.1-dev.2`
+
+ - **FEAT**: add Iterator / AsyncIterator interop. ([b23b4a4f](https://github.com/invertase/dart_edge/commit/b23b4a4ff1ab781744b4480d0fbfd286343205f5))
+
+#### `edge_runtime` - `v0.0.3`
+
+ - **FEAT**: add Iterator / AsyncIterator interop. ([b23b4a4f](https://github.com/invertase/dart_edge/commit/b23b4a4ff1ab781744b4480d0fbfd286343205f5))
+
+
 ## 2023-02-21
 
 ### Changes

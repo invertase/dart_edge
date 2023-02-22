@@ -1,3 +1,7 @@
+## 0.0.3+1
+
+ - Update a dependency to the latest release.
+
 ## 0.0.3
 
  - **FEAT**: add working supabase example. ([c9544bb0](https://github.com/invertase/dart_edge/commit/c9544bb0a408a25cc977017ecae74ed06a92f3d4))

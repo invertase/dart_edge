@@ -7,4 +7,4 @@ environment:
 
 dependencies:
   edge: ^0.0.5
-  supabase_functions: ^0.0.1-dev.2
+  supabase_functions: ^0.0.1-dev.3

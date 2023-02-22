@@ -1,3 +1,7 @@
+## 0.0.1-dev.8
+
+ - Update a dependency to the latest release.
+
 ## 0.0.1-dev.7
 
  - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))

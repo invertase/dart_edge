@@ -1,3 +1,7 @@
+## 0.0.3
+
+ - **FEAT**: add Iterator / AsyncIterator interop. ([b23b4a4f](https://github.com/invertase/dart_edge/commit/b23b4a4ff1ab781744b4480d0fbfd286343205f5))
+
 ## 0.0.2
 
  - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))
