@@ -4,7 +4,7 @@ import 'package:js/js.dart';
 import 'dart:js_util' as js_util;
 
 import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:edge_runtime/src/interop/utils_interop.dart';
+import 'package:edge_runtime/src/interop/utils_interop.dart' as interop;
 import 'package:edge_runtime/src/interop/promise_interop.dart';
 import 'package:edge_runtime/src/interop/iterator_interop.dart';
 
@@ -23,7 +23,7 @@ extension PropsEnv on Env {
   void delete(String key) => js_util.callMethod(this, 'delete', [key]);
   bool has(String key) => js_util.callMethod(this, 'has', [key]);
   Map<String, String> toObject() => Map<String, String>.from(
-      dartify(js_util.callMethod(this, 'toObject', [])));
+      interop.dartify(js_util.callMethod(this, 'toObject', [])));
 }
 
 @JS()
@@ -68,6 +68,14 @@ external Promise<String> _realPath(String path);
 @staticInterop
 external Promise<String> _readLink(String path);
 
+@JS('Deno.stat')
+@staticInterop
+external Promise<String> _stat(String path);
+
+@JS('Deno.lstat')
+@staticInterop
+external Promise<String> _lstat(String path);
+
 class Deno {
   static Env get env => _env;
   static String cwd() => _cwd();
@@ -90,6 +98,14 @@ class Deno {
   static Future<String> readLink(String path) {
     return js_util.promiseToFuture(_readLink(path));
   }
+
+  static Future<FileInfo> stat(String path) {
+    return js_util.promiseToFuture(_stat(path));
+  }
+
+  static Future<FileInfo> lstat(String path) {
+    return js_util.promiseToFuture(_lstat(path));
+  }
 }
 
 @JS()
@@ -99,4 +115,46 @@ class ReadFileOptions {
   external factory ReadFileOptions({
     interop.AbortSignal? signal,
   });
+}
+
+@JS()
+@staticInterop
+@anonymous
+class FileInfo {
+  external factory FileInfo();
+}
+
+extension PropsFileInfo on FileInfo {
+  int get len => js_util.getProperty(this, 'len');
+  bool get isFile => js_util.getProperty(this, 'isFile');
+  bool get isDirectory => js_util.getProperty(this, 'isDirectory');
+  bool get isSymlink => js_util.getProperty(this, 'isSymlink');
+  int get size => js_util.getProperty(this, 'size');
+  DateTime? get mtime {
+    final date = js_util.getProperty(this, 'mtime') as interop.Date?;
+    if (date == null) return null;
+    return DateTime.fromMillisecondsSinceEpoch(date.valueOf());
+  }
+
+  DateTime? get atime {
+    final date = js_util.getProperty(this, 'atime') as interop.Date?;
+    if (date == null) return null;
+    return DateTime.fromMillisecondsSinceEpoch(date.valueOf());
+  }
+
+  DateTime? get birthtime {
+    final date = js_util.getProperty(this, 'birthtime') as interop.Date?;
+    if (date == null) return null;
+    return DateTime.fromMillisecondsSinceEpoch(date.valueOf());
+  }
+
+  int get dev => js_util.getProperty(this, 'dev');
+  int get ino => js_util.getProperty(this, 'ino');
+  int get mode => js_util.getProperty(this, 'mode');
+  int get nlink => js_util.getProperty(this, 'nlink');
+  int get uid => js_util.getProperty(this, 'uid');
+  int get gid => js_util.getProperty(this, 'gid');
+  int get rdev => js_util.getProperty(this, 'rdev');
+  int get blksize => js_util.getProperty(this, 'blksize');
+  int get blocks => js_util.getProperty(this, 'blocks');
 }

@@ -26,6 +26,15 @@ class JavaScriptObject {
   external factory JavaScriptObject();
 }
 
+@JS()
+@staticInterop
+class Date {
+  external factory Date();
+}
+
+extension PropsDate on Date {
+  int valueOf() => js_util.callMethod(this, 'valueOf', []);
+}
 
 extension PropsJavaScriptObject on JavaScriptObject {
   T get<T>(String key) => js_util.getProperty(this, key);

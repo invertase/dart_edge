@@ -80,11 +80,17 @@ class Deno {
   }) =>
       throw UnimplementedError();
 
-  static stat(Uri uri) => throw UnimplementedError();
-  static lstat(Uri uri) => throw UnimplementedError();
+  static Future<FileInfo> stat(Uri uri) async =>
+      fileInfoFromJsObject(await interop.Deno.stat(uri.toString()));
+
+  static Future<FileInfo> lstat(Uri uri) async =>
+      fileInfoFromJsObject(await interop.Deno.lstat(uri.toString()));
+
   static Future<String> realPath(Uri uri) =>
       interop.Deno.realPath(uri.toString());
-  static Future<String> readLink(Uri uri) async => 'todo';
+
+  static Future<String> readLink(Uri uri) =>
+      interop.Deno.readLink(uri.toString());
 }
 
 class TcpConn {}
