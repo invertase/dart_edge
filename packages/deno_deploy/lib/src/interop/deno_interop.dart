@@ -6,7 +6,7 @@ import 'dart:js_util' as js_util;
 import 'package:js_bindings/js_bindings.dart' as interop;
 import 'package:edge_runtime/src/interop/utils_interop.dart';
 import 'package:edge_runtime/src/interop/promise_interop.dart';
-import 'package:edge_runtime/src/interop/async_iterator_interop.dart';
+import 'package:edge_runtime/src/interop/iterator_interop.dart';
 
 @JS()
 @staticInterop

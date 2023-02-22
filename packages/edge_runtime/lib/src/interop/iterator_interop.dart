@@ -7,8 +7,37 @@ class Symbol {
   external factory Symbol();
 }
 
+@JS('Symbol.iterator')
+external Symbol get _iterator;
+
+@anonymous
+@JS()
+@staticInterop
+class Iterator<T> {
+  external factory Iterator();
+}
+
+extension PropsIterator<T> on Iterator<T> {
+  Iterable<T> toIterable<T>() sync* {
+    final iterator = js_util.getProperty(this, _iterator);
+    final callable = js_util.callMethod(iterator, 'call', []);
+
+    while (true) {
+      final result = _next<T>(callable);
+      if (result.done) {
+        break;
+      }
+      yield result.value;
+    }
+  }
+
+  IteratorResult<T> _next<T>(dynamic iteratorInstance) {
+    return js_util.callMethod(iteratorInstance, 'next', []);
+  }
+}
+
 @JS('Symbol.asyncIterator')
-external Symbol get asyncIterator;
+external Symbol get _asyncIterator;
 
 @anonymous
 @JS()
@@ -19,7 +48,7 @@ class AsyncIterator<T> {
 
 extension PropsAsyncIterator<T> on AsyncIterator<T> {
   Stream<T> toStream<T>() async* {
-    final iterator = js_util.getProperty(this, asyncIterator);
+    final iterator = js_util.getProperty(this, _asyncIterator);
     final callable = js_util.callMethod(iterator, 'call', []);
 
     while (true) {
