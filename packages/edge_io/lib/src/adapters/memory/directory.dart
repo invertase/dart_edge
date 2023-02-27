@@ -92,12 +92,48 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
     final map = overrides._entities.toMap();
     final entities = <FileSystemEntity>[];
 
-    if (_parentNode == null) {
-      return entities;
+    FileSystemEntity toEntity(MemoryFsImplementation impl) {
+      if (impl is MemoryFileImplementation) {
+        return MemoryFile._(overrides, path);
+      } else if (impl is MemoryDirectoryImplementation) {
+        return MemoryDirectory._(overrides, path);
+      } else {
+        throw StateError("Unknown entity type");
+      }
     }
 
-    // TODO implement me
+    // TODO: followLinks
+    if (recursive) {
+      for (final entry in map.entries) {
+        if (entry.key.startsWith(path)) {
+          entities.add(toEntity(entry.value!));
+        }
+      }
+    } else {
+      for (final entry in map.entries) {
+        if (entry.key.startsWith(path) &&
+            entry.key.split("/").length == path.split("/").length + 1) {
+          entities.add(toEntity(entry.value!));
+        }
+      }
+    }
 
     return entities;
+  }
+
+  @override
+  String resolveSymbolicLinksSync() {
+    throw UnimplementedError('Directory.resolveSymbolicLinksSync');
+  }
+
+  @override
+  FileStat statSync() {
+    return MemoryFileStat(overrides, path);
+  }
+
+  @override
+  Stream<FileSystemEvent> watch(
+      {int events = FileSystemEvent.all, bool recursive = false}) {
+    throw UnimplementedError('Directory.watch');
   }
 }

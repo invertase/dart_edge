@@ -1,7 +1,9 @@
 part of edge_io.memory;
 
-class MemoryFsEntity implements FileSystemEntity {
+abstract class MemoryFsEntity implements FileSystemEntity {
   final MemoryFsOverrides overrides;
+
+  @override
   final String path;
 
   MemoryFsEntity(this.overrides, this.path);
@@ -23,13 +25,12 @@ class MemoryFsEntity implements FileSystemEntity {
   }
 
   @override
-  // TODO: implement absolute
   FileSystemEntity get absolute => throw UnimplementedError();
 
   @override
-  Future<FileSystemEntity> delete({bool recursive = false}) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<FileSystemEntity> delete({bool recursive = false}) async {
+    deleteSync(recursive: recursive);
+    return this;
   }
 
   @override
@@ -51,52 +52,42 @@ class MemoryFsEntity implements FileSystemEntity {
   bool get isAbsolute => true;
 
   @override
-  Directory get parent => throw UnimplementedError();
+  Directory get parent {
+    if (_parentNode == null) {
+      return Directory('.');
+    }
+
+    return Directory(_segments.sublist(0, _segments.length - 1).join('/'));
+  }
 
   @override
   Future<FileSystemEntity> rename(String newPath) {
-    // TODO: implement rename
-    throw UnimplementedError();
+    return Future.value(renameSync(newPath));
   }
 
   @override
-  FileSystemEntity renameSync(String newPath) {
-    // TODO: implement renameSync
-    throw UnimplementedError();
-  }
+  FileSystemEntity renameSync(String newPath);
 
   @override
   Future<String> resolveSymbolicLinks() {
-    // TODO: implement resolveSymbolicLinks
-    throw UnimplementedError();
+    return Future.value(resolveSymbolicLinksSync());
   }
 
   @override
-  String resolveSymbolicLinksSync() {
-    // TODO: implement resolveSymbolicLinksSync
-    throw UnimplementedError();
-  }
+  String resolveSymbolicLinksSync();
 
   @override
   Future<FileStat> stat() {
-    // TODO: implement stat
-    throw UnimplementedError();
+    return Future.value(statSync());
   }
 
   @override
-  FileStat statSync() {
-    // TODO: implement statSync
-    throw UnimplementedError();
-  }
+  FileStat statSync();
 
   @override
-  // TODO: implement uri
-  Uri get uri => throw UnimplementedError();
+  Uri get uri => Uri.file(path);
 
   @override
   Stream<FileSystemEvent> watch(
-      {int events = FileSystemEvent.all, bool recursive = false}) {
-    // TODO: implement watch
-    throw UnimplementedError();
-  }
+      {int events = FileSystemEvent.all, bool recursive = false});
 }

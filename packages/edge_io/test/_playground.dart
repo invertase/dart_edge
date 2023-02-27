@@ -68,8 +68,18 @@ Future fileRead() async {
 }
 
 Future dirRename() async {
-  final dir1 = tempDir(Directory('foo'));
-  await dir1.create(recursive: true);
-  print(dir1.listSync());
-  print(dir1.path);
+  // final dir1 = tempDir(Directory('foo'));
+  // // final dir2 = Directory(dir1.path + '/bar');
+  // await dir1.create(recursive: true);
+  // await Future.delayed(Duration(seconds: 3));
+  // // await dir2.create(recursive: true);
+  // print(await dir1.stat());
+
+  final f1 = tempFile(File('file1.txt'));
+  print(f1.parent);
+  // final sink = f1.openWrite();
+  // // sink.addError(Exception('foo'));
+  // sink.add([1, 2, 3, 4, 5]);
+  // await sink.flush();
+  // print(await f1.stat());
 }

@@ -3,21 +3,28 @@ library edge_io.memory;
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:edge_io/adapters/memory/impl/directory_impl.dart';
 import 'package:path/path.dart' as p;
+
+import '../../streamed_io_sink.dart';
+import '../../streamed_stdout.dart';
+import 'impl/directory_impl.dart';
 import 'impl/implementation.dart';
 import 'impl/file_impl.dart';
 
 part 'entity.dart';
 part 'directory.dart';
 part 'file.dart';
+part 'file_stat.dart';
 
 class MemoryFsOverrides extends IOOverrides {
   final Entities _entities;
+  final Stdout _stdout;
 
   MemoryFsOverrides({
     String? basePath,
-  }) : _entities = Entities(basePath ?? '/');
+    Stdout? stdout,
+  })  : _entities = Entities(basePath ?? '/'),
+        _stdout = stdout ?? StreamedStdout();
 
   void clear() {
     _entities.clear();
@@ -35,50 +42,51 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   Link createLink(String path) {
-    // TODO: implement createLink
-    throw UnimplementedError();
+    throw UnimplementedError('MemoryFsOverrides.createLink');
   }
 
   @override
   Stream<FileSystemEvent> fsWatch(String path, int events, bool recursive) {
-    // TODO: implement fsWatch
-    throw UnimplementedError();
+    throw UnimplementedError('MemoryFsOverrides.fsWatch');
   }
 
   @override
-  bool fsWatchIsSupported() {
-    // TODO: implement fsWatchIsSupported
-    throw UnimplementedError();
-  }
+  bool fsWatchIsSupported() => false;
 
   @override
   Future<FileSystemEntityType> fseGetType(String path, bool followLinks) {
-    // TODO: implement fseGetType
-    throw UnimplementedError();
+    return Future.value(fseGetTypeSync(path, followLinks));
   }
 
   @override
   FileSystemEntityType fseGetTypeSync(String path, bool followLinks) {
-    // TODO: implement fseGetTypeSync
-    throw UnimplementedError();
+    final entity = _entities.get(path);
+
+    if (entity is MemoryDirectoryImplementation) {
+      return FileSystemEntityType.directory;
+    }
+
+    if (entity is MemoryFileImplementation) {
+      return FileSystemEntityType.file;
+    }
+
+    return FileSystemEntityType.notFound;
   }
 
   @override
   Future<bool> fseIdentical(String path1, String path2) {
-    // TODO: implement fseIdentical
-    throw UnimplementedError();
+    return Future.value(fseIdenticalSync(path1, path2));
   }
 
   @override
   bool fseIdenticalSync(String path1, String path2) {
-    // TODO: implement fseIdenticalSync
-    throw UnimplementedError();
+    // This is probably lazy...
+    return path1 == path2;
   }
 
   @override
   Directory getCurrentDirectory() {
-    // TODO: implement getCurrentDirectory
-    throw UnimplementedError();
+    return MemoryDirectory._(this, _entities.basePath);
   }
 
   @override
@@ -90,49 +98,44 @@ class MemoryFsOverrides extends IOOverrides {
   @override
   Future<ServerSocket> serverSocketBind(address, int port,
       {int backlog = 0, bool v6Only = false, bool shared = false}) {
-    // TODO: implement serverSocketBind
-    throw UnimplementedError();
+    throw UnimplementedError('MemoryFsOverrides.serverSocketBind');
   }
 
   @override
   void setCurrentDirectory(String path) {
-    // TODO: implement setCurrentDirectory
+    throw UnimplementedError('MemoryFsOverrides.setCurrentDirectory');
   }
 
   @override
   Future<Socket> socketConnect(host, int port,
       {sourceAddress, int sourcePort = 0, Duration? timeout}) {
-    // TODO: implement socketConnect
-    throw UnimplementedError();
+    throw UnimplementedError('MemoryFsOverrides.socketConnect');
   }
 
   @override
   Future<ConnectionTask<Socket>> socketStartConnect(host, int port,
       {sourceAddress, int sourcePort = 0}) {
-    // TODO: implement socketStartConnect
-    throw UnimplementedError();
+    throw UnimplementedError('MemoryFsOverrides.socketStartConnect');
   }
 
   @override
   Future<FileStat> stat(String path) {
-    // TODO: implement stat
-    throw UnimplementedError();
+    return Future.value(MemoryFileStat(this, path));
   }
 
   @override
   FileStat statSync(String path) {
-    // TODO: implement statSync
-    throw UnimplementedError();
+    return MemoryFileStat(this, path);
   }
 
   @override
-  Stdout get stderr => throw UnimplementedError();
+  Stdout get stderr => _stdout;
 
   @override
-  Stdin get stdin => throw UnimplementedError();
+  Stdin get stdin => throw UnimplementedError('MemoryFsOverrides.stdin');
 
   @override
-  Stdout get stdout => throw UnimplementedError();
+  Stdout get stdout => _stdout;
 }
 
 class Entities {

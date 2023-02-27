@@ -154,8 +154,7 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   IOSink openWrite({FileMode mode = FileMode.write, Encoding encoding = utf8}) {
-    // TODO: implement openWrite
-    throw UnimplementedError();
+    return StreamedIOSink(this, encoding: encoding);
   }
 
   @override
@@ -261,6 +260,12 @@ class MemoryFile extends MemoryFsEntity implements File {
       case FileMode.writeOnlyAppend:
         file.bytes.addAll(bytes);
         break;
+      case FileMode.read:
+        throw FileSystemException(
+          'Cannot write to file in read mode',
+          path,
+          OSError('Invalid argument', 22),
+        );
     }
 
     overrides._entities.set(path, file);
@@ -281,5 +286,21 @@ class MemoryFile extends MemoryFsEntity implements File {
       Encoding encoding = utf8,
       bool flush = false}) {
     writeAsBytesSync(utf8.encode(contents), mode: mode, flush: flush);
+  }
+
+  @override
+  String resolveSymbolicLinksSync() {
+    throw UnimplementedError('File.resolveSymbolicLinksSync');
+  }
+
+  @override
+  FileStat statSync() {
+    return MemoryFileStat(overrides, path);
+  }
+
+  @override
+  Stream<FileSystemEvent> watch(
+      {int events = FileSystemEvent.all, bool recursive = false}) {
+    throw UnimplementedError('File.watch');
   }
 }

@@ -1,3 +1,3 @@
 library memory;
 
-export 'adapters/memory/memory_adapter.dart';
+export 'src/adapters/memory/memory_adapter.dart';
