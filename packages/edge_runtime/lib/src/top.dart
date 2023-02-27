@@ -1,24 +1,29 @@
+import 'dart:io' show HttpOverrides;
 import 'dart:js' as js;
 import 'dart:js_util';
 
+import 'package:edge_runtime/src/fetch_override.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 import 'abort.dart';
 import 'headers.dart';
 import 'interop/scope_interop.dart' as interop;
 import 'interop/utils_interop.dart' as interop;
 
+import 'fetch_override.dart';
 import 'fetch_event.dart';
 import 'resource.dart';
 import 'response.dart';
 
 void addFetchEventListener(Null Function(FetchEvent event) listener) {
-  interop.addEventListener(
-    'fetch',
-    js.allowInterop((interop.ExtendableEvent delegate) {
-      // This needs casting, because the type of the event is not known at compile time.
-      listener(fetchEventFromJsObject(delegate as interop.FetchEvent));
-    }),
-  );
+  HttpOverrides.runZoned(() {
+    interop.addEventListener(
+      'fetch',
+      js.allowInterop((interop.ExtendableEvent delegate) {
+        // This needs casting, because the type of the event is not known at compile time.
+        listener(fetchEventFromJsObject(delegate as interop.FetchEvent));
+      }),
+    );
+  }, createHttpClient: (c) => FetchHttpOverride().createHttpClient(c));
 }
 
 Future<Response> fetch(

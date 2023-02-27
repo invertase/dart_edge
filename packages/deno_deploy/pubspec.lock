@@ -12,10 +12,9 @@ packages:
   edge_runtime:
     dependency: "direct main"
     description:
-      name: edge_runtime
-      sha256: "2c6f7bc9c10b059509b46abc28dcaa36e57a1cf4677c2c87be8a64873c923901"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../edge_runtime"
+      relative: true
+    source: path
     version: "0.0.3"
   freezed_annotation:
     dependency: transitive

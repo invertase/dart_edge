@@ -79,14 +79,14 @@ packages:
       path: "../../edge"
       relative: true
     source: path
-    version: "0.0.4"
+    version: "0.0.5"
   edge_runtime:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1+3"
+    version: "0.0.3"
   file:
     dependency: transitive
     description:
@@ -120,7 +120,7 @@ packages:
     source: hosted
     version: "3.0.5"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"

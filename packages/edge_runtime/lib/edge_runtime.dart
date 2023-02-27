@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'dart:js';
+
+import 'src/fetch_override.dart';
 
 export 'dart:async' show FutureOr;
 
@@ -37,4 +40,5 @@ export 'package:js_bindings/bindings/fetch.dart'
 /// This should be called before any other platform code is run.
 void setupRuntime() {
   context['window'] ??= context['self'];
+  // HttpOverrides.global = FetchHttpOverride();
 }
