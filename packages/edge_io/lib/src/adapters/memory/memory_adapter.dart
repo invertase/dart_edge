@@ -3,13 +3,16 @@ library edge_io.memory;
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:path/path.dart' as p;
+import 'dart:math' as math show min;
 
 import '../../streamed_io_sink.dart';
 import '../../streamed_stdout.dart';
+import 'file_system.dart';
 import 'impl/directory_impl.dart';
 import 'impl/implementation.dart';
 import 'impl/file_impl.dart';
+import 'random_access_file.dart';
+import 'utils.dart';
 
 part 'entity.dart';
 part 'directory.dart';
@@ -17,27 +20,27 @@ part 'file.dart';
 part 'file_stat.dart';
 
 class MemoryFsOverrides extends IOOverrides {
-  final Entities _entities;
+  final MemoryFileSystem _fs;
   final Stdout _stdout;
 
   MemoryFsOverrides({
     String? basePath,
     Stdout? stdout,
-  })  : _entities = Entities(basePath ?? '/'),
+  })  : _fs = MemoryFileSystem(basePath ?? '/'),
         _stdout = stdout ?? StreamedStdout();
 
   void clear() {
-    _entities.clear();
+    _fs.clear();
   }
 
   @override
   Directory createDirectory(String path) {
-    return MemoryDirectory._(this, path);
+    return MemoryDirectory._(_fs, path);
   }
 
   @override
   File createFile(String path) {
-    return MemoryFile._(this, path);
+    return MemoryFile._(_fs, path);
   }
 
   @override
@@ -60,7 +63,7 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   FileSystemEntityType fseGetTypeSync(String path, bool followLinks) {
-    final entity = _entities.get(path);
+    final entity = _fs.get(path);
 
     if (entity is MemoryDirectoryImplementation) {
       return FileSystemEntityType.directory;
@@ -86,7 +89,7 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   Directory getCurrentDirectory() {
-    return MemoryDirectory._(this, _entities.basePath);
+    return MemoryDirectory._(_fs, _fs.basePath);
   }
 
   @override
@@ -120,12 +123,12 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   Future<FileStat> stat(String path) {
-    return Future.value(MemoryFileStat(this, path));
+    return Future.value(statSync(path));
   }
 
   @override
   FileStat statSync(String path) {
-    return MemoryFileStat(this, path);
+    return MemoryFileStat(_fs, path);
   }
 
   @override
@@ -136,47 +139,4 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   Stdout get stdout => _stdout;
-}
-
-class Entities {
-  final String basePath;
-
-  Entities(this.basePath);
-
-  final Map<String, MemoryFsImplementation?> _entities = {};
-
-  void clear() {
-    _entities.clear();
-  }
-
-  String join(String path) {
-    return p.join(basePath, path);
-  }
-
-  void remove(String path) {
-    _entities.remove(join(path));
-  }
-
-  void set(String path, MemoryFsImplementation impl) {
-    _entities[join(path)] = impl;
-  }
-
-  T? get<T extends MemoryFsImplementation>(String path) {
-    final impl = _entities[join(path)];
-
-    if (impl == null) {
-      return null;
-    }
-
-    if (impl is! T) {
-      throw FileSystemException(
-          'Entity at path is not a ${T.runtimeType}', path);
-    }
-
-    return impl;
-  }
-
-  Map<String, MemoryFsImplementation?> toMap() {
-    return _entities;
-  }
 }

@@ -1,12 +1,11 @@
 part of edge_io.memory;
 
 class MemoryFileStat implements FileStat {
-  final MemoryFsOverrides _overrides;
+  final MemoryFileSystem _fs;
   final String _path;
   final MemoryFsImplementation? _impl;
 
-  MemoryFileStat(this._overrides, this._path)
-      : _impl = _overrides._entities.get(_path);
+  MemoryFileStat(this._fs, this._path) : _impl = _fs.get(_path);
 
   DateTime get defaultDateTime => DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -62,7 +61,7 @@ class MemoryFileStat implements FileStat {
   }
 
   @override
-  int get mode => 777;
+  int get mode => 777; // TODO: Do we care about this?
 
   @override
   String modeString() {

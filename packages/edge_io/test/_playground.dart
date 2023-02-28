@@ -68,15 +68,53 @@ Future fileRead() async {
 }
 
 Future dirRename() async {
+  final d1 = tempDir(Directory('foo'));
+  await d1.create(recursive: true);
+
+  final f1 = File(p.join(d1.path, 'baz.txt'));
+  f1.writeAsString('foo');
+
+  await d1.rename('bar');
+  print(f1.existsSync());
+
+  // await d1.create(recursive: true);
+  // await d1.create(recursive: true);
+
   // final dir1 = tempDir(Directory('foo'));
+  // await dir1.create(recursive: true);
+  // // await dir1.create(recursive: true);
+  // final f1 = File(p.join(dir1.path, 'baz'));
+  // f1.createSync(recursive: true);
+  // f1.renameSync(p.join(dir1.path, 'bar', 'baz'));
+
+  // var f2 = File(p.join(dir1.path, 'bar.txt', 'baz.txt'));
+  // f1.renameSync(p.join(dir1.path, 'bar.txt', 'baz.txt'));
+
+  // f1.writeAsStringSync('f1');
+  // // f1.createSync(recursive: true);
+
+  // var f2 = File(p.join(dir1.path, 'file2.txt'));
+  // f2.writeAsStringSync('fffff');
+
+  // // f1.openWrite();
+  // f1.copySync(f2.path);
+  // print(f1.readAsStringSync());
+  // print(f2.readAsStringSync());
+  // f1.createSync(recursive: true);
+  // print(f1.path);
+  // f1 = f1.renameSync('bar/bax');
+  // print(f1.path);
+
+  // print(f1.readAsStringSync());
+
   // // final dir2 = Directory(dir1.path + '/bar');
   // await dir1.create(recursive: true);
   // await Future.delayed(Duration(seconds: 3));
   // // await dir2.create(recursive: true);
   // print(await dir1.stat());
 
-  final f1 = tempFile(File('file1.txt'));
-  print(f1.parent);
+  // final f1 = tempFile(File('file1.txt'));
+  // print(f1.parent);
   // final sink = f1.openWrite();
   // // sink.addError(Exception('foo'));
   // sink.add([1, 2, 3, 4, 5]);

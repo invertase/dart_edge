@@ -1,7 +1,12 @@
 part of edge_io.memory;
 
 class MemoryDirectory extends MemoryFsEntity implements Directory {
-  MemoryDirectory._(super.overrides, super.path);
+  MemoryDirectory._(super._fs, super.path);
+
+  @override
+  bool existsSync() {
+    return _fs.get<MemoryDirectoryImplementation>(path) != null;
+  }
 
   @override
   Future<Directory> rename(String newPath) {
@@ -10,21 +15,15 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
 
   @override
   Directory renameSync(String newPath) {
-    final existing =
-        overrides._entities.get<MemoryDirectoryImplementation>(path);
+    final dir = assertDirectoryIsEmpty(_fs, path, 'Rename failed');
 
-    if (existing == null) {
-      throw PathNotFoundException(
-        path,
-        OSError("No such file or directory", 2),
-        "Rename failed",
-      );
-    }
+    final newDir = MemoryDirectory._(_fs, newPath);
+    newDir.createSync();
 
-    overrides._entities.remove(path); // Remove the old directory.
-    overrides._entities.set(newPath, existing);
+    _fs.remove(path); // Remove the old directory.
+    _fs.set(newPath, dir);
 
-    return MemoryDirectory._(overrides, newPath);
+    return MemoryDirectory._(_fs, newPath);
   }
 
   @override
@@ -48,14 +47,13 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
       );
     }
 
-    final existing =
-        overrides._entities.get<MemoryDirectoryImplementation>(path);
+    final existing = _fs.get<MemoryDirectoryImplementation>(path);
 
     if (existing != null) {
       return;
     }
 
-    overrides._entities.set(path, MemoryDirectoryImplementation());
+    _fs.set(path, MemoryDirectoryImplementation());
   }
 
   @override
@@ -78,8 +76,7 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
   @override
   List<FileSystemEntity> listSync(
       {bool recursive = false, bool followLinks = true}) {
-    final existing =
-        overrides._entities.get<MemoryDirectoryImplementation>(path);
+    final existing = _fs.get<MemoryDirectoryImplementation>(path);
 
     if (existing == null) {
       throw PathNotFoundException(
@@ -89,14 +86,14 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
       );
     }
 
-    final map = overrides._entities.toMap();
+    final map = _fs.toMap();
     final entities = <FileSystemEntity>[];
 
     FileSystemEntity toEntity(MemoryFsImplementation impl) {
       if (impl is MemoryFileImplementation) {
-        return MemoryFile._(overrides, path);
+        return MemoryFile._(_fs, path);
       } else if (impl is MemoryDirectoryImplementation) {
-        return MemoryDirectory._(overrides, path);
+        return MemoryDirectory._(_fs, path);
       } else {
         throw StateError("Unknown entity type");
       }
@@ -128,7 +125,7 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
 
   @override
   FileStat statSync() {
-    return MemoryFileStat(overrides, path);
+    return MemoryFileStat(_fs, path);
   }
 
   @override

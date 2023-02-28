@@ -1,12 +1,12 @@
 part of edge_io.memory;
 
 abstract class MemoryFsEntity implements FileSystemEntity {
-  final MemoryFsOverrides overrides;
+  final MemoryFileSystem _fs;
 
   @override
   final String path;
 
-  MemoryFsEntity(this.overrides, this.path);
+  MemoryFsEntity(this._fs, this.path);
 
   /// Cached list of segments in the path.
   List<String>? _cachedSegments;
@@ -14,14 +14,14 @@ abstract class MemoryFsEntity implements FileSystemEntity {
   /// Returns the segments in the path.
   List<String> get _segments => _cachedSegments ??= path.split('/');
 
-  /// Returns the parent node of the file.
+  /// Returns the parent node of the entity.
   MemoryFsImplementation? get _parentNode {
     if (_segments.length == 1) {
       return null;
     }
 
     final parentPath = _segments.sublist(0, _segments.length - 1).join('/');
-    return overrides._entities.get<MemoryFsImplementation>(parentPath);
+    return _fs.get<MemoryFsImplementation>(parentPath);
   }
 
   @override
@@ -35,7 +35,7 @@ abstract class MemoryFsEntity implements FileSystemEntity {
 
   @override
   void deleteSync({bool recursive = false}) {
-    overrides._entities.remove(path);
+    _fs.remove(path);
   }
 
   @override
@@ -44,9 +44,7 @@ abstract class MemoryFsEntity implements FileSystemEntity {
   }
 
   @override
-  bool existsSync() {
-    return overrides._entities.get(path) != null;
-  }
+  bool existsSync();
 
   @override
   bool get isAbsolute => true;
