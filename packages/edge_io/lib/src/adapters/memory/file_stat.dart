@@ -1,18 +1,22 @@
 part of edge_io.memory;
 
+/// An in-memory implementation of [FileStat].
 class MemoryFileStat implements FileStat {
   final MemoryFileSystem _fs;
   final String _path;
   final MemoryFsImplementation? _impl;
 
-  MemoryFileStat(this._fs, this._path) : _impl = _fs.get(_path);
+  /// Creates a new [MemoryFileStat] instance.
+  MemoryFileStat(this._fs, String path)
+      : _path = _fs.resolve(path),
+        _impl = _fs.get(path);
 
-  DateTime get defaultDateTime => DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime get _defaultDateTime => DateTime.fromMillisecondsSinceEpoch(0);
 
   @override
   DateTime get accessed {
     if (_impl == null) {
-      return defaultDateTime;
+      return _defaultDateTime;
     }
 
     if (_impl is MemoryFileImplementation) {
@@ -29,7 +33,7 @@ class MemoryFileStat implements FileStat {
   @override
   DateTime get modified {
     if (_impl == null) {
-      return defaultDateTime;
+      return _defaultDateTime;
     }
 
     if (_impl is MemoryFileImplementation) {
@@ -37,6 +41,7 @@ class MemoryFileStat implements FileStat {
     }
 
     if (_impl is MemoryDirectoryImplementation) {
+      // TODO(ehesp): This probably isn't correct.
       return DateTime.now();
     }
 
@@ -46,7 +51,7 @@ class MemoryFileStat implements FileStat {
   @override
   DateTime get changed {
     if (_impl == null) {
-      return defaultDateTime;
+      return _defaultDateTime;
     }
 
     if (_impl is MemoryFileImplementation) {
@@ -54,6 +59,7 @@ class MemoryFileStat implements FileStat {
     }
 
     if (_impl is MemoryDirectoryImplementation) {
+      // TODO(ehesp): This probably isn't correct.
       return DateTime.now();
     }
 
@@ -92,6 +98,20 @@ class MemoryFileStat implements FileStat {
       return (_impl as MemoryFileImplementation).bytes.length;
     }
 
+    if (_impl is MemoryDirectoryImplementation) {
+      int size = 0;
+
+      for (final entry in _fs.toMap().entries) {
+        if (entry.key.startsWith(_path) && entry.key != _path) {
+          if (entry.value is MemoryFileImplementation) {
+            size += (entry.value as MemoryFileImplementation).bytes.length;
+          }
+        }
+      }
+
+      return size;
+    }
+
     throw UnimplementedError(
         'TODO: implement size for MemoryDirectoryImplementation');
   }
@@ -106,6 +126,7 @@ class MemoryFileStat implements FileStat {
       return FileSystemEntityType.file;
     }
 
+    // TODO(ehesp): Handle links
     // if (_impl is MemoryLink) {
     //   return FileSystemEntityType.link;
     // }

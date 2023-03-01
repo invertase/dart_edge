@@ -1,6 +1,8 @@
 part of edge_io.memory;
 
+/// An in-memory implementation of [Directory].
 class MemoryDirectory extends MemoryFsEntity implements Directory {
+  /// Creates a new [MemoryDirectory] instance.
   MemoryDirectory._(super._fs, super.path);
 
   @override
@@ -27,7 +29,7 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
   }
 
   @override
-  Directory get absolute => throw UnimplementedError();
+  Directory get absolute => MemoryDirectory._(_fs, _fs.resolve(path));
 
   @override
   Future<Directory> create({bool recursive = false}) async {
@@ -37,23 +39,13 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
 
   @override
   void createSync({bool recursive = false}) {
-    // If recursive is false, we should check whether this directory has a parent,
-    // and if not, throw an error.
-    if (!recursive && _segments.length > 1 && _parentNode == null) {
-      throw PathNotFoundException(
-        path,
-        OSError("No such file or directory", 2),
-        "Creation failed",
-      );
+    if (!recursive) assertParentDirectory(_fs, path);
+
+    if (recursive) {
+      _fs.setRecursively(path, MemoryDirectoryImplementation());
+    } else {
+      _fs.set(path, MemoryDirectoryImplementation());
     }
-
-    final existing = _fs.get<MemoryDirectoryImplementation>(path);
-
-    if (existing != null) {
-      return;
-    }
-
-    _fs.set(path, MemoryDirectoryImplementation());
   }
 
   @override
@@ -76,15 +68,7 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
   @override
   List<FileSystemEntity> listSync(
       {bool recursive = false, bool followLinks = true}) {
-    final existing = _fs.get<MemoryDirectoryImplementation>(path);
-
-    if (existing == null) {
-      throw PathNotFoundException(
-        path,
-        OSError("No such file or directory", 2),
-        "Directory listing failed",
-      );
-    }
+    assertDirectoryIsEmpty(_fs, path, 'Directory listing failed');
 
     final map = _fs.toMap();
     final entities = <FileSystemEntity>[];
@@ -99,17 +83,18 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
       }
     }
 
-    // TODO: followLinks
+    // TODO(ehesp): Implement followLinks
     if (recursive) {
       for (final entry in map.entries) {
-        if (entry.key.startsWith(path)) {
+        if (entry.key.startsWith(absolute.path) && entry.key != absolute.path) {
           entities.add(toEntity(entry.value!));
         }
       }
     } else {
       for (final entry in map.entries) {
-        if (entry.key.startsWith(path) &&
-            entry.key.split("/").length == path.split("/").length + 1) {
+        if (entry.key.startsWith(absolute.path) &&
+            entry.key.split("/").length ==
+                absolute.path.split("/").length + 1) {
           entities.add(toEntity(entry.value!));
         }
       }

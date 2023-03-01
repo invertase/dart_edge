@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:math' as math show min;
+import 'package:path/path.dart' as p;
 
 import '../../streamed_io_sink.dart';
 import '../../streamed_stdout.dart';
@@ -11,16 +12,30 @@ import 'file_system.dart';
 import 'impl/directory_impl.dart';
 import 'impl/implementation.dart';
 import 'impl/file_impl.dart';
-import 'random_access_file.dart';
 import 'utils.dart';
 
 part 'entity.dart';
 part 'directory.dart';
 part 'file.dart';
 part 'file_stat.dart';
+part 'random_access_file.dart';
 
+/// An in-memory [Map] based file system.
+///
+/// This can be used to override the IO file system:
+///
+/// ```dart
+/// import 'package:edge_io/memory.dart';
+///
+/// voud main() {
+///   IOOverrides.global = MemoryFsOverrides();
+/// }
+/// ```
 class MemoryFsOverrides extends IOOverrides {
+  /// The in-memory file system.
   final MemoryFileSystem _fs;
+
+  /// The [Stdout] to use.
   final Stdout _stdout;
 
   MemoryFsOverrides({
@@ -29,6 +44,7 @@ class MemoryFsOverrides extends IOOverrides {
   })  : _fs = MemoryFileSystem(basePath ?? '/'),
         _stdout = stdout ?? StreamedStdout();
 
+  /// Clears the file system, and resets any base path nodes.
   void clear() {
     _fs.clear();
   }
@@ -83,7 +99,7 @@ class MemoryFsOverrides extends IOOverrides {
 
   @override
   bool fseIdenticalSync(String path1, String path2) {
-    // This is probably lazy...
+    // TODO(ehesp): This is probably lazy...
     return path1 == path2;
   }
 

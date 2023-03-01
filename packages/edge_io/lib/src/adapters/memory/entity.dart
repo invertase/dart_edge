@@ -1,5 +1,6 @@
 part of edge_io.memory;
 
+/// An in-memory implementation of [FileSystemEntity].
 abstract class MemoryFsEntity implements FileSystemEntity {
   final MemoryFileSystem _fs;
 
@@ -8,24 +9,8 @@ abstract class MemoryFsEntity implements FileSystemEntity {
 
   MemoryFsEntity(this._fs, this.path);
 
-  /// Cached list of segments in the path.
-  List<String>? _cachedSegments;
-
-  /// Returns the segments in the path.
-  List<String> get _segments => _cachedSegments ??= path.split('/');
-
-  /// Returns the parent node of the entity.
-  MemoryFsImplementation? get _parentNode {
-    if (_segments.length == 1) {
-      return null;
-    }
-
-    final parentPath = _segments.sublist(0, _segments.length - 1).join('/');
-    return _fs.get<MemoryFsImplementation>(parentPath);
-  }
-
   @override
-  FileSystemEntity get absolute => throw UnimplementedError();
+  FileSystemEntity get absolute;
 
   @override
   Future<FileSystemEntity> delete({bool recursive = false}) async {
@@ -51,11 +36,7 @@ abstract class MemoryFsEntity implements FileSystemEntity {
 
   @override
   Directory get parent {
-    if (_parentNode == null) {
-      return Directory('.');
-    }
-
-    return Directory(_segments.sublist(0, _segments.length - 1).join('/'));
+    return Directory(p.dirname(path));
   }
 
   @override

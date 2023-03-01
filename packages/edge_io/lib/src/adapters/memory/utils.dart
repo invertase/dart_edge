@@ -93,6 +93,7 @@ MemoryDirectoryImplementation assertDirectoryIsEmpty(
   return dir;
 }
 
+/// Asserts that the given path has a parent, which is a directory.
 MemoryDirectoryImplementation assertParentDirectory(
     MemoryFileSystem fs, String path,
     [String message = ""]) {

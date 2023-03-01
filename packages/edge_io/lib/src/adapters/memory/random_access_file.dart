@@ -1,19 +1,18 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:edge_io/src/adapters/memory/file_system.dart';
+part of edge_io.memory;
 
 class MemoryRandomAccessFile implements RandomAccessFile {
   final MemoryFileSystem _fs;
   final String _path;
   final FileMode _mode;
 
+  final MemoryFileImplementation _file;
+
   MemoryRandomAccessFile(
     this._fs,
     this._path, {
     required FileMode mode,
-  }) : _mode = mode;
+  })  : _mode = mode,
+        _file = _fs.get<MemoryFileImplementation>(_path)!;
 
   bool _isOpen = true;
   int _position = 0;
@@ -24,7 +23,10 @@ class MemoryRandomAccessFile implements RandomAccessFile {
   }
 
   @override
-  void closeSync() {}
+  void closeSync() {
+    _assertIsOpen();
+    _isOpen = false;
+  }
 
   @override
   Future<RandomAccessFile> flush() async {
@@ -34,7 +36,7 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   void flushSync() {
-    throw UnimplementedError();
+    _assertIsOpen();
   }
 
   @override
@@ -44,8 +46,8 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   int lengthSync() {
-    // TODO: implement lengthSync
-    throw UnimplementedError();
+    _assertIsOpen();
+    return _file.bytes.length;
   }
 
   @override
@@ -58,12 +60,11 @@ class MemoryRandomAccessFile implements RandomAccessFile {
   @override
   void lockSync(
       [FileLock mode = FileLock.exclusive, int start = 0, int end = -1]) {
-    // TODO: implement lockSync
-    throw UnimplementedError();
+    throw UnimplementedError('RandomAccessFile.lockSync');
   }
 
   @override
-  String get path => throw UnimplementedError();
+  String get path => _fs.resolve(_path);
 
   @override
   Future<int> position() {
@@ -72,7 +73,8 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   int positionSync() {
-    throw UnimplementedError();
+    _assertIsOpen();
+    return _position;
   }
 
   @override
@@ -82,7 +84,12 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   Uint8List readSync(int count) {
-    throw UnimplementedError();
+    _assertIsOpen();
+    _assertIsReadable('readSync');
+    final int end = math.min(_position + count, lengthSync());
+    final copy = _file.bytes.sublist(_position, end);
+    _position = end;
+    return Uint8List.fromList(copy);
   }
 
   @override
@@ -92,7 +99,14 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   int readByteSync() {
-    throw UnimplementedError();
+    _assertIsOpen();
+    _assertIsReadable('readByteSync');
+
+    if (_position >= lengthSync()) {
+      throw FileSystemException('Cannot readByte at end of file', path);
+    }
+
+    return _file.bytes[_position++];
   }
 
   @override
@@ -102,7 +116,17 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   int readIntoSync(List<int> buffer, [int start = 0, int? end]) {
-    throw UnimplementedError();
+    _assertIsOpen();
+    _assertIsReadable('readIntoSync');
+
+    end = RangeError.checkValidRange(start, end, buffer.length);
+
+    final int length = lengthSync();
+    int i;
+    for (i = start; i < end && _position < length; i += 1, _position += 1) {
+      buffer[i] = _file.bytes[_position];
+    }
+    return i - start;
   }
 
   @override
@@ -113,7 +137,13 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   void setPositionSync(int position) {
-    throw UnimplementedError();
+    _assertIsOpen();
+
+    if (position < 0) {
+      throw ArgumentError.value(position, 'position', 'must be non-negative');
+    }
+
+    _position = position;
   }
 
   @override
@@ -124,7 +154,14 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   void truncateSync(int length) {
-    throw UnimplementedError();
+    _assertIsOpen();
+    _assertIsWriteable('truncateSync');
+
+    if (length < 0) {
+      throw ArgumentError.value(length, 'length', 'must be non-negative');
+    }
+
+    throw UnimplementedError('RandomAccessFile.truncateSync');
   }
 
   @override
@@ -135,7 +172,7 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   void unlockSync([int start = 0, int end = -1]) {
-    throw UnimplementedError();
+    throw UnimplementedError('RandomAccessFile.unlockSync');
   }
 
   @override
@@ -146,7 +183,9 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   int writeByteSync(int value) {
-    throw UnimplementedError();
+    _assertIsOpen();
+    _assertIsWriteable('writeByteSync');
+    throw UnimplementedError('RandomAccessFile.writeByteSync');
   }
 
   @override
@@ -158,6 +197,8 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   void writeFromSync(List<int> buffer, [int start = 0, int? end]) {
+    _assertIsOpen();
+    _assertIsWriteable('writeFromSync');
     throw UnimplementedError();
   }
 
@@ -170,7 +211,7 @@ class MemoryRandomAccessFile implements RandomAccessFile {
 
   @override
   void writeStringSync(String string, {Encoding encoding = utf8}) {
-    throw UnimplementedError();
+    writeFromSync(encoding.encode(string));
   }
 
   void _assertIsOpen() {

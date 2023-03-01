@@ -23,9 +23,8 @@ class MemoryFile extends MemoryFsEntity implements File {
     return newFile;
   }
 
-  // TODO should this use Directory.current, which uses basePath?
   @override
-  File get absolute => this;
+  File get absolute => MemoryFile._(_fs, _fs.resolve(path));
 
   @override
   bool existsSync() {
@@ -109,12 +108,10 @@ class MemoryFile extends MemoryFsEntity implements File {
     Uint8List bytes = readAsBytesSync();
 
     if (start != null) {
-      bytes = end == null
-          ? bytes.sublist(start)
-          : bytes.sublist(start, math.min(end, bytes.length));
+      bytes = bytes.sublist(start, end);
     }
 
-    return Stream.value(bytes.sublist(start ?? 0, end));
+    return Stream.value(bytes);
   }
 
   @override
