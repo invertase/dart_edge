@@ -6,13 +6,11 @@ import 'dart:typed_data';
 import 'dart:math' as math show min;
 import 'package:path/path.dart' as p;
 
+import '../../file_systems/map_based/map_based_file_system.dart';
 import '../../streamed_io_sink.dart';
 import '../../streamed_stdout.dart';
-import 'file_system.dart';
-import 'impl/directory_impl.dart';
-import 'impl/implementation.dart';
+
 import 'impl/file_impl.dart';
-import 'utils.dart';
 
 part 'entity.dart';
 part 'directory.dart';
@@ -33,15 +31,15 @@ part 'random_access_file.dart';
 /// ```
 class MemoryFsOverrides extends IOOverrides {
   /// The in-memory file system.
-  final MemoryFileSystem _fs;
+  final MapBasedFileSystem _fs;
 
   /// The [Stdout] to use.
   final Stdout _stdout;
 
   MemoryFsOverrides({
-    String? basePath,
+    String? mountTo,
     Stdout? stdout,
-  })  : _fs = MemoryFileSystem(basePath ?? '/'),
+  })  : _fs = MapBasedFileSystem(p.join('/', mountTo)),
         _stdout = stdout ?? StreamedStdout();
 
   /// Clears the file system, and resets any base path nodes.
@@ -81,7 +79,7 @@ class MemoryFsOverrides extends IOOverrides {
   FileSystemEntityType fseGetTypeSync(String path, bool followLinks) {
     final entity = _fs.get(path);
 
-    if (entity is MemoryDirectoryImplementation) {
+    if (entity is MapBasedFsDirectoryImplementation) {
       return FileSystemEntityType.directory;
     }
 

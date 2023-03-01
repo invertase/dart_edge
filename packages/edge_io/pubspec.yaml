@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   path: ^1.8.3
+  archive: ^3.3.6
 
 dev_dependencies:
   lints: ^2.0.0

@@ -73,7 +73,9 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   DateTime lastAccessedSync() {
-    return assertIsFile(_fs, path, 'Cannot retrieve access time').lastAccessed;
+    return assertIsFile<MemoryFileImplementation>(
+            _fs, path, 'Cannot retrieve access time')
+        .lastAccessed;
   }
 
   @override
@@ -83,7 +85,8 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   DateTime lastModifiedSync() {
-    return assertIsFile(_fs, path, 'Cannot retrieve modification time')
+    return assertIsFile<MemoryFileImplementation>(
+            _fs, path, 'Cannot retrieve modification time')
         .lastModified;
   }
 
@@ -133,7 +136,12 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   Uint8List readAsBytesSync() {
-    final file = assertIsFile(_fs, path, 'Cannot open file');
+    final file = assertIsFile<MemoryFileImplementation>(
+      _fs,
+      path,
+      'Cannot open file',
+    );
+
     return Uint8List.fromList(file.bytes);
   }
 
@@ -165,7 +173,12 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   void setLastAccessedSync(DateTime time) {
-    final file = assertIsFile(_fs, path, 'Cannot set access time');
+    final file = assertIsFile<MemoryFileImplementation>(
+      _fs,
+      path,
+      'Cannot set access time',
+    );
+
     file.lastAccessed = time;
   }
 
@@ -176,8 +189,12 @@ class MemoryFile extends MemoryFsEntity implements File {
 
   @override
   void setLastModifiedSync(DateTime time) {
-    final file =
-        assertIsFile(_fs, path, 'Failed to set file modification time');
+    final file = assertIsFile<MemoryFileImplementation>(
+      _fs,
+      path,
+      'Failed to set file modification time',
+    );
+
     file.lastModified = time;
   }
 

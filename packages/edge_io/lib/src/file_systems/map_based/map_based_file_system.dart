@@ -1,34 +1,33 @@
-import 'package:path/path.dart' as p;
-import 'impl/directory_impl.dart';
-import 'impl/implementation.dart';
-import 'utils.dart';
+library edge_io.fs.map_based;
 
-/// An im-memory [Map] based file system.
-class MemoryFileSystem {
+import 'dart:io';
+
+import 'package:path/path.dart' as p;
+
+part 'utils.dart';
+
+class MapBasedFileSystem {
+  /// The root node of the file system.
+  final Map<String, MapBasedFsImplementation?> _nodes = {};
+
   /// The base path of the file system.
   final String basePath;
 
-  /// Creates a new [MemoryFileSystem] instance.
-  MemoryFileSystem(this.basePath) {
+  /// Creates a new [MapBasedFileSystem] instance.
+  MapBasedFileSystem(String basePath) : basePath = p.join('/', basePath) {
     _init();
   }
 
-  /// Initializes the file system.
-  _init() {
-    // Setup the structure of the file system, using the base path as the root.
-    setRecursively(basePath, MemoryDirectoryImplementation());
+  void _init() {
+    setRecursively(basePath, MapBasedFsDirectoryImplementation());
   }
 
-  /// A [Map] of all nodes in the file system.
-  final Map<String, MemoryFsImplementation?> _nodes = {};
-
-  /// Clears the file system, and resets any base path nodes.
+  /// Clears the file system.
   void clear() {
     _nodes.clear();
     _init();
   }
 
-  /// Resolves and normalizes a path to the provided base path.
   String resolve(String path) {
     // TODO(ehesp): Should we be normalizing the path here?
     return p.normalize(p.join(basePath, path));
@@ -36,16 +35,17 @@ class MemoryFileSystem {
 
   /// Removes a node from the file system.
   void remove(String path) {
+    // You can't delete non-empty directories, so this should be fine.
     _nodes.remove(resolve(path));
   }
 
   /// Sets a node in the file system.
-  void set(String path, MemoryFsImplementation impl) {
+  void set(String path, MapBasedFsImplementation impl) {
     _nodes[resolve(path)] = impl;
   }
 
-  ///  Sets a node in the file system, and creates any parent directories.
-  void setRecursively(String path, MemoryFsImplementation impl) {
+  /// Sets a node in the file system, and creates any parent directories.
+  void setRecursively(String path, MapBasedFsImplementation impl) {
     final chunks = p.split(path);
 
     for (var i = 0; i < chunks.length; i++) {
@@ -56,9 +56,9 @@ class MemoryFileSystem {
       } else {
         if (get(currentPath) != null) {
           assertIsDirectory(this, currentPath);
+        } else {
+          set(currentPath, MapBasedFsDirectoryImplementation());
         }
-
-        set(currentPath, MemoryDirectoryImplementation());
       }
     }
 
@@ -68,7 +68,7 @@ class MemoryFileSystem {
   /// Gets a node from the file system, or null if it doesn't exist.
   ///
   /// This also accepts an optional type to check the node is of the correct type.
-  T? get<T extends MemoryFsImplementation>(String path) {
+  T? get<T extends MapBasedFsImplementation>(String path) {
     final impl = _nodes[resolve(path)];
 
     if (impl is! T) {
@@ -79,7 +79,15 @@ class MemoryFileSystem {
   }
 
   /// Returns the raw [Map] of nodes.
-  Map<String, MemoryFsImplementation?> toMap() {
+  Map<String, MapBasedFsImplementation?> toMap() {
     return _nodes;
   }
 }
+
+abstract class MapBasedFsImplementation {}
+
+/// A stub-directory implementation.
+class MapBasedFsDirectoryImplementation extends MapBasedFsImplementation {}
+
+/// A stub-directory implementation.
+class MapBasedFsFileImplementation extends MapBasedFsImplementation {}

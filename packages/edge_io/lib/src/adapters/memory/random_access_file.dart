@@ -1,7 +1,7 @@
 part of edge_io.memory;
 
 class MemoryRandomAccessFile implements RandomAccessFile {
-  final MemoryFileSystem _fs;
+  final MapBasedFileSystem _fs;
   final String _path;
   final FileMode _mode;
 

@@ -1,14 +1,8 @@
-import 'dart:io';
-
-import 'package:path/path.dart' as p;
-import 'file_system.dart';
-import 'impl/directory_impl.dart';
-import 'impl/file_impl.dart';
-import 'impl/implementation.dart';
+part of edge_io.fs.map_based;
 
 /// Ensures that the node exists.
-T assertExists<T extends MemoryFsImplementation>(
-    MemoryFileSystem fs, String path,
+T assertExists<T extends MapBasedFsImplementation>(
+    MapBasedFileSystem fs, String path,
     [String message = ""]) {
   final current = fs.get<T>(path);
 
@@ -24,8 +18,8 @@ T assertExists<T extends MemoryFsImplementation>(
 }
 
 /// Ensures that the node exists.
-void assertFileDoesNotExist<T extends MemoryFsImplementation>(
-    MemoryFileSystem fs, String path,
+void assertFileDoesNotExist<T extends MapBasedFsImplementation>(
+    MapBasedFileSystem fs, String path,
     [String message = ""]) {
   final current = fs.get<T>(path);
 
@@ -40,11 +34,12 @@ void assertFileDoesNotExist<T extends MemoryFsImplementation>(
 
 /// Ensures that the file exists and is a file, throwing a [FileSystemException]
 /// if it is not.
-MemoryFileImplementation assertIsFile(MemoryFileSystem fs, String path,
+T assertIsFile<T extends MapBasedFsFileImplementation>(
+    MapBasedFileSystem fs, String path,
     [String message = ""]) {
   final impl = assertExists(fs, path, message);
 
-  if (impl is! MemoryFileImplementation) {
+  if (impl is! T) {
     throw FileSystemException(
       message,
       path,
@@ -57,12 +52,12 @@ MemoryFileImplementation assertIsFile(MemoryFileSystem fs, String path,
 
 /// Ensures that the directory exists and is a file, throwing a [FileSystemException]
 /// if it is not.
-MemoryDirectoryImplementation assertIsDirectory(
-    MemoryFileSystem fs, String path,
+T assertIsDirectory<T extends MapBasedFsDirectoryImplementation>(
+    MapBasedFileSystem fs, String path,
     [String message = ""]) {
   final impl = assertExists(fs, path, message);
 
-  if (impl is! MemoryDirectoryImplementation) {
+  if (impl is! T) {
     throw FileSystemException(
       message,
       path,
@@ -75,8 +70,8 @@ MemoryDirectoryImplementation assertIsDirectory(
 
 /// Ensures that the directory exists and is a file, throwing a [FileSystemException]
 /// if it is not.
-MemoryDirectoryImplementation assertDirectoryIsEmpty(
-    MemoryFileSystem fs, String path,
+MapBasedFsDirectoryImplementation assertDirectoryIsEmpty(
+    MapBasedFileSystem fs, String path,
     [String message = ""]) {
   final dir = assertIsDirectory(fs, path, message);
 
@@ -94,10 +89,10 @@ MemoryDirectoryImplementation assertDirectoryIsEmpty(
 }
 
 /// Asserts that the given path has a parent, which is a directory.
-MemoryDirectoryImplementation assertParentDirectory(
-    MemoryFileSystem fs, String path,
+MapBasedFsDirectoryImplementation assertParentDirectory(
+    MapBasedFileSystem fs, String path,
     [String message = ""]) {
-  final parent = fs.get<MemoryDirectoryImplementation>(p.dirname(path));
+  final parent = fs.get<MapBasedFsDirectoryImplementation>(p.dirname(path));
 
   if (parent == null) {
     throw FileSystemException(

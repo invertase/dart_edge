@@ -1,6 +1,6 @@
-import 'implementation.dart';
+import 'package:edge_io/src/file_systems/map_based/map_based_file_system.dart';
 
-class MemoryFileImplementation extends MemoryFsImplementation {
+class MemoryFileImplementation extends MapBasedFsFileImplementation {
   List<int> bytes = [];
   DateTime lastAccessed = DateTime.now();
   DateTime lastModified = DateTime.now();

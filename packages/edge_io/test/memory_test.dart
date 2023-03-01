@@ -8,11 +8,11 @@ void main() {
     IOOverrides.global = MemoryFsOverrides();
   });
 
-  group('Overrides', () {
+  group('Memory', () {
     group('MemoryFsOverrides', () {
       test('it resolves files and directories to the base bath', () {
         IOOverrides.global = MemoryFsOverrides(
-          basePath: '/foo/bar',
+          mountTo: '/foo/bar',
         );
 
         final file1 = File('file.txt');

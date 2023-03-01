@@ -1,17 +1,8 @@
-part of edge_io.memory;
+import 'dart:io';
 
-/// An in-memory implementation of [FileSystemEntity].
-abstract class MemoryFsEntity implements FileSystemEntity {
-  final MapBasedFileSystem _fs;
+import 'exceptions.dart';
 
-  @override
-  final String path;
-
-  MemoryFsEntity(this._fs, this.path);
-
-  @override
-  FileSystemEntity get absolute;
-
+abstract class ReadOnlyFsEntity implements FileSystemEntity {
   @override
   Future<FileSystemEntity> delete({bool recursive = false}) async {
     deleteSync(recursive: recursive);
@@ -20,7 +11,7 @@ abstract class MemoryFsEntity implements FileSystemEntity {
 
   @override
   void deleteSync({bool recursive = false}) {
-    _fs.remove(path);
+    throw readOnlyException;
   }
 
   @override
@@ -32,12 +23,13 @@ abstract class MemoryFsEntity implements FileSystemEntity {
   bool existsSync();
 
   @override
-  bool get isAbsolute => true;
+  bool get isAbsolute;
 
   @override
-  Directory get parent {
-    return Directory(p.dirname(path));
-  }
+  Directory get parent;
+
+  @override
+  String get path;
 
   @override
   Future<FileSystemEntity> rename(String newPath) {
@@ -45,7 +37,9 @@ abstract class MemoryFsEntity implements FileSystemEntity {
   }
 
   @override
-  FileSystemEntity renameSync(String newPath);
+  FileSystemEntity renameSync(String newPath) {
+    throw readOnlyException;
+  }
 
   @override
   Future<String> resolveSymbolicLinks() {
@@ -64,7 +58,7 @@ abstract class MemoryFsEntity implements FileSystemEntity {
   FileStat statSync();
 
   @override
-  Uri get uri => Uri.file(path);
+  Uri get uri;
 
   @override
   Stream<FileSystemEvent> watch(

@@ -7,7 +7,7 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
 
   @override
   bool existsSync() {
-    return _fs.get<MemoryDirectoryImplementation>(path) != null;
+    return _fs.get<MapBasedFsDirectoryImplementation>(path) != null;
   }
 
   @override
@@ -42,9 +42,9 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
     if (!recursive) assertParentDirectory(_fs, path);
 
     if (recursive) {
-      _fs.setRecursively(path, MemoryDirectoryImplementation());
+      _fs.setRecursively(path, MapBasedFsDirectoryImplementation());
     } else {
-      _fs.set(path, MemoryDirectoryImplementation());
+      _fs.set(path, MapBasedFsDirectoryImplementation());
     }
   }
 
@@ -73,10 +73,10 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
     final map = _fs.toMap();
     final entities = <FileSystemEntity>[];
 
-    FileSystemEntity toEntity(MemoryFsImplementation impl) {
-      if (impl is MemoryFileImplementation) {
+    FileSystemEntity toEntity(MapBasedFsImplementation impl) {
+      if (impl is MapBasedFsFileImplementation) {
         return MemoryFile._(_fs, path);
-      } else if (impl is MemoryDirectoryImplementation) {
+      } else if (impl is MapBasedFsDirectoryImplementation) {
         return MemoryDirectory._(_fs, path);
       } else {
         throw StateError("Unknown entity type");
@@ -84,6 +84,7 @@ class MemoryDirectory extends MemoryFsEntity implements Directory {
     }
 
     // TODO(ehesp): Implement followLinks
+    // TODO could move to MapBasedFileSystem as utility method
     if (recursive) {
       for (final entry in map.entries) {
         if (entry.key.startsWith(absolute.path) && entry.key != absolute.path) {

@@ -2,9 +2,9 @@ part of edge_io.memory;
 
 /// An in-memory implementation of [FileStat].
 class MemoryFileStat implements FileStat {
-  final MemoryFileSystem _fs;
+  final MapBasedFileSystem _fs;
   final String _path;
-  final MemoryFsImplementation? _impl;
+  final MapBasedFsImplementation? _impl;
 
   /// Creates a new [MemoryFileStat] instance.
   MemoryFileStat(this._fs, String path)
@@ -19,11 +19,11 @@ class MemoryFileStat implements FileStat {
       return _defaultDateTime;
     }
 
-    if (_impl is MemoryFileImplementation) {
+    if (_impl is MapBasedFsFileImplementation) {
       return (_impl as MemoryFileImplementation).lastAccessed;
     }
 
-    if (_impl is MemoryDirectoryImplementation) {
+    if (_impl is MapBasedFsDirectoryImplementation) {
       return DateTime.now();
     }
 
@@ -40,7 +40,7 @@ class MemoryFileStat implements FileStat {
       return (_impl as MemoryFileImplementation).lastModified;
     }
 
-    if (_impl is MemoryDirectoryImplementation) {
+    if (_impl is MapBasedFsDirectoryImplementation) {
       // TODO(ehesp): This probably isn't correct.
       return DateTime.now();
     }
@@ -58,7 +58,7 @@ class MemoryFileStat implements FileStat {
       return (_impl as MemoryFileImplementation).changed;
     }
 
-    if (_impl is MemoryDirectoryImplementation) {
+    if (_impl is MapBasedFsDirectoryImplementation) {
       // TODO(ehesp): This probably isn't correct.
       return DateTime.now();
     }
@@ -98,7 +98,7 @@ class MemoryFileStat implements FileStat {
       return (_impl as MemoryFileImplementation).bytes.length;
     }
 
-    if (_impl is MemoryDirectoryImplementation) {
+    if (_impl is MapBasedFsDirectoryImplementation) {
       int size = 0;
 
       for (final entry in _fs.toMap().entries) {
@@ -118,11 +118,11 @@ class MemoryFileStat implements FileStat {
 
   @override
   FileSystemEntityType get type {
-    if (_impl is MemoryDirectoryImplementation) {
+    if (_impl is MapBasedFsDirectoryImplementation) {
       return FileSystemEntityType.directory;
     }
 
-    if (_impl is MemoryFileImplementation) {
+    if (_impl is MapBasedFsFileImplementation) {
       return FileSystemEntityType.file;
     }
 
