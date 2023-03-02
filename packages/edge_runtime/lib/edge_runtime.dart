@@ -1,7 +1,4 @@
-import 'dart:io';
 import 'dart:js';
-
-import 'src/fetch_override.dart';
 
 export 'dart:async' show FutureOr;
 
@@ -25,6 +22,8 @@ export 'src/response.dart' show Response;
 export 'src/text_decoder.dart'
     show TextDecoder, TextDecodeOptions, TextDecoderOptions;
 export 'src/text_encoder.dart' show TextEncoder, TextEncoderEncodeIntoResult;
+
+export 'src/io_http_client.dart';
 
 export 'package:js_bindings/bindings/referrer_policy.dart' show ReferrerPolicy;
 export 'package:js_bindings/bindings/fetch.dart'

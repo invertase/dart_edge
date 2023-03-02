@@ -13,6 +13,7 @@ class Headers {
   bool has(String name) => _delegate.has(name);
   void append(String name, String value) => _delegate.append(name, value);
   void delete(String name) => _delegate.delete(name);
+  String? get(String name) => _delegate.get(name);
 
   operator []=(String name, String value) {
     _delegate.set(name, value);

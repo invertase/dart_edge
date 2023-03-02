@@ -12,13 +12,15 @@ void main() async {
   });
 
   app.get('/200/json', (Request request) {
-    return Response(200,
-        body: jsonEncode({
-          'foo': 'bar',
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        });
+    return Response(
+      200,
+      body: jsonEncode({
+        'foo': 'bar',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
   });
 
   app.post('/200', (Request request) {
