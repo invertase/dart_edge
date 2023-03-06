@@ -29,8 +29,8 @@ class MapBasedFileSystem {
   }
 
   String resolve(String path) {
-    // TODO(ehesp): Should we be normalizing the path here?
-    return p.normalize(p.join(basePath, path));
+    // If the path is absolute, we need to make it relative to the base path.
+    return p.join(basePath, path.startsWith('/') ? path.substring(1) : path);
   }
 
   /// Removes a node from the file system.
