@@ -92,6 +92,7 @@ MapBasedFsDirectoryImplementation assertDirectoryIsEmpty(
 MapBasedFsDirectoryImplementation assertParentDirectory(
     MapBasedFileSystem fs, String path,
     [String message = ""]) {
+  final r = p.dirname(path);
   final parent = fs.get<MapBasedFsDirectoryImplementation>(p.dirname(path));
 
   if (parent == null) {

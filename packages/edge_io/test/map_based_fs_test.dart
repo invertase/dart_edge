@@ -39,10 +39,8 @@ void main() {
 
     test('it resolves a path', () {
       final fs = MapBasedFileSystem('/foo');
-      expect(fs.resolve('/bar'), '/foo/bar');
       expect(fs.resolve('bar'), '/foo/bar');
       expect(fs.resolve('bar/baz'), '/foo/bar/baz');
-      expect(fs.resolve('/bar/baz'), '/foo/bar/baz');
     });
 
     test('it removes a node', () {

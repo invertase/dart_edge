@@ -30,7 +30,7 @@ class MapBasedFileSystem {
 
   String resolve(String path) {
     // If the path is absolute, we need to make it relative to the base path.
-    return p.join(basePath, path.startsWith('/') ? path.substring(1) : path);
+    return p.normalize(p.join(basePath, path));
   }
 
   /// Removes a node from the file system.
@@ -61,8 +61,6 @@ class MapBasedFileSystem {
         }
       }
     }
-
-    _nodes[resolve(path)] = impl;
   }
 
   /// Gets a node from the file system, or null if it doesn't exist.
