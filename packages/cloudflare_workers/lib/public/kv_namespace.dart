@@ -1,7 +1,8 @@
+import 'dart:js_util';
 import 'dart:typed_data';
 
 import 'package:edge_runtime/src/interop/utils_interop.dart';
-import 'package:edge_runtime/src/readable_stream.dart';
+import 'package:edge_runtime/src/interop/readable_stream.dart';
 
 import '../interop/kv_namespace_interop.dart' as interop;
 
@@ -89,7 +90,7 @@ class KVNamespace {
     );
   }
 
-  Future<ReadableStream?> getStream(
+  Future<Stream<List<int>>?> getStream(
     String name, {
     int? cacheTtl,
   }) async {
@@ -100,7 +101,17 @@ class KVNamespace {
         ..cacheTtl = cacheTtl,
     );
 
-    return readableStreamFromJsObject(stream);
+    if (stream == null) {
+      return null;
+    }
+
+    final reader = callMethod<ReadableStreamDefaultReader>(
+      stream,
+      'getReader',
+      [],
+    );
+
+    return streamFromJSReader(reader);
   }
 
   Future<KVNamespaceGetWithMetadataResult<ReadableStream?>>

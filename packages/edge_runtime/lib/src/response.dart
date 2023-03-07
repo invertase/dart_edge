@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:js_util' show jsify;
+import 'dart:js_util' show jsify, getProperty;
 import 'dart:typed_data';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
@@ -9,7 +9,7 @@ import 'blob.dart';
 import 'body.dart';
 import 'form_data.dart';
 import 'headers.dart';
-import 'readable_stream.dart';
+import 'interop/readable_stream.dart';
 import 'interop/utils_interop.dart';
 
 class Response implements Body {
@@ -74,10 +74,9 @@ class Response implements Body {
   @override
   Future<Object> blob() async => blobFromJsObject(await _delegate.blob());
 
-  @override
-  ReadableStream? get body {
-    final body = _delegate.body;
-    return body == null ? null : readableStreamFromJsObject(body);
+  Stream<List<int>>? get body {
+    final body = getProperty<ReadableStream?>(_delegate, 'body');
+    return body == null ? null : streamFromJSReadable(body);
   }
 
   @override

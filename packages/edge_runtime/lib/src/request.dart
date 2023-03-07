@@ -1,14 +1,15 @@
+import 'dart:js_util';
 import 'dart:typed_data';
 
 import 'abort.dart';
 import 'blob.dart';
 import 'body.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
+import 'interop/readable_stream.dart';
 import 'interop/utils_interop.dart' as interop;
 
 import 'form_data.dart';
 import 'headers.dart';
-import 'readable_stream.dart';
 import 'resource.dart';
 
 class Request implements Body {
@@ -36,6 +37,7 @@ class Request implements Body {
           interop.RequestInit(
             method: method,
             headers: headers?.delegate,
+            // TODO(lesnitsky): support streams
             body: body,
             referrer: referrer,
             referrerPolicy: referrerPolicy,
@@ -71,10 +73,9 @@ class Request implements Body {
   @override
   Future<Object> blob() async => blobFromJsObject(await _delegate.blob());
 
-  @override
-  ReadableStream? get body {
-    final body = _delegate.body;
-    return body == null ? null : readableStreamFromJsObject(body);
+  Stream<List<int>>? get body {
+    final body = getProperty<ReadableStream?>(_delegate, 'body');
+    return body == null ? null : streamFromJSReadable(body);
   }
 
   @override

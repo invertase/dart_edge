@@ -23,6 +23,20 @@ void main() async {
     );
   });
 
+  app.get('/200/stream', (Request request) {
+    return Response(
+      200,
+      body: Stream.fromIterable(
+        List.generate(100, (index) {
+          return List.generate(10 * 1024, (index) => index % 256);
+        }),
+      ),
+      headers: {
+        'Content-Type': 'application/octet-stream',
+      },
+    );
+  });
+
   app.post('/200', (Request request) {
     return Response.ok('POST');
   });

@@ -1,8 +1,8 @@
+import 'dart:js_util';
 import 'dart:typed_data';
 
+import 'package:edge_runtime/src/interop/readable_stream.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
-
-import 'readable_stream.dart';
 
 export 'package:js_bindings/js_bindings.dart' show EndingType;
 
@@ -24,8 +24,8 @@ class Blob {
     return Blob._(_delegate.slice(start, end, contentType));
   }
 
-  ReadableStream stream() {
-    return readableStreamFromJsObject(_delegate.stream());
+  Stream<List<int>> stream() {
+    return streamFromJSReadable(callMethod(_delegate, 'stream', []));
   }
 
   Future<String> text() => _delegate.text();

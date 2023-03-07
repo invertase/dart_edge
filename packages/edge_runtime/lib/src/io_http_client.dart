@@ -249,7 +249,7 @@ class HttpClientRequest implements io.HttpClientRequest {
   }
 
   @override
-  Future<io.HttpClientResponse> close() async {
+  Future<HttpClientResponse> close() async {
     final fetchResponse = await fetch(
       _resource,
       body: _body,
@@ -442,231 +442,16 @@ class HttpHeaders implements io.HttpHeaders {
   }
 }
 
-class ValueStreamImpl<T> implements Stream<T> {
-  @override
-  Future<bool> any(bool Function(T element) test) {
-    // TODO: implement any
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> asBroadcastStream(
-      {void Function(StreamSubscription<T> subscription)? onListen,
-      void Function(StreamSubscription<T> subscription)? onCancel}) {
-    // TODO: implement asBroadcastStream
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<E> asyncExpand<E>(Stream<E>? Function(T event) convert) {
-    // TODO: implement asyncExpand
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<E> asyncMap<E>(FutureOr<E> Function(T event) convert) {
-    // TODO: implement asyncMap
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<R> cast<R>() {
-    // TODO: implement cast
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> contains(Object? needle) {
-    // TODO: implement contains
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> distinct([bool Function(T previous, T next)? equals]) {
-    // TODO: implement distinct
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<E> drain<E>([E? futureValue]) {
-    // TODO: implement drain
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<T> elementAt(int index) {
-    // TODO: implement elementAt
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> every(bool Function(T element) test) {
-    // TODO: implement every
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<S> expand<S>(Iterable<S> Function(T element) convert) {
-    // TODO: implement expand
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement first
-  Future<T> get first => throw UnimplementedError();
-
-  @override
-  Future<T> firstWhere(bool Function(T element) test, {T Function()? orElse}) {
-    // TODO: implement firstWhere
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<S> fold<S>(S initialValue, S Function(S previous, T element) combine) {
-    // TODO: implement fold
-    throw UnimplementedError();
-  }
-
-  @override
-  Future forEach(void Function(T element) action) {
-    // TODO: implement forEach
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> handleError(Function onError,
-      {bool Function(dynamic error)? test}) {
-    // TODO: implement handleError
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement isBroadcast
-  bool get isBroadcast => throw UnimplementedError();
-
-  @override
-  // TODO: implement isEmpty
-  Future<bool> get isEmpty => throw UnimplementedError();
-
-  @override
-  Future<String> join([String separator = ""]) {
-    // TODO: implement join
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement last
-  Future<T> get last => throw UnimplementedError();
-
-  @override
-  Future<T> lastWhere(bool Function(T element) test, {T Function()? orElse}) {
-    // TODO: implement lastWhere
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement length
-  Future<int> get length => throw UnimplementedError();
-
-  @override
-  StreamSubscription<T> listen(void Function(T event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
-    // TODO: implement listen
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<S> map<S>(S Function(T event) convert) {
-    // TODO: implement map
-    throw UnimplementedError();
-  }
-
-  @override
-  Future pipe(StreamConsumer<T> streamConsumer) {
-    // TODO: implement pipe
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<T> reduce(T Function(T previous, T element) combine) {
-    // TODO: implement reduce
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement single
-  Future<T> get single => throw UnimplementedError();
-
-  @override
-  Future<T> singleWhere(bool Function(T element) test, {T Function()? orElse}) {
-    // TODO: implement singleWhere
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> skip(int count) {
-    // TODO: implement skip
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> skipWhile(bool Function(T element) test) {
-    // TODO: implement skipWhile
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> take(int count) {
-    // TODO: implement take
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> takeWhile(bool Function(T element) test) {
-    // TODO: implement takeWhile
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> timeout(Duration timeLimit,
-      {void Function(EventSink<T> sink)? onTimeout}) {
-    // TODO: implement timeout
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<T>> toList() {
-    // TODO: implement toList
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Set<T>> toSet() {
-    // TODO: implement toSet
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<S> transform<S>(StreamTransformer<T, S> streamTransformer) {
-    // TODO: implement transform
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<T> where(bool Function(T event) test) {
-    // TODO: implement where
-    throw UnimplementedError();
-  }
-}
-
-class HttpClientResponse extends ValueStreamImpl<List<int>>
-    implements io.HttpClientResponse {
+class HttpClientResponse implements io.HttpClientResponse {
   final Response _response;
   late final int contentLength;
   late final io.HttpHeaders headers;
+  late final Stream<List<int>> _body;
 
   HttpClientResponse(this._response) {
     headers = HttpHeaders.fromFetchResponseHeaders(_response.headers);
+    _body = _response.body ?? Stream.empty();
+
     final contentLengthHeader =
         headers.value(io.HttpHeaders.contentLengthHeader);
     contentLength = int.parse(contentLengthHeader ?? '-1');
@@ -722,4 +507,212 @@ class HttpClientResponse extends ValueStreamImpl<List<int>>
 
   @override
   int get statusCode => _response.status;
+
+  @override
+  Future<bool> any(bool Function(List<int> element) test) {
+    return _body.any(test);
+  }
+
+  @override
+  Stream<List<int>> asBroadcastStream({
+    void Function(StreamSubscription<List<int>> subscription)? onListen,
+    void Function(StreamSubscription<List<int>> subscription)? onCancel,
+  }) {
+    return _body.asBroadcastStream(onListen: onListen, onCancel: onCancel);
+  }
+
+  @override
+  Stream<E> asyncExpand<E>(Stream<E>? Function(List<int> event) convert) {
+    return _body.asyncExpand(convert);
+  }
+
+  @override
+  Stream<E> asyncMap<E>(FutureOr<E> Function(List<int> event) convert) {
+    return _body.asyncMap(convert);
+  }
+
+  @override
+  Stream<R> cast<R>() {
+    return _body.cast<R>();
+  }
+
+  @override
+  Future<bool> contains(Object? needle) {
+    return _body.contains(needle);
+  }
+
+  @override
+  Stream<List<int>> distinct([
+    bool Function(List<int> previous, List<int> next)? equals,
+  ]) {
+    return _body.distinct(equals);
+  }
+
+  @override
+  Future<E> drain<E>([E? futureValue]) {
+    return _body.drain(futureValue);
+  }
+
+  @override
+  Future<List<int>> elementAt(int index) {
+    return _body.elementAt(index);
+  }
+
+  @override
+  Future<bool> every(bool Function(List<int> element) test) {
+    return _body.every(test);
+  }
+
+  @override
+  Stream<S> expand<S>(Iterable<S> Function(List<int> element) convert) {
+    return _body.expand(convert);
+  }
+
+  @override
+  Future<List<int>> get first => _body.first;
+
+  @override
+  Future<List<int>> firstWhere(
+    bool Function(List<int> element) test, {
+    List<int> Function()? orElse,
+  }) {
+    return _body.firstWhere(test, orElse: orElse);
+  }
+
+  @override
+  Future<S> fold<S>(
+    S initialValue,
+    S Function(S previous, List<int> element) combine,
+  ) {
+    return _body.fold(initialValue, combine);
+  }
+
+  @override
+  Future forEach(void Function(List<int> element) action) {
+    return _body.forEach(action);
+  }
+
+  @override
+  Stream<List<int>> handleError(
+    Function onError, {
+    bool Function(dynamic error)? test,
+  }) {
+    return _body.handleError(onError, test: test);
+  }
+
+  @override
+  bool get isBroadcast => _body.isBroadcast;
+
+  @override
+  Future<bool> get isEmpty => _body.isEmpty;
+
+  @override
+  Future<String> join([String separator = ""]) {
+    return _body.join(separator);
+  }
+
+  @override
+  Future<List<int>> get last => _body.last;
+
+  @override
+  Future<List<int>> lastWhere(
+    bool Function(List<int> element) test, {
+    List<int> Function()? orElse,
+  }) {
+    return _body.lastWhere(test, orElse: orElse);
+  }
+
+  @override
+  Future<int> get length => _body.length;
+
+  @override
+  StreamSubscription<List<int>> listen(
+    void Function(List<int> event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return _body.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+  }
+
+  @override
+  Stream<S> map<S>(S Function(List<int> event) convert) {
+    return _body.map(convert);
+  }
+
+  @override
+  Future pipe(StreamConsumer<List<int>> streamConsumer) {
+    return _body.pipe(streamConsumer);
+  }
+
+  @override
+  Future<List<int>> reduce(
+    List<int> Function(List<int> previous, List<int> element) combine,
+  ) {
+    return _body.reduce(combine);
+  }
+
+  @override
+  Future<List<int>> get single => _body.single;
+
+  @override
+  Future<List<int>> singleWhere(
+    bool Function(List<int> element) test, {
+    List<int> Function()? orElse,
+  }) {
+    return _body.singleWhere(test, orElse: orElse);
+  }
+
+  @override
+  Stream<List<int>> skip(int count) {
+    return _body.skip(count);
+  }
+
+  @override
+  Stream<List<int>> skipWhile(bool Function(List<int> element) test) {
+    return _body.skipWhile(test);
+  }
+
+  @override
+  Stream<List<int>> take(int count) {
+    return _body.take(count);
+  }
+
+  @override
+  Stream<List<int>> takeWhile(bool Function(List<int> element) test) {
+    return _body.takeWhile(test);
+  }
+
+  @override
+  Stream<List<int>> timeout(
+    Duration timeLimit, {
+    void Function(EventSink<List<int>> sink)? onTimeout,
+  }) {
+    return _body.timeout(timeLimit, onTimeout: onTimeout);
+  }
+
+  @override
+  Future<List<List<int>>> toList() {
+    return _body.toList();
+  }
+
+  @override
+  Future<Set<List<int>>> toSet() {
+    return _body.toSet();
+  }
+
+  @override
+  Stream<S> transform<S>(StreamTransformer<List<int>, S> streamTransformer) {
+    return _body.transform(streamTransformer);
+  }
+
+  @override
+  Stream<List<int>> where(bool Function(List<int> event) test) {
+    return _body.where(test);
+  }
 }

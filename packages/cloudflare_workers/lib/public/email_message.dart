@@ -1,6 +1,7 @@
+import 'dart:js_util';
+
 import 'package:edge_runtime/src/headers.dart';
-import 'package:edge_runtime/src/readable_stream.dart';
-import 'package:edge_runtime/edge_runtime.dart' show Headers, ReadableStream;
+import 'package:edge_runtime/src/interop/readable_stream.dart';
 import '../interop/email_message_interop.dart' as interop;
 
 class EmailMessage {
@@ -11,7 +12,11 @@ class EmailMessage {
   String get from => _delegate.from;
   String get to => _delegate.to;
   Headers get headers => headersFromJsObject(_delegate.headers);
-  ReadableStream get raw => readableStreamFromJsObject(_delegate.raw);
+  Stream<List<int>> get raw {
+    final readable = getProperty<ReadableStream>(_delegate, 'raw');
+    return streamFromJSReadable(readable);
+  }
+
   int get rawSize => _delegate.rawSize;
 
   void setReject(String reason) => _delegate.setReject(reason);
