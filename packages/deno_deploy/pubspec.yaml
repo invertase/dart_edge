@@ -9,5 +9,8 @@ environment:
 
 dependencies:
   js: ^0.6.5
-  js_bindings: ^0.1.0
+  js_bindings:
+    git:
+      url: git@github.com:jodinathan/js_bindings.git
+      ref: adc8f2fbb794b86af7280f2aa5adb2b48cdefa43
   edge_runtime: ^0.0.3

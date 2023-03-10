@@ -11,6 +11,7 @@ import 'form_data.dart';
 import 'headers.dart';
 import 'interop/readable_stream.dart';
 import 'interop/utils_interop.dart';
+import 'interop/headers.dart' as headers_interop;
 
 class Response implements Body {
   final interop.Response _delegate;
@@ -65,7 +66,12 @@ class Response implements Body {
   int get status => _delegate.status;
   bool get ok => _delegate.ok;
   String get statusText => _delegate.statusText;
-  Headers get headers => headersFromJsObject(_delegate.headers);
+  Headers get headers {
+    return headersFromJsObject(
+      getProperty<headers_interop.Headers>(_delegate, 'headers'),
+    );
+  }
+
   Response clone() => Response._(_delegate.clone());
 
   @override

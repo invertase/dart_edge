@@ -6,6 +6,10 @@ import 'package:edge_runtime/edge_runtime.dart';
 
 const kUnsupportedEnv = 'Unsupported environment';
 
+class ClientClosedException implements Exception {}
+
+class AbortedByClientException implements Exception {}
+
 class HttpClient implements io.HttpClient {
   @override
   bool autoUncompress = false;
@@ -70,7 +74,11 @@ class HttpClient implements io.HttpClient {
   }
 
   @override
-  void close({bool force = false}) {}
+  void close({bool force = false}) {
+    _pendingRequests.forEach((request) {
+      request.abort(new ClientClosedException());
+    });
+  }
 
   @override
   set connectionFactory(
@@ -131,7 +139,9 @@ class HttpClient implements io.HttpClient {
     int port,
     String path,
   ) async {
-    return HttpClientRequest(
+    final ctrl = AbortController();
+
+    return HttpClientRequest._(
       method,
       Resource.uri(
         Uri(
@@ -141,12 +151,17 @@ class HttpClient implements io.HttpClient {
           path: path,
         ),
       ),
+      ctrl,
+      _pendingRequests,
     );
   }
 
   @override
   Future<io.HttpClientRequest> openUrl(String method, Uri url) {
-    return Future.value(HttpClientRequest(method, Resource.uri(url)));
+    final ctrl = AbortController();
+    return Future.value(
+      HttpClientRequest._(method, Resource.uri(url), ctrl, _pendingRequests),
+    );
   }
 
   @override
@@ -184,8 +199,10 @@ class HttpClientRequest implements io.HttpClientRequest {
   @override
   bool bufferOutput = true;
 
-  @override
-  int contentLength = 0;
+  get contentLength => headers.contentLength;
+  set contentLength(int value) {
+    headers.contentLength = value;
+  }
 
   @override
   late Encoding encoding;
@@ -196,8 +213,10 @@ class HttpClientRequest implements io.HttpClientRequest {
   @override
   int maxRedirects = 5;
 
-  @override
-  bool persistentConnection = true;
+  get persistentConnection => headers.persistentConnection;
+  set persistentConnection(bool value) {
+    headers.persistentConnection = value;
+  }
 
   final io.HttpHeaders headers;
 
@@ -208,26 +227,43 @@ class HttpClientRequest implements io.HttpClientRequest {
   List<int>? _body;
   final Completer<io.HttpClientResponse> _doneCompleter = Completer();
 
-  AbortController? _abortController;
+  AbortController _abortController;
 
-  HttpClientRequest(this.method, this._resource) : headers = HttpHeaders() {
+  HttpClientRequest._(
+    this.method,
+    this._resource,
+    this._abortController,
+    Set<HttpClientRequest> pendingRequests,
+  ) : headers = HttpHeaders._() {
     uri = Resource.getUri(_resource);
+    pendingRequests.add(this);
+    done.whenComplete(() => pendingRequests.remove(this));
+
+    headers.host = uri.host;
+    headers.port = uri.port;
   }
 
   @override
   void abort([Object? exception, StackTrace? stackTrace]) {
-    _abortController?.abort(exception);
+    _abortController.abort(exception);
+    _doneCompleter.completeError(
+      exception ?? AbortedByClientException(),
+      stackTrace,
+    );
   }
 
   @override
   void add(List<int> data) {
     _body ??= [];
     _body!.addAll(data);
+
+    contentLength = _body!.length;
   }
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
     abort(error, stackTrace);
+    _doneCompleter.completeError(error, stackTrace);
   }
 
   @override
@@ -255,7 +291,7 @@ class HttpClientRequest implements io.HttpClientRequest {
       body: _body,
       headers: Headers((headers as HttpHeaders).toMap()),
       method: method,
-      signal: _abortController?.signal,
+      signal: _abortController.signal,
     );
 
     final response = HttpClientResponse(fetchResponse);
@@ -273,7 +309,6 @@ class HttpClientRequest implements io.HttpClientRequest {
   List<io.Cookie> get cookies => throw UnimplementedError();
 
   @override
-  // TODO: implement done
   Future<io.HttpClientResponse> get done => _doneCompleter.future;
 
   @override
@@ -283,8 +318,7 @@ class HttpClientRequest implements io.HttpClientRequest {
 
   @override
   void write(Object? object) {
-    _body ??= [];
-    _body!.addAll(utf8.encode(object.toString()));
+    add(utf8.encode(object.toString()));
   }
 
   @override
@@ -294,8 +328,7 @@ class HttpClientRequest implements io.HttpClientRequest {
 
   @override
   void writeCharCode(int charCode) {
-    _body ??= [];
-    _body!.add(charCode);
+    add([charCode]);
   }
 
   @override
@@ -306,15 +339,15 @@ class HttpClientRequest implements io.HttpClientRequest {
 }
 
 class HttpHeaders implements io.HttpHeaders {
-  HttpHeaders();
+  HttpHeaders._();
 
   factory HttpHeaders.fromFetchResponseHeaders(Headers headers) {
-    final ioHeaders = HttpHeaders();
+    final ioHeaders = HttpHeaders._();
 
-    // TODO: implement once forEach is available on headers
-    // headers.forEach((key, value) {
-    //   ioHeaders.set(key, value);
-    // });
+    headers.toMap().forEach((key, value) {
+      ioHeaders.set(key, value);
+    });
+
     return ioHeaders;
   }
 
@@ -332,8 +365,9 @@ class HttpHeaders implements io.HttpHeaders {
   }
 
   @override
-  int get contentLength =>
-      int.parse(value(io.HttpHeaders.contentLengthHeader)!);
+  int get contentLength {
+    return int.parse(value(io.HttpHeaders.contentLengthHeader)!);
+  }
 
   set contentLength(int value) {
     set(io.HttpHeaders.contentLengthHeader, value);
@@ -354,22 +388,103 @@ class HttpHeaders implements io.HttpHeaders {
   }
 
   @override
-  DateTime? date;
+  bool get persistentConnection {
+    return value(io.HttpHeaders.connectionHeader) == 'keep-alive';
+  }
 
-  @override
-  DateTime? expires;
+  set persistentConnection(bool value) {
+    set(io.HttpHeaders.connectionHeader, value ? 'keep-alive' : 'close');
+  }
 
-  @override
-  String? host;
+  DateTime? get date {
+    final string = value('date');
+    if (string == null) return null;
 
-  @override
-  DateTime? ifModifiedSince;
+    try {
+      return DateTime.parse(string);
+    } on FormatException {
+      return null;
+    }
+  }
 
-  @override
-  bool persistentConnection = true;
+  set date(DateTime? value) {
+    if (value != null) {
+      set('date', value.toUtc().toIso8601String());
+    } else {
+      _headers.remove('date');
+    }
+  }
 
-  @override
-  int? port;
+  DateTime? get expires {
+    final string = value('expires');
+    if (string == null) return null;
+
+    try {
+      return DateTime.parse(string);
+    } on FormatException {
+      return null;
+    }
+  }
+
+  set expires(DateTime? value) {
+    if (value != null) {
+      set('expires', value.toUtc().toIso8601String());
+    } else {
+      _headers.remove('expires');
+    }
+  }
+
+  get host => value('host');
+  set host(String? value) {
+    if (value != null) {
+      set('host', value);
+    } else {
+      _headers.remove('host');
+    }
+  }
+
+  get ifModifiedSince {
+    final string = value('if-modified-since');
+    if (string == null) return null;
+
+    try {
+      return DateTime.parse(string);
+    } on FormatException {
+      return null;
+    }
+  }
+
+  set ifModifiedSince(DateTime? value) {
+    if (value != null) {
+      set('if-modified-since', value.toUtc().toIso8601String());
+    } else {
+      _headers.remove('if-modified-since');
+    }
+  }
+
+  int? get port {
+    final host = value('host');
+    if (host == null) return null;
+
+    final uri = Uri.tryParse('http://$host');
+    if (uri == null) return null;
+
+    return uri.port;
+  }
+
+  set port(int? v) {
+    if (v != null) {
+      set('host', '$host:$v');
+    } else {
+      final host = value('host');
+      if (host != null) {
+        final uri = Uri.tryParse('http://$host');
+        if (uri != null) {
+          set('host', uri.host);
+        }
+      }
+    }
+  }
 
   Map<String, Set<String>> _headers = {};
 

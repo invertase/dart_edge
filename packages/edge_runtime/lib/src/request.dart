@@ -7,6 +7,7 @@ import 'body.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 import 'interop/readable_stream.dart';
 import 'interop/utils_interop.dart' as interop;
+import 'interop/headers.dart' as headers_interop;
 
 import 'form_data.dart';
 import 'headers.dart';
@@ -54,7 +55,12 @@ class Request implements Body {
 
   String get method => _delegate.method;
   Uri get url => Uri.parse(_delegate.url);
-  Headers get headers => headersFromJsObject(_delegate.headers);
+  Headers get headers {
+    return headersFromJsObject(
+      getProperty<headers_interop.Headers>(_delegate, 'headers'),
+    );
+  }
+
   interop.RequestDestination get destination => _delegate.destination;
   String get referrer => _delegate.referrer;
   interop.ReferrerPolicy get referrerPolicy => _delegate.referrerPolicy;

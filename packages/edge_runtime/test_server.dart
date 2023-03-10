@@ -23,6 +23,29 @@ void main() async {
     );
   });
 
+  app.get('/200/bytes', (Request request) {
+    return Response(
+      200,
+      body: List.generate(
+        int.parse(request.url.queryParameters['length']!),
+        (index) => index % 256,
+      ),
+      headers: {
+        'Content-Type': 'application/octet-stream',
+      },
+    );
+  });
+
+  app.get('/200/echoHeaders', (Request request) {
+    return Response(
+      200,
+      body: jsonEncode(request.headers),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+  });
+
   app.get('/200/stream', (Request request) {
     return Response(
       200,
@@ -41,16 +64,26 @@ void main() async {
     return Response.ok('POST');
   });
 
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': '*',
+  };
+
   final handler = const Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware((innerHandler) {
     return (request) async {
-      return Future.sync(() => innerHandler(request)).then((response) {
-        return response.change(headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': '*',
-          'Access-Control-Allow-Headers': '*',
-        });
+      final response = await innerHandler(request);
+
+      if (request.method == 'OPTIONS') {
+        return Response.ok('', headers: corsHeaders);
+      }
+
+      // Move onto handler
+      return response.change(headers: {
+        ...response.headers,
+        ...corsHeaders,
       });
     };
   }).addHandler(app);

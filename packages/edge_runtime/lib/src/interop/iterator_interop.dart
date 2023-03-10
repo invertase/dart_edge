@@ -17,13 +17,30 @@ class Iterator<T> {
   external factory Iterator();
 }
 
+Iterable<T> fromJSIterator<T>(dynamic jsIterable) sync* {
+  while (true) {
+    final result = js_util.callMethod<IteratorResult<T>>(
+      jsIterable,
+      'next',
+      [],
+    );
+
+    if (result.done) {
+      break;
+    }
+
+    yield result.value;
+  }
+}
+
 extension PropsIterator<T> on Iterator<T> {
   Iterable<T> toIterable<T>() sync* {
-    final iterator = js_util.getProperty(this, _iterator);
-    final callable = js_util.callMethod(iterator, 'call', []);
+    final generator = js_util.getProperty(this, _iterator);
+    final iterator = js_util.callMethod(generator, 'call', []);
 
     while (true) {
-      final result = _next<T>(callable);
+      final result = _next<T>(iterator);
+
       if (result.done) {
         break;
       }
