@@ -32,6 +32,7 @@ void main() async {
       ),
       headers: {
         'Content-Type': 'application/octet-stream',
+        'Content-Length': request.url.queryParameters['length']!,
       },
     );
   });
@@ -56,6 +57,7 @@ void main() async {
       ),
       headers: {
         'Content-Type': 'application/octet-stream',
+        'Content-Length': '${10 * 1024 * 100}',
       },
     );
   });

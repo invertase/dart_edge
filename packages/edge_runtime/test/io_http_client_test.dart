@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 void main() {
   final client = HttpClient();
 
-  group('HttpClient', () {
+  group('dart:io HttpClient', () {
     group('perfroms GET request', () {
       test('without body', () async {
         final Uri uri = Uri.parse('http://localhost:3001/200');
