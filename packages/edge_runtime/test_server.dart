@@ -62,8 +62,50 @@ void main() async {
     );
   });
 
-  app.post('/200', (Request request) {
-    return Response.ok('POST');
+  app.post('/200/json', (Request request) async {
+    final headers = request.headers;
+
+    if (headers['content-type'] != 'application/json') {
+      return Response(400, body: 'Invalid content-type');
+    }
+
+    final body = await request.readAsString();
+
+    if (int.tryParse(headers['content-length']!) != body.length) {
+      return Response(400, body: 'Invalid content-length');
+    }
+
+    print(body);
+
+    if (body != '{"foo":"bar"}') {
+      return Response(400, body: 'Invalid body');
+    }
+
+    return Response(200);
+  });
+
+  app.post('/200/urlencoded', (Request request) async {
+    final headers = request.headers;
+    if (headers['content-type'] !=
+        'application/x-www-form-urlencoded; charset=utf-8') {
+      return Response(400, body: 'Invalid content-type');
+    }
+
+    print('\n' + headers.entries.join('\n'));
+    final body = await request.readAsString();
+
+    if (int.tryParse(headers['content-length']!) != body.length) {
+      return Response(400, body: 'Invalid content-length');
+    }
+
+    print(body);
+    print(body == 'foo=bar&baz=qux');
+
+    if (body != 'foo=bar&baz=qux') {
+      return Response(400, body: 'Invalid body');
+    }
+
+    return Response(200);
   });
 
   const corsHeaders = {

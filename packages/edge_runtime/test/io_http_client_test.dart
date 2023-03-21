@@ -48,6 +48,22 @@ void main() {
       });
     });
 
+    group('performs POST request', () {
+      test('with JSON', () async {
+        final uri = Uri.parse('http://localhost:3001/200/json');
+
+        final req = await client.postUrl(uri);
+        req.headers.add('content-type', 'application/json');
+
+        final body = {'foo': 'bar'};
+
+        req.write(jsonEncode(body));
+        final res = await req.close();
+
+        expect(res.statusCode, 200);
+      });
+    });
+
     group('HttpClientRequest', () {
       test('sends all headers', () async {
         final uri = Uri.parse('http://localhost:3001/200/echoHeaders');

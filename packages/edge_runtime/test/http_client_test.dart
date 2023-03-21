@@ -51,6 +51,35 @@ void main() {
       });
     });
 
+    group('preforms POST request', () {
+      test('with JSON', run(() async {
+        final uri = Uri.parse('http://localhost:3001/200/json');
+
+        final res = await http.post(
+          uri,
+          body: jsonEncode({'foo': 'bar'}),
+          headers: {'Content-Type': 'application/json'},
+        );
+
+        expect(res.statusCode, 200);
+      }));
+
+      test('urlencoded', run(() async {
+        final uri = Uri.parse('http://localhost:3001/200/urlencoded');
+
+        final res = await http.post(
+          uri,
+          body: {
+            'foo': 'bar',
+            'baz': 'qux',
+          },
+        );
+
+        print(res.body);
+        expect(res.statusCode, 200);
+      }));
+    });
+
     test('sends all headers', run(() async {
       final uri = Uri.parse('http://localhost:3001/200/echoHeaders');
 

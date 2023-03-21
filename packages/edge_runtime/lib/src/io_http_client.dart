@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:typed_data';
 
 import 'package:edge_runtime/edge_runtime.dart';
 
@@ -286,9 +287,10 @@ class HttpClientRequest implements io.HttpClientRequest {
 
   @override
   Future<HttpClientResponse> close() async {
+    print('close()');
     final fetchResponse = await fetch(
       _resource,
-      body: _body,
+      body: _body != null ? Uint8List.fromList(_body!) : null,
       headers: Headers((headers as HttpHeaders).toMap()),
       method: method,
       signal: _abortController.signal,

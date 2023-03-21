@@ -144,11 +144,12 @@ class Client implements http.Client {
     final body = request.finalize();
 
     if (_allowedBodyMethods.contains(request.method)) {
-      body.pipe(req);
+      final bytes = await body.toBytes();
+      req.contentLength = bytes.length;
+      req.add(bytes);
     }
 
     final res = await req.close();
-
     final resHeaders = <String, String>{};
 
     res.headers.forEach((key, values) {
@@ -196,7 +197,6 @@ class Client implements http.Client {
     } else if (body is Map<String, String>) {
       final r = http.Request(method, url);
       r.headers.addAll(headers ?? {});
-      r.headers['content-type'] = 'application/x-www-form-urlencoded';
       r.bodyFields = body;
       req = r;
     } else {
