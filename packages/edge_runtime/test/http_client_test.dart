@@ -75,7 +75,6 @@ void main() {
           },
         );
 
-        print(res.body);
         expect(res.statusCode, 200);
       }));
     });

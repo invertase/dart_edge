@@ -159,7 +159,6 @@ class Client implements http.Client {
     return http.StreamedResponse(
       res,
       res.statusCode,
-      contentLength: res.contentLength,
       headers: resHeaders,
       isRedirect: res.isRedirect,
       persistentConnection: res.persistentConnection,

@@ -296,8 +296,9 @@ class HttpClientRequest implements io.HttpClientRequest {
       signal: _abortController.signal,
     );
 
-    final response = HttpClientResponse(fetchResponse);
+    final response = HttpClientResponse._(fetchResponse);
     _doneCompleter.complete(response);
+
     return response;
   }
 
@@ -565,7 +566,7 @@ class HttpClientResponse implements io.HttpClientResponse {
   late final io.HttpHeaders headers;
   late final Stream<List<int>> _body;
 
-  HttpClientResponse(this._response) {
+  HttpClientResponse._(this._response) {
     headers = HttpHeaders.fromFetchResponseHeaders(_response.headers);
     _body = _response.body ?? Stream.empty();
 
