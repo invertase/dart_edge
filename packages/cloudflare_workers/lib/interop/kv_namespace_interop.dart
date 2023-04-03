@@ -130,10 +130,10 @@ extension PropsKVNamespaceListOptions on KVNamespaceListOptions {
   }
 
   set prefix(String? value) {
-    js_util.setProperty(this, 'prefix', value);
+    js_util.setProperty(this, 'prefix', value ?? jsUndefined);
   }
 
   set cursor(String? value) {
-    js_util.setProperty(this, 'cursor', value);
+    js_util.setProperty(this, 'cursor', value ?? jsUndefined);
   }
 }

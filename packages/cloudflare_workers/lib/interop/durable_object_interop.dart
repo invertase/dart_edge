@@ -3,6 +3,7 @@ import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:js_bindings/js_bindings.dart' as interop;
 import 'package:edge_runtime/src/interop/promise_interop.dart';
+import 'package:edge_runtime/src/interop/utils_interop.dart';
 
 import 'environment_interop.dart' as interop;
 
@@ -121,56 +122,116 @@ extension PropsDurableObjectStorage on DurableObjectStorage {
 @JS()
 @staticInterop
 class DurableObjectGetOptions {
-  external factory DurableObjectGetOptions({
-    bool? allowConcurrency,
-    bool? noCache,
-  });
+  external factory DurableObjectGetOptions();
+}
+
+extension PropsDurableObjectGetOptions on DurableObjectGetOptions {
+  set allowConcurrency(bool? allowConcurrency) {
+    js_util.setProperty(
+        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+  }
+
+  set noCache(bool? noCache) {
+    js_util.setProperty(this, 'noCache', noCache ?? jsUndefined);
+  }
 }
 
 @anonymous
 @JS()
 @staticInterop
 class DurableObjectGetAlarmOptions {
-  external factory DurableObjectGetAlarmOptions({
-    bool? allowConcurrency,
-  });
+  external factory DurableObjectGetAlarmOptions();
+}
+
+extension PropsDurableObjectGetAlarmOptions on DurableObjectGetAlarmOptions {
+  set allowConcurrency(bool? allowConcurrency) {
+    js_util.setProperty(
+        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+  }
 }
 
 @anonymous
 @JS()
 @staticInterop
 class DurableObjectSetAlarmOptions {
-  external factory DurableObjectSetAlarmOptions({
-    bool? allowConcurrency,
-    bool? allowUnconfirmed,
-  });
+  external factory DurableObjectSetAlarmOptions();
+}
+
+extension PropsDurableObjectSetAlarmOptions on DurableObjectSetAlarmOptions {
+  set allowConcurrency(bool? allowConcurrency) {
+    js_util.setProperty(
+        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+  }
+
+  set allowUnconfirmed(bool? allowUnconfirmed) {
+    js_util.setProperty(
+        this, 'allowUnconfirmed', allowUnconfirmed ?? jsUndefined);
+  }
 }
 
 @anonymous
 @JS()
 @staticInterop
 class DurableObjectPutOptions {
-  external factory DurableObjectPutOptions({
-    bool? allowConcurrency,
-    bool? allowUnconfirmed,
-    bool? noCache,
-  });
+  external factory DurableObjectPutOptions();
+}
+
+extension PropsDurableObjectPutOptions on DurableObjectPutOptions {
+  set allowConcurrency(bool? allowConcurrency) {
+    js_util.setProperty(
+        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+  }
+
+  set allowUnconfirmed(bool? allowUnconfirmed) {
+    js_util.setProperty(
+        this, 'allowUnconfirmed', allowUnconfirmed ?? jsUndefined);
+  }
+
+  set noCache(bool? noCache) {
+    js_util.setProperty(this, 'noCache', noCache ?? jsUndefined);
+  }
 }
 
 @anonymous
 @JS()
 @staticInterop
 class DurableObjectListOptions {
-  external factory DurableObjectListOptions({
-    String? start,
-    String? startAfter,
-    String? end,
-    String? prefix,
-    bool? reverse,
-    bool? limit,
-    bool? allowConcurrency,
-    bool? noCache,
-  });
+  external factory DurableObjectListOptions();
+}
+
+extension PropsDurableObjectListOptions on DurableObjectListOptions {
+  set start(String? start) {
+    js_util.setProperty(this, 'start', start ?? jsUndefined);
+  }
+
+  set startAfter(String? startAfter) {
+    js_util.setProperty(this, 'startAfter', startAfter ?? jsUndefined);
+  }
+
+  set end(String? end) {
+    js_util.setProperty(this, 'end', end ?? jsUndefined);
+  }
+
+  set prefix(String? prefix) {
+    js_util.setProperty(this, 'prefix', prefix ?? jsUndefined);
+  }
+
+  set reverse(bool? reverse) {
+    js_util.setProperty(this, 'reverse', reverse ?? jsUndefined);
+  }
+
+  set limit(bool? limit) {
+    js_util.setProperty(this, 'limit', limit ?? jsUndefined);
+  }
+
+  set allowConcurrency(bool? allowConcurrency) {
+    js_util.setProperty(
+        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+  }
+
+  set noCache(bool? noCache) {
+    js_util.setProperty(this, 'noCache', noCache ?? jsUndefined);
+  }
 }
 
 @anonymous
@@ -180,6 +241,13 @@ class DurableObjectNamespaceNewUniqueIdOptions {
   external factory DurableObjectNamespaceNewUniqueIdOptions({
     String? jurisdiction,
   });
+}
+
+extension PropsDurableObjectNamespaceNewUniqueIdOptions
+    on DurableObjectNamespaceNewUniqueIdOptions {
+  set jurisdiction(String? jurisdiction) {
+    js_util.setProperty(this, 'jurisdiction', jurisdiction ?? jsUndefined);
+  }
 }
 
 @anonymous

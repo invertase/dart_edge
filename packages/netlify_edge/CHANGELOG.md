@@ -1,3 +1,16 @@
+## 0.0.1-dev.8
+
+ - Update a dependency to the latest release.
+
+## 0.0.1-dev.7
+
+ - **FEAT**: Deno deploy api. ([235f4748](https://github.com/invertase/dart_edge/commit/235f4748b0a8dc4cf4240f0b91b230bbabc9004a))
+
+## 0.0.1-dev.6
+
+ - **REFACTOR**: prefer named arguments on DO/KV apis. ([c6e07055](https://github.com/invertase/dart_edge/commit/c6e0705553b1607637fcdd21ee7b316a29dbd2ca))
+ - **REFACTOR**: update cli implementation ([#18](https://github.com/invertase/dart_edge/issues/18)). ([86802207](https://github.com/invertase/dart_edge/commit/868022075012814679e68a3a3e48003068db6bb6))
+
 ## 0.0.1-dev.5
 
  - Update a dependency to the latest release.
