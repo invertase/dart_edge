@@ -37,6 +37,16 @@ export 'package:js_bindings/bindings/fetch.dart'
 
 /// This should be called before any other platform code is run.
 void setupRuntime() {
+  // Dart to JS looks for some context properties to determine whether some
+  // features are available. Uri.base checks whether window.location.href is
+  // available, so we patch it in here.
+  if (context['self']['location'] == null) {
+    context['self']['location'] = JsObject.jsify({
+      'href': '',
+    });
+  }
+
+  // Dart to JS assumes we're in a browser context, so we need to patch in.
   context['window'] ??= context['self'];
   // HttpOverrides.global = FetchHttpOverride();
 }
