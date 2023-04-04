@@ -51,6 +51,7 @@
         ["Request Properties", "/platform/cloudflare/request-properties"],
         ["Service Bindings", "/platform/cloudflare/service-bindings"]
       ]
-    ]
+    ],
+    ["Supabase Edge Functions", [["Getting Started", "/platform/supabase"]]]
   ]
 }
