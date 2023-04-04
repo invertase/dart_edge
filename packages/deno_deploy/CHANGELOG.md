@@ -1,3 +1,7 @@
+## 0.0.1-dev.3
+
+ - Update a dependency to the latest release.
+
 ## 0.0.1-dev.2
 
  - **FEAT**: add Iterator / AsyncIterator interop. ([b23b4a4f](https://github.com/invertase/dart_edge/commit/b23b4a4ff1ab781744b4480d0fbfd286343205f5))
