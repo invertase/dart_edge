@@ -15,6 +15,10 @@ void main() {
       return Response.ok("Hello...");
     });
 
+    app.post('/hello', (request) async {
+      return Response.ok('hello...');
+    });
+
     app.all('/<ignored|.*>', (request) {
       return Response.notFound('Not found');
     });

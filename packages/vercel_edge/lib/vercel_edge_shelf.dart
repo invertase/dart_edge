@@ -32,10 +32,13 @@ class VercelEdgeShelf {
             })
           ]);
 
+          final reader = clone.body?.getReader();
+          final body = reader != null ? streamFromJSReader(reader) : null;
+
           final shelfRequest = shelf.Request(
             clone.method,
             Uri.parse(clone.url),
-            body: clone.body,
+            body: body,
             headers: headers,
           );
 
