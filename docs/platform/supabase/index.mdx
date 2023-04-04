@@ -1,0 +1,121 @@
+---
+title: Supabase Edge Functions - Dart Edge
+description: Write and deploy Dart to Supabase Edge Functions.
+---
+
+# Supabase Functions
+
+[Supabase Edge Functions](https://supabase.com/docs/guides/functions) are runnable functions distributed globally at the edge. They can be used for listening to webhooks or integrating your Supabase project with third-parties.
+
+Supabase Edge Functions are developed using [Deno](https://deno.com/).
+
+## Getting Started
+
+Before getting started, you need to install the [`supabase` CLI](https://supabase.com/docs/guides/cli) - available via NPM, Homebrew & Scoop.
+
+Once installed, [start the Supabase services](https://supabase.com/docs/guides/cli/local-development#start-supabase-services):
+
+```sh
+supabase start
+```
+
+Next, either use the `edge` CLI command or setup manually:
+
+<Tabs
+  values={[
+    { label: 'Edge CLI', value: 'cli' },
+    { label: 'Manually', value: 'manually' },
+  ]}
+>
+  <TabItem value="cli">
+    Create a new project using the `edge` CLI command:
+
+    ```sh
+    edge new supabase_functions new_project
+    ```
+
+    This command will create a new barebones template in the current directory. Once complete, install the dependencies:
+
+    ```
+    dart pub get
+    ```
+
+    Next, init the local superbase project using their CLI:
+
+    ```sh
+    supabase init
+    ```
+
+    This will create a local `supabase` directory, which contains various contents used to run your Supabase functions.
+
+  </TabItem>
+  <TabItem value="manually">
+    Install the `supabase_functions` package:
+
+    ```sh
+    dart pub add supabase_functions
+    ```
+
+    Next create a `lib/main.dart` file, import the `supabase_functions` package and setup a `fetch` handler, to handle incoming HTTP requests:
+
+    ```dart
+    import 'package:supabase_functions/supabase_functions.dart';
+
+    void main() {
+      SupabaseFunctions(fetch: (request) {
+        return Response("Hello from Supabase Edge Functions!");
+      });
+    }
+    ```
+
+    Next, init the local superbase project using their CLI:
+
+    ```sh
+    supabase init
+    ```
+
+    This will create a local `supabase` directory, which contains various contents used to run your Supabase functions.
+
+  </TabItem>
+</Tabs>
+
+Open the `lib/main.dart` file to view the minimal HTTP request fetch handler:
+
+```dart
+void main() {
+  SupabaseFunctions(fetch: (request) {
+    return Response("Hello from Supabase Edge Functions!");
+  });
+}
+```
+
+Each incoming request to your edge function will be passed to the `fetch` handler, which is expected to return a `Response` instance. The `fetch` handler provides a `Request` instance which contains useful information about the incoming request, such as the method, URL, headers, body and more.
+
+## Local development
+
+To run your application locally, first run `edge build supabase_functions --dev` command from the root of your project:
+
+```sh
+edge build supabase_functions --dev
+```
+
+This command will start a build watcher which will recompile any changes you make to your project.
+
+Next run the `dart_edge` function:
+
+```sh
+supabase functions serve dart_edge --no-verify-jwt
+```
+
+> Note: By default Supabase Functions expects a valid auth header. The `--no-verify-jwt` enables you to run the function without a valid auth header.
+
+To learn more about local Supabase development, view their [documentation](https://supabase.com/docs/guides/functions/local-development).
+
+## Deployment
+
+To deploy your application to Supabase, run the following commands:
+
+```sh
+edge build supabase_functions
+supabase functions deploy dart_edge
+```
