@@ -17,7 +17,7 @@
 
 ## About
 
-Dart Edge is a project aimed at running Dart code on Edge functions, including support for platforms such as [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) (more to come).
+Dart Edge is a project aimed at running Dart code on Edge functions, including support for platforms such as [Cloudflare Workers](https://workers.cloudflare.com/), [Vercel Edge Functions](https://vercel.com/features/edge-functions) & [Supabase Edge Functions](https://supabase.com/docs/guides/functions) (more to come).
 
 ```dart
 import 'package:vercel_edge/vercel_edge_shelf.dart';
