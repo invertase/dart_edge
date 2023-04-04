@@ -5,7 +5,7 @@ description: Run Dart on on the Edge.
 
 # Dart Edge
 
-Dart Edge is a project aimed at running Dart code on Edge functions, including support for platforms such as [Cloudflare Workers](https://workers.cloudflare.com/) & [Vercel Edge Functions](https://vercel.com/features/edge-functions) (more to come).
+Dart Edge is a project aimed at running Dart code on Edge functions, including support for platforms such as [Cloudflare Workers](https://workers.cloudflare.com/), [Vercel Edge Functions](https://vercel.com/features/edge-functions) & [Supabase Edge Functions](https://supabase.com/docs/guides/functions) (more to come).
 
 <Warning>
   Dart Edge is an experimental project - it's probably not ready for production
@@ -34,6 +34,7 @@ Next create a new project for your specific provider:
   values={[
     { label: 'Vercel Edge', value: 'vercel' },
     { label: 'Cloudflare Workers', value: 'cloudflare' },
+    { label: 'Supabase Edge Functions', value: 'supabase' },
   ]}
 >
   <TabItem value="vercel">
@@ -52,6 +53,14 @@ Next create a new project for your specific provider:
     View the [Cloudflare Workers](/platform/cloudflare) docs for more information on APIs, usage and deployment.
 
   </TabItem>
+  <TabItem value="supabase">
+    ```sh
+    edge new supabase_functions new_project
+    ```
+
+    View the [Supabase Edge Functions](/platform/supabase) docs for more information on APIs, usage and deployment.
+
+  </TabItem>
 </Tabs>
 
 ## What next?
@@ -60,6 +69,7 @@ Each platform is slightly different, so visit the platform specific documentatio
 
 - [Vercel Edge](/platform/vercel)
 - [Cloudflare Workers](/platform/cloudflare)
+- [Supabase Edge Functions](/platform/supabase)
 
 Some other useful resources:
 
