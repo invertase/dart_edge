@@ -22,7 +22,6 @@ export 'src/text_decoder.dart'
 export 'src/text_encoder.dart' show TextEncoder, TextEncoderEncodeIntoResult;
 
 export 'src/io_http_client.dart';
-export 'src/http_client.dart';
 
 export 'package:js_bindings/bindings/referrer_policy.dart' show ReferrerPolicy;
 export 'package:js_bindings/bindings/fetch.dart'

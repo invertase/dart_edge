@@ -1,12 +1,14 @@
-import 'dart:typed_data';
+library edge_http_client;
 
+import 'dart:typed_data';
 import 'dart:convert';
 
+// todo: this should come from edge_io
+import 'package:edge_runtime/edge_runtime.dart' show HttpClient;
 import 'package:http/http.dart' as http;
 
-import 'io_http_client.dart';
-
-class Client implements http.Client {
+/// A Edge compatible [http.Client] implementation.
+class EdgeHttpClient implements http.Client {
   final _ioClient = HttpClient();
 
   static const _allowedBodyMethods = {

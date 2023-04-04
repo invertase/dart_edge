@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:edge_runtime/edge_runtime.dart';
+import 'package:edge_http_client/edge_http_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 Future Function() run(Future Function() fn) {
   return () async {
-    await http.runWithClient(fn, () => Client());
+    await http.runWithClient(fn, () => EdgeHttpClient());
   };
 }
 
