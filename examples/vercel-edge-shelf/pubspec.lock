@@ -86,7 +86,7 @@ packages:
       path: "../../packages/edge_runtime"
       relative: true
     source: path
-    version: "0.0.3+1"
+    version: "0.0.4"
   file:
     dependency: transitive
     description:
@@ -357,7 +357,7 @@ packages:
       path: "../../packages/vercel_edge"
       relative: true
     source: path
-    version: "0.0.3+2"
+    version: "0.0.4"
   vm_service:
     dependency: transitive
     description:

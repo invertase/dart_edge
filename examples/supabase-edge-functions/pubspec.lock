@@ -79,7 +79,7 @@ packages:
       path: "../../packages/deno_deploy"
       relative: true
     source: path
-    version: "0.0.1-dev.3"
+    version: "0.0.1-dev.4"
   edge:
     dependency: "direct main"
     description:
@@ -87,13 +87,20 @@ packages:
       relative: true
     source: path
     version: "0.0.6"
+  edge_http_client:
+    dependency: "direct main"
+    description:
+      path: "../../packages/edge_http_client"
+      relative: true
+    source: path
+    version: "0.0.1"
   edge_runtime:
     dependency: "direct overridden"
     description:
       path: "../../packages/edge_runtime"
       relative: true
     source: path
-    version: "0.0.3+1"
+    version: "0.0.4"
   file:
     dependency: transitive
     description:
@@ -110,6 +117,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  functions_client:
+    dependency: transitive
+    description:
+      name: functions_client
+      sha256: e82e7325c0fc04d751aca9aaaf7b9e9d599e1e5cf869e0cb7c762a5f53784c71
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   glob:
     dependency: transitive
     description:
@@ -118,6 +133,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  gotrue:
+    dependency: transitive
+    description:
+      name: gotrue
+      sha256: da1528e2de8ec626e04ee93aee6d055b53ab06388cf1a36ffd1d9af776da31f3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.7"
   hotreloader:
     dependency: transitive
     description:
@@ -174,6 +197,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
+  jwt_decode:
+    dependency: transitive
+    description:
+      name: jwt_decode
+      sha256: d2e9f68c052b2225130977429d30f187aa1981d789c76ad104a32243cfdebfbb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
   lints:
     dependency: "direct dev"
     description:
@@ -214,6 +245,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: e4ff8e8564c03f255408decd16e7899da1733852a9110a58fe6d1b817684a63e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   mustache_template:
     dependency: transitive
     description:
@@ -254,6 +293,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  postgrest:
+    dependency: transitive
+    description:
+      name: postgrest
+      sha256: b6c2d1b58e648bdf1e6c775a90064ae1c505879b439c30028cfc5072969e8601
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.3"
   prompts:
     dependency: transitive
     description:
@@ -270,6 +317,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+  realtime_client:
+    dependency: transitive
+    description:
+      name: realtime_client
+      sha256: "467ef702a35858004a1b9c475dc0ebc0b858ade758e99295beda7f101d523198"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   recase:
     dependency: transitive
     description:
@@ -278,6 +333,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  retry:
+    dependency: transitive
+    description:
+      name: retry
+      sha256: a8a1e475a100a0bdc73f529ca8ea1e9c9c76bec8ad86a1f47780139a34ce7aea
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.27.7"
   source_span:
     dependency: transitive
     description:
@@ -294,6 +365,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  storage_client:
+    dependency: transitive
+    description:
+      name: storage_client
+      sha256: d0fefd2e68e14ced989197b6f4f1933290d32fcd633003aafd7a325e4143ddd3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.5"
+  stream_channel:
+    dependency: transitive
+    description:
+      name: stream_channel
+      sha256: "83615bee9045c1d322bbbd1ba209b7a749c2cbcdcb3fdd1df8eb488b3279c1c8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   stream_transform:
     dependency: transitive
     description:
@@ -310,13 +397,21 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  supabase:
+    dependency: "direct main"
+    description:
+      name: supabase
+      sha256: d3c7978c547260950d5b9cbfe7351bc883a16c916c12f3c9c6963b084f42a516
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.3"
   supabase_functions:
     dependency: "direct main"
     description:
       path: "../../packages/supabase_functions"
       relative: true
     source: path
-    version: "0.0.1+1"
+    version: "0.0.2"
   term_glyph:
     dependency: transitive
     description:
@@ -341,6 +436,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  universal_io:
+    dependency: transitive
+    description:
+      name: universal_io
+      sha256: "06866290206d196064fd61df4c7aea1ffe9a4e7c4ccaa8fcded42dd41948005d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   vm_service:
     dependency: transitive
     description:
@@ -357,6 +460,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  web_socket_channel:
+    dependency: transitive
+    description:
+      name: web_socket_channel
+      sha256: ca49c0bc209c687b887f30527fb6a9d80040b072cc2990f34b9bec3e7663101b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   yaml:
     dependency: transitive
     description:
@@ -365,5 +476,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  yet_another_json_isolate:
+    dependency: "direct main"
+    description:
+      name: yet_another_json_isolate
+      sha256: cfaaaf91a1a7f4b226a4fbc72b6db2adadccea1bfa337aef9827d2d0cce6d79a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
 sdks:
   dart: ">=2.19.0 <3.0.0"
