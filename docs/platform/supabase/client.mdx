@@ -1,0 +1,80 @@
+---
+title: Supabase Client
+description: Use the Supabase Client in Dart Edge.
+---
+
+# Supabase Client
+
+The Dart [`supabase`](https://pub.dev/packages/supabase) package provides a client for connecting and interacting with your Supabase project. The client can be used directly inside of Dart Edge, however requires a few additional steps to get started.
+
+## Installation
+
+First, install the [`supabase`](https://pub.dev/packages/supabase) package from pub.dev:
+
+```sh
+dart pub add supabase
+```
+
+Next, install the Dart Edge HTTP Client:
+
+```sh
+dart pub add edge_http_client
+```
+
+Next, install the `yet_another_json_isolate` package (more on this next...):
+
+```sh
+dart pub add yet_another_json_isolate
+```
+
+### Create an Isolate stub
+
+> Please note; this code will be extracted out at some point so this step will be easier.
+
+The Supabase client uses isolates to parse JSON off the main thread. This is not supported in Dart Edge, so we need to create a stub that will allow the client to run it in the main thread.
+
+```dart
+import 'package:yet_another_json_isolate/yet_another_json_isolate.dart';
+
+class EdgeIsolate implements YAJsonIsolate {
+  @override
+  Future decode(String json) {
+    return Future.value(jsonDecode(json));
+  }
+
+  @override
+  Future<void> dispose() async {}
+
+  @override
+  Future<String> encode(Object? json) {
+    return Future.value(jsonEncode(json));
+  }
+
+  @override
+  Future<void> initialize() async {}
+}
+```
+
+## Usage
+
+Within your `lib/main` file, import the `supabase` package and create a new instance of the client:
+
+```dart
+import 'package:supabase_functions/supabase_functions.dart';
+import 'package:edge_http_client/edge_http_client.dart';
+import 'package:supabase/supabase.dart';
+
+void main() {
+  final client = SupabaseClient(
+    'https://<your-project-id>.supabase.co',
+    'your-anon-key',
+    httpClient: EdgeHttpClient(),
+    isolate: EdgeIsolate(),
+  );
+
+  SupabaseFunctions(fetch: (request) async {
+    List users = await client.from('users').select();
+    return Response.json(users);
+  });
+}
+```

@@ -5,4 +5,50 @@ description: Learn how to perform HTTP Requests to fetch data from remote resour
 
 # Fetching Data
 
-<Info>These docs are a work in progress, check back soon!</Info>
+In Edge environemnts, the platform provides a `fetch` API that allows you to perform HTTP requests to fetch data from remote resources.
+If you are familiar with the `fetch` API in the browser, you will find that the Edge version is very similar, however there we appriciate that
+this API may not be familiar to Dart developers, so a custom Edge client is also available.
+
+## Fetch
+
+To perform basic HTTP requests, you can use the `fetch` API. .
+
+```dart
+Future<void> getData() async {
+  final response = await fetch('https://example.com/data.json');
+  final data = await response.json();
+}
+```
+
+To perform requests such as POST, and add other metadata such as headers:
+
+```dart
+Future<void> getData() async {
+  final response = await fetch('https://example.com/data.json', method: 'POST', headers: Headers({
+    'Content-Type': 'application/json',
+  }));
+  final data = await response.json();
+}
+```
+
+## HTTP Package
+
+The [`http`](https://pub.dev/packages/http) package is a popular package for performing HTTP requests in Dart. Dart Edge provides a custom client built ontop of the HTTP client that is compatible with the `http` package.
+
+First, install the `edge_http_client` package:
+
+```sh
+dart pub add edge_http_client
+```
+
+Next, import and use the `EdgeHttpClient` instance via the [`runWithClient`](https://pub.dev/documentation/http/latest/http/runWithClient.html) API:
+
+```dart
+import 'package:edge_http_client/edge_http_client.dart';
+import 'package:http/http.dart' as http;
+
+http.runWithClient(() async {
+  final response = await http.get('https://example.com/data.json');
+  final data = jsonDecode(response.body);
+}, () => EdgeHttpClient());
+```
