@@ -15,6 +15,47 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`edge_http_client` - `v0.0.1+1`](#edge_http_client---v0011)
+ - [`edge_runtime` - `v0.0.4+1`](#edge_runtime---v0041)
+ - [`netlify_edge` - `v0.0.1-dev.11`](#netlify_edge---v001-dev11)
+ - [`cloudflare_workers` - `v0.0.4+1`](#cloudflare_workers---v0041)
+ - [`deno_deploy` - `v0.0.1-dev.5`](#deno_deploy---v001-dev5)
+ - [`vercel_edge` - `v0.0.4+1`](#vercel_edge---v0041)
+ - [`supabase_functions` - `v0.0.2+1`](#supabase_functions---v0021)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.11`
+ - `cloudflare_workers` - `v0.0.4+1`
+ - `deno_deploy` - `v0.0.1-dev.5`
+ - `vercel_edge` - `v0.0.4+1`
+ - `supabase_functions` - `v0.0.2+1`
+
+---
+
+#### `edge_http_client` - `v0.0.1+1`
+
+ - **FIX**: fix invalid content length value in client. ([70d53268](https://github.com/invertase/dart_edge/commit/70d53268fbcca6cd076968c9a30818104712bb05))
+
+#### `edge_runtime` - `v0.0.4+1`
+
+ - **FIX**: fix invalid content length value in client. ([70d53268](https://github.com/invertase/dart_edge/commit/70d53268fbcca6cd076968c9a30818104712bb05))
+
+
+## 2023-04-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`cloudflare_workers` - `v0.0.4`](#cloudflare_workers---v004)
  - [`deno_deploy` - `v0.0.1-dev.4`](#deno_deploy---v001-dev4)
  - [`edge_runtime` - `v0.0.4`](#edge_runtime---v004)
