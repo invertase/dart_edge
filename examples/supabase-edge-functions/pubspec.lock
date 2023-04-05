@@ -74,28 +74,25 @@ packages:
     source: hosted
     version: "3.0.2"
   deno_deploy:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: deno_deploy
-      sha256: "3b6eef9d88d93e6144b9f9501481615ac1a55e8ca7ff4882250799eeb0d70840"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/deno_deploy"
+      relative: true
+    source: path
     version: "0.0.1-dev.3"
   edge:
     dependency: "direct main"
     description:
-      name: edge
-      sha256: f3c0c6e6e0845c64a8d44c6208a856dbf4a75b8a2d37aeb7a8a338f6c3433426
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/edge"
+      relative: true
+    source: path
     version: "0.0.6"
   edge_runtime:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: edge_runtime
-      sha256: "9ce28ef2c83f0db9eb857c4b433c1531c5bab31627cc6544727d4abc918570d7"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/edge_runtime"
+      relative: true
+    source: path
     version: "0.0.3+1"
   file:
     dependency: transitive
@@ -316,10 +313,9 @@ packages:
   supabase_functions:
     dependency: "direct main"
     description:
-      name: supabase_functions
-      sha256: "4f9c5e3755e0f8e6066f528642840ec3ea9a2025ee1069293512083ade375b0b"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/supabase_functions"
+      relative: true
+    source: path
     version: "0.0.1+1"
   term_glyph:
     dependency: transitive

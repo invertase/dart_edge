@@ -218,7 +218,7 @@ packages:
     source: hosted
     version: "2.2.0"
   http:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: http
       sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
@@ -268,12 +268,11 @@ packages:
   js_bindings:
     dependency: "direct main"
     description:
-      path: "."
-      ref: adc8f2fbb794b86af7280f2aa5adb2b48cdefa43
-      resolved-ref: adc8f2fbb794b86af7280f2aa5adb2b48cdefa43
-      url: "git@github.com:jodinathan/js_bindings.git"
-    source: git
-    version: "0.1.2"
+      name: js_bindings
+      sha256: "4b2f25c42b5b5eb2537bfe1006878787bdf10d50f680d80d15bd90569e36c926"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2+1"
   json_annotation:
     dependency: transitive
     description:
