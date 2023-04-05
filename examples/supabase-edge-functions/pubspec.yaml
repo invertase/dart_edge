@@ -8,6 +8,10 @@ environment:
 
 dependencies:
   edge: ^0.0.5
+  edge_http_client: ^0.0.1
+  supabase: ^1.6.3
   supabase_functions: ^0.0.2
+  yet_another_json_isolate: ^1.0.2
+
 dev_dependencies:
   lints: ^2.0.1

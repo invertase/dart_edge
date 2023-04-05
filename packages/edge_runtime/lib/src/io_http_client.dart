@@ -287,7 +287,6 @@ class HttpClientRequest implements io.HttpClientRequest {
 
   @override
   Future<HttpClientResponse> close() async {
-    print('close()');
     final fetchResponse = await fetch(
       _resource,
       body: _body != null ? Uint8List.fromList(_body!) : null,

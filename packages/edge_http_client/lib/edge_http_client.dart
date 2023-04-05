@@ -150,7 +150,6 @@ class EdgeHttpClient implements http.Client {
       req.contentLength = bytes.length;
       req.add(bytes);
     }
-
     final res = await req.close();
     final resHeaders = <String, String>{};
 
@@ -161,7 +160,8 @@ class EdgeHttpClient implements http.Client {
     return http.StreamedResponse(
       res,
       res.statusCode,
-      contentLength: res.contentLength,
+      request: request,
+      contentLength: res.contentLength == -1 ? null : res.contentLength,
       headers: resHeaders,
       isRedirect: res.isRedirect,
       persistentConnection: res.persistentConnection,
