@@ -1,3 +1,7 @@
+## 0.0.4
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
 ## 0.0.3+1
 
  - **FIX**: patch location.href global ([#19](https://github.com/invertase/dart_edge/issues/19)). ([fd8ed116](https://github.com/invertase/dart_edge/commit/fd8ed116ec22c410bb101be36296be8915888c7a))

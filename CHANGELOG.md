@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cloudflare_workers` - `v0.0.4`](#cloudflare_workers---v004)
+ - [`deno_deploy` - `v0.0.1-dev.4`](#deno_deploy---v001-dev4)
+ - [`edge_runtime` - `v0.0.4`](#edge_runtime---v004)
+ - [`netlify_edge` - `v0.0.1-dev.10`](#netlify_edge---v001-dev10)
+ - [`supabase_functions` - `v0.0.2`](#supabase_functions---v002)
+ - [`vercel_edge` - `v0.0.4`](#vercel_edge---v004)
+ - [`edge_http_client` - `v0.0.1+1`](#edge_http_client---v0011)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `edge_http_client` - `v0.0.1+1`
+
+---
+
+#### `cloudflare_workers` - `v0.0.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `deno_deploy` - `v0.0.1-dev.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `edge_runtime` - `v0.0.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `netlify_edge` - `v0.0.1-dev.10`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `supabase_functions` - `v0.0.2`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `vercel_edge` - `v0.0.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+
 ## 2023-04-04
 
 ### Changes

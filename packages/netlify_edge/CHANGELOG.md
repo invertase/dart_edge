@@ -1,3 +1,7 @@
+## 0.0.1-dev.10
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
 ## 0.0.1-dev.9
 
  - Update a dependency to the latest release.
