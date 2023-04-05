@@ -2,18 +2,15 @@ name: netlify_edge
 description: Write and deploy Dart functions to the Netlify Edge network.
 homepage: https://dartedge.dev
 repository: https://github.com/invertase/dart_edge/tree/main/packages/netlify_edge
-version: 0.0.1-dev.8
+version: 0.0.1-dev.9
 
 environment:
   sdk: ">=2.18.5 <3.0.0"
 
 dependencies:
-  edge: ^0.0.5
-  edge_runtime: ^0.0.3
-  js_bindings:
-    git:
-      url: git@github.com:jodinathan/js_bindings.git
-      ref: adc8f2fbb794b86af7280f2aa5adb2b48cdefa43
+  edge: ^0.0.6
+  edge_runtime: ^0.0.3+1
+  js_bindings: ^0.1.0
   js: ^0.6.5
   path: ^1.8.3
 

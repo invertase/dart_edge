@@ -1,6 +1,7 @@
 import 'base_command.dart';
 import 'new_commands/cloudflare_new_command.dart';
 import 'new_commands/vercel_new_command.dart';
+import 'new_commands/supabase_new_command.dart';
 
 class NewCommand extends BaseCommand {
   @override
@@ -14,5 +15,6 @@ class NewCommand extends BaseCommand {
   }) {
     addSubcommand(VercelNewCommand(logger: logger));
     addSubcommand(CloudflareNewCommand(logger: logger));
+    addSubcommand(SupabaseNewCommand(logger: logger));
   }
 }
