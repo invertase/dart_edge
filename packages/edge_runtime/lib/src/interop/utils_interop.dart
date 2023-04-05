@@ -7,11 +7,16 @@ import '../resource.dart';
 import '../request.dart';
 
 interop.Request requestFromResource(Resource resource) {
-  return resource.when(
-    (url) => interop.Request(url),
-    uri: (uri) => interop.Request(uri.toString()),
-    request: (request) => request.delegate,
-  );
+  switch (resource.runtimeType) {
+    case StringValue:
+      return interop.Request((resource as StringValue).url);
+    case UriValue:
+      return interop.Request((resource as UriValue).uri.toString());
+    case RequestValue:
+      return (resource as RequestValue).request.delegate;
+    default:
+      throw Exception('Unknown resource type ${resource.runtimeType}');
+  }
 }
 
 @JS('Object.keys')
@@ -25,7 +30,6 @@ external Object get jsUndefined;
 class JavaScriptObject {
   external factory JavaScriptObject();
 }
-
 
 extension PropsJavaScriptObject on JavaScriptObject {
   T get<T>(String key) => js_util.getProperty(this, key);
