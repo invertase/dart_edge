@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:edge_io/src/memory_directory.dart';
-import 'package:edge_io/src/memory_fse.dart';
 import 'package:path/path.dart' as p;
-
 import 'package:edge_io/file_system_platform_interface.dart';
+
+import 'memory_directory.dart';
+import 'memory_fse.dart';
 
 class _Entities {
   final Map<String, MemoryFSE> _pathsMap = {};

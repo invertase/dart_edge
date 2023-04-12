@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:edge_io/src/memory_fse.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:edge_io/fs_adapter_platform_interface.dart';
 
 import 'memory_directory.dart';
 import 'memory_fs.dart';
+import 'memory_fse.dart';
 
 class MemoryFSAdapter implements PlatformFSAdapter<MemoryFS> {
   @override

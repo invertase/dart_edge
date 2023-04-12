@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:edge_io/file_system_platform_interface.dart';
-import 'package:edge_io/src/memory_stat.dart';
 import 'package:path/path.dart' as p;
+
+import 'memory_stat.dart';
 
 abstract class MemoryFSE<T extends FileSystemEntity> extends FileSystemEntity {
   late final String _absolutePath;

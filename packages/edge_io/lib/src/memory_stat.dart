@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:edge_io/src/memory_fse.dart';
+import 'memory_fse.dart';
 
 class MemoryStat implements FileStat {
   final MemoryFSE entity;

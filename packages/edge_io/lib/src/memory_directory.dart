@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:path/path.dart' as p;
 
 import 'package:edge_io/file_system_platform_interface.dart';
-import 'package:edge_io/src/memory_fse.dart';
+import 'memory_fse.dart';
 
 final r = Random.secure();
 final chars = 'abcdefghijklmnopqrstuvwxyz0123456789'.split('');
