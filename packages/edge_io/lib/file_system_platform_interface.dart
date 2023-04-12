@@ -12,8 +12,8 @@ abstract class FileSystemPlatform {
     bool recursive = false,
   });
 
-  T getEntity<T extends FileSystemEntity>(String path);
-  FileStat stat<T extends FileSystemEntity>(T entity);
+  T? getEntity<T extends FileSystemEntity>(String path);
+  FileStat stat(covariant FileSystemEntity entity);
 
   Iterable<T> list<T extends FileSystemEntity>(
     String path, {

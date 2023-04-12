@@ -55,7 +55,7 @@ class _Entities {
   }
 }
 
-class MemoryFS extends FileSystemPlatform<MemoryFSE> {
+class MemoryFS extends FileSystemPlatform {
   @override
   late Directory cwd;
 
@@ -70,7 +70,7 @@ class MemoryFS extends FileSystemPlatform<MemoryFSE> {
   }
 
   @override
-  T rename<T extends MemoryFSE>(String path, String newPath) {
+  T rename<T extends FileSystemEntity>(String path, String newPath) {
     final entity = _entities.remove(path);
 
     try {
@@ -105,7 +105,7 @@ class MemoryFS extends FileSystemPlatform<MemoryFSE> {
   }
 
   @override
-  T create<T extends MemoryFSE>(
+  T create<T extends FileSystemEntity>(
     String path,
     T entity, {
     bool recursive = false,
@@ -120,14 +120,14 @@ class MemoryFS extends FileSystemPlatform<MemoryFSE> {
     if (_entities.has(path)) {
       throw FileSystemException('File exists', path);
     } else {
-      _entities[path] = entity;
+      _entities[path] = entity as MemoryFSE;
       return entity;
     }
   }
 
   @override
-  MemoryFSE? getEntity(String path) {
-    return _entities[path];
+  T? getEntity<T extends FileSystemEntity>(String path) {
+    return _entities[path] as T;
   }
 
   @override
@@ -136,7 +136,7 @@ class MemoryFS extends FileSystemPlatform<MemoryFSE> {
   }
 
   @override
-  Iterable<K> list<K extends MemoryFSE>(
+  Iterable<T> list<T extends FileSystemEntity>(
     String path, {
     bool recursive = false,
     bool followLinks = true,

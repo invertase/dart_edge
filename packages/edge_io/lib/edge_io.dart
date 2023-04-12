@@ -8,10 +8,8 @@ class EdgeIOOverrides implements IOOverrides {
   final PlatformFSAdapter fsAdapter;
 
   EdgeIOOverrides({
-    this.fsAdapter = const MemoryFSAdapter(),
-  }) {
-    fsAdapter.mount();
-  }
+    PlatformFSAdapter? fsAdapter,
+  }) : fsAdapter = fsAdapter ?? MemoryFSAdapter();
 
   @override
   Directory createDirectory(String path) {

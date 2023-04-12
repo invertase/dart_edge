@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:edge_io/src/memory_fse.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:edge_io/fs_adapter_platform_interface.dart';
@@ -35,7 +36,7 @@ class MemoryFSAdapter implements PlatformFSAdapter<MemoryFS> {
 
   @override
   FileSystemEntityType getType(String path, bool followLinks) {
-    final entity = fs.getEntity(path);
+    final entity = fs.getEntity<MemoryFSE>(path);
 
     if (entity == null) {
       return FileSystemEntityType.notFound;
@@ -63,7 +64,7 @@ class MemoryFSAdapter implements PlatformFSAdapter<MemoryFS> {
 
   @override
   FileStat stat(String path) {
-    final entity = fs.getEntity(path);
+    final entity = fs.getEntity<MemoryFSE>(path);
 
     if (entity == null) {
       throw FileSystemException('No such file or directory', path);
