@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 
 import '../../compiler.dart';
 import '../../watcher.dart';
@@ -21,13 +22,43 @@ class SupabaseBuildCommand extends BaseCommand {
       help:
           'Runs Dart Edge in a local development environment with hot reload via Vercel CLI.',
     );
+    argParser.addOption(
+      'output',
+      abbr: 'o',
+      help: 'The output directory for the compiled Dart Edge function.',
+      defaultsTo: 'supabase/functions/dart_edge',
+    );
+  }
+
+  Future<YamlMap?> getConfig() async {
+    final file = File(p.join(Directory.current.path, 'edge.yaml'));
+    if (!file.existsSync()) {
+      return null;
+    }
+    return file.readAsString().then((value) => loadYaml(value));
+  }
+
+  final _defaultOutputDirectory = 'supabase/functions/dart_edge';
+
+  Directory getOutputDirectory(YamlMap? cfg) {
+    String _getOutputDir() {
+      if (argResults!.wasParsed('output')) {
+        return argResults!['output'] as String;
+      }
+      if (cfg != null) {
+        return cfg['supabase']['output'] as String;
+      }
+
+      return _defaultOutputDirectory;
+    }
+
+    return Directory(p.canonicalize(_getOutputDir()));
   }
 
   Future<void> runDev() async {
-    final functionDirectory = Directory(
-      p.join(Directory.current.path, 'supabase', 'functions', 'dart_edge'),
-    );
-
+    final cfg = await getConfig();
+    final functionDirectory = getOutputDirectory(cfg);
+    print("Building Edge Function in ${functionDirectory.path}...");
     final entryFile = File(p.join(functionDirectory.path, 'index.ts'));
 
     final watcher = Watcher(
@@ -56,9 +87,9 @@ class SupabaseBuildCommand extends BaseCommand {
   }
 
   Future<void> runBuild() async {
-    final functionDirectory = Directory(
-      p.join(Directory.current.path, 'supabase', 'functions', 'dart_edge'),
-    );
+    final cfg = await getConfig();
+    final functionDirectory = getOutputDirectory(cfg);
+    print("Building Edge Function in ${functionDirectory.path}...");
 
     final entryFile = File(p.join(functionDirectory.path, 'index.ts'));
 

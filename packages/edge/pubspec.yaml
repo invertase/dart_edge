@@ -18,6 +18,7 @@ dependencies:
   watcher: ^1.0.2
   prompts: ^2.0.0
   mason_logger: ^0.2.5
+  yaml: ^3.1.1
 
 executables:
   edge:
