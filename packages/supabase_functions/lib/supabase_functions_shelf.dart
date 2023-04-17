@@ -37,6 +37,9 @@ class SupabaseFunctionsShelf {
           // Remove the first path segment, because it starts with `dart_edge/<actual-sub-path>`.
           var uri = Uri.parse(clone.url);
           uri = uri.replace(pathSegments: uri.pathSegments.skip(1));
+          if (uri.path.isEmpty) {
+            uri = uri.replace(path: "/");
+          }
 
           final shelfRequest = shelf.Request(
             clone.method,
