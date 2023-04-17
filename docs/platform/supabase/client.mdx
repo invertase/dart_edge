@@ -21,40 +21,6 @@ Next, install the Dart Edge HTTP Client:
 dart pub add edge_http_client
 ```
 
-Next, install the `yet_another_json_isolate` package (more on this next...):
-
-```sh
-dart pub add yet_another_json_isolate
-```
-
-### Create an Isolate stub
-
-> Please note; this code will be extracted out at some point so this step will be easier.
-
-The Supabase client uses isolates to parse JSON off the main thread. This is not supported in Dart Edge, so we need to create a stub that will allow the client to run it in the main thread.
-
-```dart
-import 'package:yet_another_json_isolate/yet_another_json_isolate.dart';
-
-class EdgeIsolate implements YAJsonIsolate {
-  @override
-  Future decode(String json) {
-    return Future.value(jsonDecode(json));
-  }
-
-  @override
-  Future<void> dispose() async {}
-
-  @override
-  Future<String> encode(Object? json) {
-    return Future.value(jsonEncode(json));
-  }
-
-  @override
-  Future<void> initialize() async {}
-}
-```
-
 ## Usage
 
 Within your `lib/main` file, import the `supabase` package and create a new instance of the client:
@@ -69,7 +35,6 @@ void main() {
     'https://<your-project-id>.supabase.co',
     'your-anon-key',
     httpClient: EdgeHttpClient(),
-    isolate: EdgeIsolate(),
   );
 
   SupabaseFunctions(fetch: (request) async {
