@@ -9,8 +9,10 @@ import 'package:path/path.dart' as p;
 abstract class BaseCommand extends Command {
   final Logger logger;
 
+  final String configFilePath = p.join(Directory.current.path, 'edge.yaml');
+
   Future<Config> getConfig() {
-    final file = File(p.join(Directory.current.path, 'edge.yaml'));
+    final file = File(configFilePath);
     if (!file.existsSync()) {
       return Future.value(Config());
     } else {
