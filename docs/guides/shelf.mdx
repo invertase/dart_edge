@@ -34,7 +34,7 @@ void main() {
     fetch: (request) async {
       final app = Router();
 
-      app.get('/', (request, String id) async {
+      app.get('/', (request) async {
         return Response.ok('Welcome to Dart Edge!');
       });
 
@@ -49,5 +49,3 @@ void main() {
 ```
 
 Alternatively, you could return a [`Pipeline`](https://pub.dev/documentation/shelf/latest/shelf/Pipeline-class.html) handler to apply middleware to your requests.
-
-
