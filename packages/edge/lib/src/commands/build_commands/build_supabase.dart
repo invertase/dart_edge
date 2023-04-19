@@ -49,6 +49,9 @@ class SupabaseBuildCommand extends BaseCommand {
 
   Future<void> runDev() async {
     final cfg = await getConfig();
+    final exitOnError =
+        cfg.get(cfg.supabase, (c) => c.exitWatchOnFailure) ?? true;
+    logger.detail("Watcher will ${exitOnError ? '' : 'not '}exit on error.");
 
     final watcher = Watcher(
       include: '**/*.dart',
@@ -69,9 +72,11 @@ class SupabaseBuildCommand extends BaseCommand {
         entryPoint: p.join(Directory.current.path, fn.value),
         outputDirectory: fnDir,
         outputFileName: 'main.dart.js',
-        level: CompilerLevel.O1,
+        level: cfg.get(cfg.supabase, (c) => c.devCompilerLevel) ??
+            CompilerLevel.O1,
         fileName: fn.value,
         showProgress: false,
+        exitOnError: exitOnError,
       );
 
       futures.add(compiler.compile());
@@ -98,9 +103,6 @@ class SupabaseBuildCommand extends BaseCommand {
   }
 
   Future<void> runBuild() async {
-    if (argResults!['verbose'] as bool) {
-      logger.level = Level.verbose;
-    }
     final cfg = await getConfig();
 
     for (final fn in cfg.supabase.functions.entries) {
@@ -112,8 +114,10 @@ class SupabaseBuildCommand extends BaseCommand {
         entryPoint: p.join(Directory.current.path, fn.value),
         outputDirectory: fnDir,
         outputFileName: 'main.dart.js',
-        level: CompilerLevel.O4,
+        level: cfg.get(cfg.supabase, (c) => c.prodCompilerLevel) ??
+            CompilerLevel.O4,
         fileName: fn.value,
+        exitOnError: cfg.get(cfg.supabase, (c) => c.exitWatchOnFailure) ?? true,
       );
 
       await compiler.compile();
@@ -127,6 +131,9 @@ class SupabaseBuildCommand extends BaseCommand {
   @override
   void run() async {
     final isDev = argResults!['dev'] as bool;
+    if (argResults!['verbose'] as bool) {
+      logger.level = Level.verbose;
+    }
 
     if (isDev) {
       await runDev();

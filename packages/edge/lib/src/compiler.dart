@@ -27,6 +27,7 @@ class Compiler {
 
   final String fileName;
   final bool showProgress;
+  final bool exitOnError;
 
   Compiler({
     required this.logger,
@@ -36,12 +37,13 @@ class Compiler {
     this.fileName = 'Dart entry file',
     this.outputFileName = 'main.dart.js',
     this.showProgress = true,
+    this.exitOnError = true,
   });
 
   Future<String> compile() async {
     final entry = File(entryPoint);
 
-    if (!await entry.exists()) {
+    if (!entry.existsSync()) {
       logger.err(
           'Attempted to compile the entry file at ${entry.path}, but no file was found.');
       logger.lineBreak();
@@ -80,7 +82,7 @@ class Compiler {
       logger.err('Compilation of the Dart entry file failed:');
       logger.lineBreak();
       logger.err(process.stdout);
-      exit(1);
+      if (exitOnError) exit(1);
     }
 
     progress?.complete();
