@@ -1,5 +1,7 @@
+import 'dart:js_util';
+
 import 'package:edge/src/platforms/cloudflare_workers.dart';
-import 'package:edge_runtime/edge_runtime.dart';
+import 'package:edge_runtime/src/interop/readable_stream.dart';
 import 'package:js/js.dart';
 import 'package:node_interop/child_process.dart';
 import 'package:node_interop/fs.dart';
@@ -102,7 +104,10 @@ extension ResponseExtension on Response {
         js_util.callMethod(this, 'text', []),
       );
 
-  ReadableStream? get body => js_util.getProperty(this, 'body');
+  Stream<List<int>>? get body {
+    final body = getProperty(this, 'body');
+    return body == null ? null : streamFromJSReadable(ReadableStream());
+  }
 }
 
 @JS()

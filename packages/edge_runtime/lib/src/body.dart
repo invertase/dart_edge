@@ -1,10 +1,9 @@
 import 'dart:typed_data';
 
 import 'form_data.dart';
-import 'readable_stream.dart';
 
 abstract class Body {
-  ReadableStream? get body;
+  Stream<List<int>>? get body;
   bool get bodyUsed;
   Future<String> text();
   Future<Object?> json();

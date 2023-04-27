@@ -1,0 +1,112 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "cloudflare-durable-objects",
+      "cwd": "examples/cloudflare-durable-objects",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "vercel-edge-shelf",
+      "cwd": "examples/vercel-edge-shelf",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "cloudflare_workers",
+      "cwd": "packages/cloudflare_workers",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "deno_deploy",
+      "cwd": "packages/deno_deploy",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "edge",
+      "cwd": "packages/edge",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "edge_runtime",
+      "cwd": "packages/edge_runtime",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "netlify_edge",
+      "cwd": "packages/netlify_edge",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "supabase_functions",
+      "cwd": "packages/supabase_functions",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "vercel_edge",
+      "cwd": "packages/vercel_edge",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "__brick__",
+      "cwd": "bricks/cloudflare_workers/__brick__",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "__brick__",
+      "cwd": "bricks/vercel_edge/__brick__",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "example",
+      "cwd": "packages/cloudflare_workers/example",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "example",
+      "cwd": "packages/edge_runtime/example",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "example",
+      "cwd": "packages/netlify_edge/example",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "example",
+      "cwd": "packages/supabase_functions/example",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "example",
+      "cwd": "packages/vercel_edge/example",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "edge_runtime_test",
+      "cwd": "packages/edge_runtime",
+      "program": "test",
+      "request": "launch",
+      "type": "dart",
+      "args": ["-p", "chrome"]
+    }
+  ]
+}

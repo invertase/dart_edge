@@ -1,3 +1,8 @@
+## 0.0.6
+
+ - **FIX**: register supabase new command. ([66fdd085](https://github.com/invertase/dart_edge/commit/66fdd0857d2d491460fed8f906b0cb3263c93a21))
+ - **FEAT**: add supabase_functions new command. ([1a0583ef](https://github.com/invertase/dart_edge/commit/1a0583efe9e45bdcf921895696694ff27c213b04))
+
 ## 0.0.5
 
  - **FEAT**: add working supabase example. ([c9544bb0](https://github.com/invertase/dart_edge/commit/c9544bb0a408a25cc977017ecae74ed06a92f3d4))

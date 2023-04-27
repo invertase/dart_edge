@@ -15,7 +15,7 @@ packages:
       path: "../edge_runtime"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   freezed_annotation:
     dependency: transitive
     description:
@@ -36,10 +36,10 @@ packages:
     dependency: "direct main"
     description:
       name: js_bindings
-      sha256: d7890d70b8895020bd8744d8f6fe2db78b5f1ffe7359e9d257986ea1becfd726
+      sha256: "4b2f25c42b5b5eb2537bfe1006878787bdf10d50f680d80d15bd90569e36c926"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.2+1"
   json_annotation:
     dependency: transitive
     description:

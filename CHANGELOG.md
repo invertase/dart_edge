@@ -3,6 +3,161 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-04-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`edge_http_client` - `v0.0.1+1`](#edge_http_client---v0011)
+ - [`edge_runtime` - `v0.0.4+1`](#edge_runtime---v0041)
+ - [`netlify_edge` - `v0.0.1-dev.11`](#netlify_edge---v001-dev11)
+ - [`cloudflare_workers` - `v0.0.4+1`](#cloudflare_workers---v0041)
+ - [`deno_deploy` - `v0.0.1-dev.5`](#deno_deploy---v001-dev5)
+ - [`vercel_edge` - `v0.0.4+1`](#vercel_edge---v0041)
+ - [`supabase_functions` - `v0.0.2+1`](#supabase_functions---v0021)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.11`
+ - `cloudflare_workers` - `v0.0.4+1`
+ - `deno_deploy` - `v0.0.1-dev.5`
+ - `vercel_edge` - `v0.0.4+1`
+ - `supabase_functions` - `v0.0.2+1`
+
+---
+
+#### `edge_http_client` - `v0.0.1+1`
+
+ - **FIX**: fix invalid content length value in client. ([70d53268](https://github.com/invertase/dart_edge/commit/70d53268fbcca6cd076968c9a30818104712bb05))
+
+#### `edge_runtime` - `v0.0.4+1`
+
+ - **FIX**: fix invalid content length value in client. ([70d53268](https://github.com/invertase/dart_edge/commit/70d53268fbcca6cd076968c9a30818104712bb05))
+
+
+## 2023-04-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cloudflare_workers` - `v0.0.4`](#cloudflare_workers---v004)
+ - [`deno_deploy` - `v0.0.1-dev.4`](#deno_deploy---v001-dev4)
+ - [`edge_runtime` - `v0.0.4`](#edge_runtime---v004)
+ - [`netlify_edge` - `v0.0.1-dev.10`](#netlify_edge---v001-dev10)
+ - [`supabase_functions` - `v0.0.2`](#supabase_functions---v002)
+ - [`vercel_edge` - `v0.0.4`](#vercel_edge---v004)
+ - [`edge_http_client` - `v0.0.1+1`](#edge_http_client---v0011)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `edge_http_client` - `v0.0.1+1`
+
+---
+
+#### `cloudflare_workers` - `v0.0.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `deno_deploy` - `v0.0.1-dev.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `edge_runtime` - `v0.0.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `netlify_edge` - `v0.0.1-dev.10`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `supabase_functions` - `v0.0.2`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+#### `vercel_edge` - `v0.0.4`
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+
+## 2023-04-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`edge` - `v0.0.6`](#edge---v006)
+ - [`edge_runtime` - `v0.0.3+1`](#edge_runtime---v0031)
+ - [`netlify_edge` - `v0.0.1-dev.9`](#netlify_edge---v001-dev9)
+ - [`vercel_edge` - `v0.0.3+2`](#vercel_edge---v0032)
+ - [`cloudflare_workers` - `v0.0.3+2`](#cloudflare_workers---v0032)
+ - [`supabase_functions` - `v0.0.1+1`](#supabase_functions---v0011)
+ - [`deno_deploy` - `v0.0.1-dev.3`](#deno_deploy---v001-dev3)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.9`
+ - `vercel_edge` - `v0.0.3+2`
+ - `cloudflare_workers` - `v0.0.3+2`
+ - `supabase_functions` - `v0.0.1+1`
+ - `deno_deploy` - `v0.0.1-dev.3`
+
+---
+
+#### `edge` - `v0.0.6`
+
+ - **FIX**: register supabase new command. ([66fdd085](https://github.com/invertase/dart_edge/commit/66fdd0857d2d491460fed8f906b0cb3263c93a21))
+ - **FEAT**: add supabase_functions new command. ([1a0583ef](https://github.com/invertase/dart_edge/commit/1a0583efe9e45bdcf921895696694ff27c213b04))
+
+#### `edge_runtime` - `v0.0.3+1`
+
+ - **FIX**: patch location.href global ([#19](https://github.com/invertase/dart_edge/issues/19)). ([fd8ed116](https://github.com/invertase/dart_edge/commit/fd8ed116ec22c410bb101be36296be8915888c7a))
+
+
+## 2023-04-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`supabase_functions` - `v0.0.1`](#supabase_functions---v001)
+
+---
+
+#### `supabase_functions` - `v0.0.1`
+
+
 ## 2023-02-22
 
 ### Changes

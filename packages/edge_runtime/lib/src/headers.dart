@@ -1,7 +1,8 @@
 import 'dart:js_util' show jsify;
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:js_bindings/js_bindings.dart' as js_bindings;
 
-// TODO missing iterable methods, see https://github.com/jodinathan/js_bindings/issues/24
+import 'interop/headers.dart' as interop;
+
 class Headers {
   final interop.Headers _delegate;
 
@@ -13,6 +14,7 @@ class Headers {
   bool has(String name) => _delegate.has(name);
   void append(String name, String value) => _delegate.append(name, value);
   void delete(String name) => _delegate.delete(name);
+  String? get(String name) => _delegate.get(name);
 
   operator []=(String name, String value) {
     _delegate.set(name, value);
@@ -21,6 +23,12 @@ class Headers {
   String? operator [](String name) {
     return _delegate.get(name);
   }
+
+  Iterable<String> get keys => _delegate.keys;
+  Iterable<String> get values => _delegate.values;
+
+  Map<String, String> toMap() => _delegate.toMap();
+  js_bindings.Headers toJsBindingsHeaders() => _delegate as js_bindings.Headers;
 }
 
 extension HeadersExtension on Headers {

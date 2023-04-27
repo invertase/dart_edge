@@ -1,0 +1,16 @@
+name: edge_http_client
+description: A http package implementation for Dart Edge.
+homepage: https://dartedge.dev
+repository: https://github.com/invertase/dart_edge/tree/main/packages/edge_http_client
+version: 0.0.1+1
+
+environment:
+  sdk: ">=2.18.5 <3.0.0"
+
+dependencies:
+  edge_runtime: ^0.0.4+1
+  http: ^0.13.5
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.16.0

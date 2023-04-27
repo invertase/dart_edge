@@ -6,7 +6,6 @@ export 'src/top.dart';
 
 export 'src/abort.dart' show AbortController, AbortSignal;
 export 'src/blob.dart' show Blob, BlobPropertyBag;
-export 'src/body.dart' show Body;
 export 'src/cache/cache_query_options.dart'
     show CacheQueryOptions, MultiCacheQueryOptions;
 export 'src/cache/cache_storage.dart' show CacheStorage, caches;
@@ -15,13 +14,14 @@ export 'src/fetch_event.dart' show FetchEvent;
 export 'src/file.dart' show File;
 export 'src/form_data.dart' show FormData, FormDataEntryValue;
 export 'src/headers.dart' show Headers;
-export 'src/readable_stream.dart' show ReadableStream;
 export 'src/request.dart' show Request;
 export 'src/resource.dart' show Resource;
 export 'src/response.dart' show Response;
 export 'src/text_decoder.dart'
     show TextDecoder, TextDecodeOptions, TextDecoderOptions;
 export 'src/text_encoder.dart' show TextEncoder, TextEncoderEncodeIntoResult;
+
+export 'src/io_http_client.dart';
 
 export 'package:js_bindings/bindings/referrer_policy.dart' show ReferrerPolicy;
 export 'package:js_bindings/bindings/fetch.dart'
@@ -47,4 +47,5 @@ void setupRuntime() {
 
   // Dart to JS assumes we're in a browser context, so we need to patch in.
   context['window'] ??= context['self'];
+  // HttpOverrides.global = FetchHttpOverride();
 }

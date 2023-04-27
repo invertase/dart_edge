@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:js_util' show jsify;
+import 'dart:js_util' show jsify, getProperty;
 import 'dart:typed_data';
 
 import 'package:js_bindings/js_bindings.dart' as interop;
@@ -9,8 +9,9 @@ import 'blob.dart';
 import 'body.dart';
 import 'form_data.dart';
 import 'headers.dart';
-import 'readable_stream.dart';
+import 'interop/readable_stream.dart';
 import 'interop/utils_interop.dart';
+import 'interop/headers.dart' as headers_interop;
 
 class Response implements Body {
   final interop.Response _delegate;
@@ -65,7 +66,12 @@ class Response implements Body {
   int get status => _delegate.status;
   bool get ok => _delegate.ok;
   String get statusText => _delegate.statusText;
-  Headers get headers => headersFromJsObject(_delegate.headers);
+  Headers get headers {
+    return headersFromJsObject(
+      getProperty<headers_interop.Headers>(_delegate, 'headers'),
+    );
+  }
+
   Response clone() => Response._(_delegate.clone());
 
   @override
@@ -74,10 +80,9 @@ class Response implements Body {
   @override
   Future<Object> blob() async => blobFromJsObject(await _delegate.blob());
 
-  @override
-  ReadableStream? get body {
-    final body = _delegate.body;
-    return body == null ? null : readableStreamFromJsObject(body);
+  Stream<List<int>>? get body {
+    final body = getProperty<ReadableStream?>(_delegate, 'body');
+    return body == null ? null : streamFromJSReadable(body);
   }
 
   @override

@@ -1,3 +1,15 @@
+## 0.0.4+1
+
+ - **FIX**: fix invalid content length value in client. ([70d53268](https://github.com/invertase/dart_edge/commit/70d53268fbcca6cd076968c9a30818104712bb05))
+
+## 0.0.4
+
+ - **FEAT**: add edge_http_client ([#20](https://github.com/invertase/dart_edge/issues/20)). ([7526a765](https://github.com/invertase/dart_edge/commit/7526a765bb067cb092621ce4525df3c2a6e8bf29))
+
+## 0.0.3+1
+
+ - **FIX**: patch location.href global ([#19](https://github.com/invertase/dart_edge/issues/19)). ([fd8ed116](https://github.com/invertase/dart_edge/commit/fd8ed116ec22c410bb101be36296be8915888c7a))
+
 ## 0.0.3
 
  - **FEAT**: add Iterator / AsyncIterator interop. ([b23b4a4f](https://github.com/invertase/dart_edge/commit/b23b4a4ff1ab781744b4480d0fbfd286343205f5))

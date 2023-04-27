@@ -7,19 +7,8 @@ import 'headers.dart';
 import 'interop/scope_interop.dart' as interop;
 import 'interop/utils_interop.dart' as interop;
 
-import 'fetch_event.dart';
 import 'resource.dart';
 import 'response.dart';
-
-void addFetchEventListener(Null Function(FetchEvent event) listener) {
-  interop.addEventListener(
-    'fetch',
-    js.allowInterop((interop.ExtendableEvent delegate) {
-      // This needs casting, because the type of the event is not known at compile time.
-      listener(fetchEventFromJsObject(delegate as interop.FetchEvent));
-    }),
-  );
-}
 
 Future<Response> fetch(
   Resource resource, {

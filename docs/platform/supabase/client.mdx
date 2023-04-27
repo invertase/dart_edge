@@ -1,0 +1,45 @@
+---
+title: Supabase Client
+description: Use the Supabase Client in Dart Edge.
+---
+
+# Supabase Client
+
+The Dart [`supabase`](https://pub.dev/packages/supabase) package provides a client for connecting and interacting with your Supabase project. The client can be used directly inside of Dart Edge, however requires a few additional steps to get started.
+
+## Installation
+
+First, install the [`supabase`](https://pub.dev/packages/supabase) package from pub.dev:
+
+```sh
+dart pub add supabase
+```
+
+Next, install the Dart Edge HTTP Client:
+
+```sh
+dart pub add edge_http_client
+```
+
+## Usage
+
+Within your `lib/main` file, import the `supabase` package and create a new instance of the client:
+
+```dart
+import 'package:supabase_functions/supabase_functions.dart';
+import 'package:edge_http_client/edge_http_client.dart';
+import 'package:supabase/supabase.dart';
+
+void main() {
+  final client = SupabaseClient(
+    'https://<your-project-id>.supabase.co',
+    'your-anon-key',
+    httpClient: EdgeHttpClient(),
+  );
+
+  SupabaseFunctions(fetch: (request) async {
+    List users = await client.from('users').select();
+    return Response.json(users);
+  });
+}
+```
