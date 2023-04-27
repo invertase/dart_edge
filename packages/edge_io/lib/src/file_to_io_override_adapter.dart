@@ -46,7 +46,7 @@ class FileSystemToIoOverrideAdapter extends IOOverrides {
         _stdout = stdout,
         _serverSocketBind = serverSocketBind;
 
-  // TODO how to mock stdin?
+  // TODO(rrousselGit): how to mock stdin?
 
   @override
   Stdout get stderr => _stderr ?? super.stderr;
@@ -305,7 +305,7 @@ class CustomStdout implements Stdout {
 
   @override
   Future<void> flush() {
-    // TODO is there anything to do here?
+    // TODO(rrousselGit): is there anything to do here?
     return Future.value();
   }
 
