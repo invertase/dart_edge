@@ -50,16 +50,18 @@ class Response implements Body {
     );
   }
 
+  /// **Warning:** It is recommended to use [Response.json] instead
+  /// as this method is less efficient and the response data can become minified
+  /// if you enable minification in your build.
+  ///
   /// Creates a new [Response] object with a JS object as the body.
   /// Recursively converts a JSON-like collection to JavaScript compatible representation.
-  /// It is recommended to use [Response.json] instead as it is more efficient.
-  ///
   /// The data must be a [Map] or [Iterable], the contents of which are also deeply converted.
   /// Maps are converted into JavaScript objects. Iterables are converted into arrays.
   /// Strings, numbers, bools, and @JS() annotated objects are passed through unmodified.
   /// Dart objects are also passed through unmodified, but their members aren't usable from JavaScript.
   ///
-  /// Copied from [jsify].
+  /// *Copied from [jsify]*.
   factory Response.jsify(
     Object? data, {
     int status = 200,
