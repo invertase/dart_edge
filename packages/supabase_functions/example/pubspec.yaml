@@ -6,5 +6,5 @@ environment:
   sdk: ">=2.18.5 <3.0.0"
 
 dependencies:
-  edge: ^0.0.6
-  supabase_functions: ^0.0.2+1
+  edge: ^0.0.6+1
+  supabase_functions: ^0.0.2+2

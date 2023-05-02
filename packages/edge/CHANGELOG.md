@@ -1,3 +1,7 @@
+## 0.0.6+1
+
+ - **FIX**(supabase_functions): compile code when no dev flag is provided. ([c9c0fe3b](https://github.com/invertase/dart_edge/commit/c9c0fe3b3cd3496ce3fa3b7dab7f7d4a787d963e))
+
 ## 0.0.6
 
  - **FIX**: register supabase new command. ([66fdd085](https://github.com/invertase/dart_edge/commit/66fdd0857d2d491460fed8f906b0cb3263c93a21))

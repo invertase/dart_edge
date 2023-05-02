@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-05-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`edge` - `v0.0.6+1`](#edge---v0061)
+ - [`edge_http_client` - `v0.0.1+2`](#edge_http_client---v0012)
+ - [`vercel_edge` - `v0.0.4+2`](#vercel_edge---v0042)
+ - [`cloudflare_workers` - `v0.0.4+2`](#cloudflare_workers---v0042)
+ - [`netlify_edge` - `v0.0.1-dev.12`](#netlify_edge---v001-dev12)
+ - [`supabase_functions` - `v0.0.2+2`](#supabase_functions---v0022)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `vercel_edge` - `v0.0.4+2`
+ - `cloudflare_workers` - `v0.0.4+2`
+ - `netlify_edge` - `v0.0.1-dev.12`
+ - `supabase_functions` - `v0.0.2+2`
+
+---
+
+#### `edge` - `v0.0.6+1`
+
+ - **FIX**(supabase_functions): compile code when no dev flag is provided. ([c9c0fe3b](https://github.com/invertase/dart_edge/commit/c9c0fe3b3cd3496ce3fa3b7dab7f7d4a787d963e))
+
+#### `edge_http_client` - `v0.0.1+2`
+
+ - **FIX**(edge_http_client): fix invalid content length value in client. ([70d53268](https://github.com/invertase/dart_edge/commit/70d53268fbcca6cd076968c9a30818104712bb05))
+
+
 ## 2023-04-05
 
 ### Changes
