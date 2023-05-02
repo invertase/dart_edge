@@ -94,7 +94,10 @@ class Response implements Body {
         interop.ResponseInit(
           status: status,
           statusText: statusText,
-          headers: headers?.delegate ?? jsUndefined,
+          headers: headers?.delegate ??
+              Headers({
+                'Content-Type': 'application/json; charset=utf-8',
+              }),
         ),
       ),
     );
