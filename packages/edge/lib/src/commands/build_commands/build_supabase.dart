@@ -55,7 +55,27 @@ class SupabaseBuildCommand extends BaseCommand {
     });
   }
 
-  Future<void> runBuild() async {}
+  Future<void> runBuild() async {
+    final functionDirectory = Directory(
+      p.join(Directory.current.path, 'supabase', 'functions', 'dart_edge'),
+    );
+
+    final entryFile = File(p.join(functionDirectory.path, 'index.ts'));
+
+    final compiler = Compiler(
+      logger: logger,
+      entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
+      outputDirectory: functionDirectory.path,
+      outputFileName: 'main.dart.js',
+      level: CompilerLevel.O4,
+    );
+
+    await compiler.compile();
+
+    await entryFile.writeAsString(
+      edgeFunctionEntryFileDefaultValue('main.dart.js'),
+    );
+  }
 
   @override
   void run() async {
