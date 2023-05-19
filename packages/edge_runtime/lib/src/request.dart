@@ -71,7 +71,7 @@ class Request implements Body {
   String get integrity => _delegate.integrity;
   bool get keepalive => _delegate.keepalive;
   AbortSignal get signal => abortSignalToJsObject(_delegate.signal);
-  Request clone() => Request._(_delegate);
+  Request clone() => Request._(_delegate.clone());
 
   @override
   Future<ByteBuffer> arrayBuffer() => _delegate.arrayBuffer();
@@ -79,9 +79,17 @@ class Request implements Body {
   @override
   Future<Object> blob() async => blobFromJsObject(await _delegate.blob());
 
+  ReadableStreamDefaultReader? _reader;
+
   Stream<List<int>>? get body {
     final body = getProperty<ReadableStream?>(_delegate, 'body');
-    return body == null ? null : streamFromJSReadable(body);
+    if (body == null) return null;
+
+    if (_reader == null) {
+      _reader = body.getReader();
+    }
+
+    return streamFromJSReader(_reader!);
   }
 
   @override
