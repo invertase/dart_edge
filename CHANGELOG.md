@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-05-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`edge_runtime` - `v0.0.4+2`](#edge_runtime---v0042)
+ - [`netlify_edge` - `v0.0.1-dev.13`](#netlify_edge---v001-dev13)
+ - [`supabase_functions` - `v0.0.2+3`](#supabase_functions---v0023)
+ - [`deno_deploy` - `v0.0.1-dev.6`](#deno_deploy---v001-dev6)
+ - [`edge_http_client` - `v0.0.1+3`](#edge_http_client---v0013)
+ - [`vercel_edge` - `v0.0.4+3`](#vercel_edge---v0043)
+ - [`cloudflare_workers` - `v0.0.4+3`](#cloudflare_workers---v0043)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.13`
+ - `supabase_functions` - `v0.0.2+3`
+ - `deno_deploy` - `v0.0.1-dev.6`
+ - `edge_http_client` - `v0.0.1+3`
+ - `vercel_edge` - `v0.0.4+3`
+ - `cloudflare_workers` - `v0.0.4+3`
+
+---
+
+#### `edge_runtime` - `v0.0.4+2`
+
+ - **FIX**: cache reader to prevent locking ([#41](https://github.com/invertase/dart_edge/issues/41)). ([30f96df8](https://github.com/invertase/dart_edge/commit/30f96df858ec96462af1b4239c6b45b835e888cc))
+
+
 ## 2023-05-02
 
 ### Changes

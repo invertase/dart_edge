@@ -1,3 +1,7 @@
+## 0.0.4+2
+
+ - **FIX**: cache reader to prevent locking ([#41](https://github.com/invertase/dart_edge/issues/41)). ([30f96df8](https://github.com/invertase/dart_edge/commit/30f96df858ec96462af1b4239c6b45b835e888cc))
+
 ## 0.0.4+1
 
  - **FIX**: fix invalid content length value in client. ([70d53268](https://github.com/invertase/dart_edge/commit/70d53268fbcca6cd076968c9a30818104712bb05))
