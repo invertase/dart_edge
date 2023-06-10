@@ -66,6 +66,9 @@ class SupabaseBuildCommand extends BaseCommand {
     for (final fn in cfg.supabase.functions.entries) {
       final fnDir = p.join(cfg.supabase.projectPath, 'functions', fn.key);
       final entryFile = File(p.join(fnDir, 'index.ts'));
+      if (!entryFile.parent.existsSync()) {
+        await entryFile.parent.create(recursive: true);
+      }
 
       final compiler = Compiler(
         logger: logger,
@@ -108,6 +111,9 @@ class SupabaseBuildCommand extends BaseCommand {
     for (final fn in cfg.supabase.functions.entries) {
       final fnDir = p.join(cfg.supabase.projectPath, 'functions', fn.key);
       final entryFile = File(p.join(fnDir, 'index.ts'));
+      if (!entryFile.parent.existsSync()) {
+        await entryFile.parent.create(recursive: true);
+      }
 
       final compiler = Compiler(
         logger: logger,
