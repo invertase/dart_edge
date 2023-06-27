@@ -56,7 +56,8 @@
       "Supabase Edge Functions",
       [
         ["Getting Started", "/platform/supabase"],
-        ["Supabase Client", "/platform/supabase/client"]
+        ["Supabase Client", "/platform/supabase/client"],
+        ["Configuration", "/platform/supabase/config"]
       ]
     ]
   ]

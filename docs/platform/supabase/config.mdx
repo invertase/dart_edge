@@ -1,0 +1,38 @@
+---
+title: Supabase Config
+---
+
+# Supabase Config
+
+The following Supabase configuration options are supported via the `edge.yaml` file. All options are optional.
+
+```yaml
+supabase:
+  # The path to root of where your Supabase project exists.
+  projectPath: '.'
+  # An object of functions and their entrypoints to build.
+  # This is used if you have multiple Supabase function entrypoints.
+  functions:
+    dart_edge: 'lib/main.dart'
+  # The compiler optimization level to use for development builds.
+  devCompilerLevel: 01
+  # The compiler optimization level to use for production builds.
+  prodCompilerLevel: 04
+  # Whether to exit the development watch process when a build fails.
+  exitWatchOnFailure: false
+```
+
+## Multiple entrypoints
+
+It's common in a Supabase project to have multiple entrypoints for your Supabase functions, since Supabase deploys
+multiple Edge Functions per entrypoint. 
+
+By default, a `dart_edge` function will be created, which points to your `lib/main.dart` file. Use the `functions` option
+to specify additional entrypoints, for example
+
+```yaml
+supabase:
+  functions:
+    api_handler: 'lib/api.dart'
+    webhook_handler: 'lib/webhooks.dart'
+```

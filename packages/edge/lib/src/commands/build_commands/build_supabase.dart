@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:edge/src/config.dart';
-import 'package:mason_logger/mason_logger.dart';
 import 'package:path/path.dart' as p;
 
 import '../../compiler.dart';
@@ -29,7 +28,6 @@ class SupabaseBuildCommand extends BaseCommand {
       abbr: 'p',
       help: 'The path to the supabase project.',
     );
-    argParser.addFlag('verbose', abbr: 'v', help: 'Enables verbose logging.');
   }
 
   @override
@@ -61,8 +59,10 @@ class SupabaseBuildCommand extends BaseCommand {
 
     final compilers = <Compiler>[];
     final futures = <Future>[];
+
     final progress = logger.progress(
         'Compiling ' + cfg.supabase.functions.length.toString() + ' functions');
+
     for (final fn in cfg.supabase.functions.entries) {
       final fnDir = p.join(cfg.supabase.projectPath, 'functions', fn.key);
       final entryFile = File(p.join(fnDir, 'index.ts'));
@@ -90,6 +90,7 @@ class SupabaseBuildCommand extends BaseCommand {
 
       compilers.add(compiler);
     }
+
     await Future.wait(futures);
 
     progress.complete();
@@ -108,7 +109,10 @@ class SupabaseBuildCommand extends BaseCommand {
   Future<void> runBuild() async {
     final cfg = await getConfig();
 
-    for (final fn in cfg.supabase.functions.entries) {
+    logger.info(
+        'Compiling ' + cfg.supabase.functions.length.toString() + ' functions');
+
+    await Future.any(cfg.supabase.functions.entries.map((fn) async {
       final fnDir = p.join(cfg.supabase.projectPath, 'functions', fn.key);
       final entryFile = File(p.join(fnDir, 'index.ts'));
       if (!entryFile.parent.existsSync()) {
@@ -131,16 +135,12 @@ class SupabaseBuildCommand extends BaseCommand {
       await entryFile.writeAsString(
         edgeFunctionEntryFileDefaultValue('main.dart.js'),
       );
-    }
+    }));
   }
 
   @override
   void run() async {
     final isDev = argResults!['dev'] as bool;
-    if (argResults!['verbose'] as bool) {
-      logger.level = Level.verbose;
-    }
-
     if (isDev) {
       await runDev();
     } else {
