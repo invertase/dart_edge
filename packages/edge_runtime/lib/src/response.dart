@@ -20,10 +20,14 @@ class Response implements Body {
 
   /// Creates a new [Response] object.
   /// The [body] can be a [String], [ByteBuffer] or [Uint8List].
+  ///
+  /// [status] is an HTTP status code and defaults to `200`.
+  /// [statusText] is a status message and defaults to `''`.
+  /// [headers] can be used to set HTTP headers, defaults to providing no headers.
   Response(
     Object? body, {
-    int status = 200,
-    String statusText = '',
+    int? status,
+    String? statusText,
     Headers? headers,
   }) : _delegate = interop.Response(
           convertBody(body),
