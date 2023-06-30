@@ -10,6 +10,14 @@ Install the dependencies:
 dart pub get
 ```
 
+Pull supabase images:
+
+*Note that this step is only required once, make sure you have [Docker](https://docs.docker.com/engine/install/) installed.*
+
+```bash
+supabase start
+```
+
 Start the application via Dart Edge CLU & the [`supabase` CLI](https://supabase.com/docs/guides/cli):
 
 ```bash
