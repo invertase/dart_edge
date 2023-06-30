@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-06-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`edge` - `v0.0.7`](#edge---v007)
+ - [`netlify_edge` - `v0.0.1-dev.14`](#netlify_edge---v001-dev14)
+ - [`supabase_functions` - `v0.0.2+4`](#supabase_functions---v0024)
+ - [`cloudflare_workers` - `v0.0.4+4`](#cloudflare_workers---v0044)
+ - [`vercel_edge` - `v0.0.4+4`](#vercel_edge---v0044)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `netlify_edge` - `v0.0.1-dev.14`
+ - `supabase_functions` - `v0.0.2+4`
+ - `cloudflare_workers` - `v0.0.4+4`
+ - `vercel_edge` - `v0.0.4+4`
+
+---
+
+#### `edge` - `v0.0.7`
+
+ - **FEAT**: add `edge.yaml` support + supabase config. ([8134137d](https://github.com/invertase/dart_edge/commit/8134137d28e66871ae03514e1e7c5284b26e600d))
+
+
 ## 2023-05-22
 
 ### Changes

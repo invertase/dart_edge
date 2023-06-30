@@ -1,3 +1,7 @@
+## 0.0.7
+
+ - **FEAT**: add `edge.yaml` support + supabase config. ([8134137d](https://github.com/invertase/dart_edge/commit/8134137d28e66871ae03514e1e7c5284b26e600d))
+
 ## 0.0.6+1
 
  - **FIX**(supabase_functions): compile code when no dev flag is provided. ([c9c0fe3b](https://github.com/invertase/dart_edge/commit/c9c0fe3b3cd3496ce3fa3b7dab7f7d4a787d963e))
