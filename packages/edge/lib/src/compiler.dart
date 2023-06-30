@@ -1,7 +1,7 @@
 import 'dart:io';
+
 import 'package:edge/src/logger.dart';
 import 'package:mason_logger/mason_logger.dart';
-
 import 'package:path/path.dart' as p;
 
 enum CompilerLevel {
@@ -25,18 +25,25 @@ class Compiler {
   // The output file name. Defaults to `main.dart.js`.
   final String outputFileName;
 
+  final String fileName;
+  final bool showProgress;
+  final bool exitOnError;
+
   Compiler({
     required this.logger,
     required this.entryPoint,
     required this.outputDirectory,
     required this.level,
+    this.fileName = 'Dart entry file',
     this.outputFileName = 'main.dart.js',
+    this.showProgress = true,
+    this.exitOnError = true,
   });
 
   Future<String> compile() async {
     final entry = File(entryPoint);
 
-    if (!await entry.exists()) {
+    if (!entry.existsSync()) {
       logger.err(
           'Attempted to compile the entry file at ${entry.path}, but no file was found.');
       logger.lineBreak();
@@ -56,7 +63,8 @@ class Compiler {
     logger.detail(
         'Compiling with optimization level ${level.name} ${entry.path} to $outputPath');
 
-    final progress = logger.progress('Compiling Dart entry file');
+    final progress =
+        showProgress ? logger.progress('Compiling $fileName') : null;
 
     final process = await Process.run('dart', [
       'compile',
@@ -70,14 +78,14 @@ class Compiler {
     ]);
 
     if (process.exitCode != 0) {
-      progress.cancel();
+      progress?.cancel();
       logger.err('Compilation of the Dart entry file failed:');
       logger.lineBreak();
       logger.err(process.stdout);
-      exit(1);
+      if (exitOnError) exit(1);
     }
 
-    progress.complete();
+    progress?.complete();
     logger.detail(process.stdout);
 
     return outputPath;

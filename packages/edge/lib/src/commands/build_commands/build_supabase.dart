@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:edge/src/config.dart';
 import 'package:path/path.dart' as p;
 
 import '../../compiler.dart';
@@ -21,14 +23,33 @@ class SupabaseBuildCommand extends BaseCommand {
       help:
           'Runs Dart Edge in a local development environment with hot reload via Vercel CLI.',
     );
+    argParser.addOption(
+      'project-path',
+      abbr: 'p',
+      help: 'The path to the supabase project.',
+    );
+  }
+
+  @override
+  Future<Config> updateConfig(Config cfg) async {
+    Config config = cfg.copyWith(
+      supabase: cfg.supabase.copyWith(
+        projectPath: p.canonicalize(argResults!.wasParsed('project-path')
+            ? argResults!['project-path'] as String
+            : cfg.supabase.projectPath),
+      ),
+    );
+
+    logger.detail('Supabase project path: ${config.supabase.projectPath}');
+    logger.detail('Supabase functions: ${config.supabase.functions}');
+    return config;
   }
 
   Future<void> runDev() async {
-    final functionDirectory = Directory(
-      p.join(Directory.current.path, 'supabase', 'functions', 'dart_edge'),
-    );
-
-    final entryFile = File(p.join(functionDirectory.path, 'index.ts'));
+    final cfg = await getConfig();
+    final exitOnError =
+        cfg.get(cfg.supabase, (c) => c.exitWatchOnFailure) ?? true;
+    logger.detail("Watcher will ${exitOnError ? '' : 'not '}exit on error.");
 
     final watcher = Watcher(
       include: '**/*.dart',
@@ -36,51 +57,90 @@ class SupabaseBuildCommand extends BaseCommand {
       watchPath: p.join(Directory.current.path, 'lib'),
     );
 
-    final compiler = Compiler(
-      logger: logger,
-      entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
-      outputDirectory: functionDirectory.path,
-      outputFileName: 'main.dart.js',
-      level: CompilerLevel.O1,
-    );
+    final compilers = <Compiler>[];
+    final futures = <Future>[];
 
-    await compiler.compile();
+    final progress = logger.progress(
+        'Compiling ' + cfg.supabase.functions.length.toString() + ' functions');
 
-    await entryFile.writeAsString(
-      edgeFunctionEntryFileDefaultValue('main.dart.js'),
-    );
+    for (final fn in cfg.supabase.functions.entries) {
+      final fnDir = p.join(cfg.supabase.projectPath, 'functions', fn.key);
+      final entryFile = File(p.join(fnDir, 'index.ts'));
+      if (!entryFile.parent.existsSync()) {
+        await entryFile.parent.create(recursive: true);
+      }
+
+      final compiler = Compiler(
+        logger: logger,
+        entryPoint: p.join(Directory.current.path, fn.value),
+        outputDirectory: fnDir,
+        outputFileName: 'main.dart.js',
+        level: cfg.get(cfg.supabase, (c) => c.devCompilerLevel) ??
+            CompilerLevel.O1,
+        fileName: fn.value,
+        showProgress: false,
+        exitOnError: exitOnError,
+      );
+
+      futures.add(compiler.compile());
+
+      futures.add(entryFile.writeAsString(
+        edgeFunctionEntryFileDefaultValue('main.dart.js'),
+      ));
+
+      compilers.add(compiler);
+    }
+
+    await Future.wait(futures);
+
+    progress.complete();
 
     watcher.watch().listen((event) async {
-      await compiler.compile();
+      final progress = logger.progress(
+        'Compiling ' + cfg.supabase.functions.length.toString() + ' functions',
+      );
+      await Future.wait(
+        compilers.map((compiler) => compiler.compile()),
+      );
+      progress.complete();
     });
   }
 
   Future<void> runBuild() async {
-    final functionDirectory = Directory(
-      p.join(Directory.current.path, 'supabase', 'functions', 'dart_edge'),
-    );
+    final cfg = await getConfig();
 
-    final entryFile = File(p.join(functionDirectory.path, 'index.ts'));
+    logger.info(
+        'Compiling ' + cfg.supabase.functions.length.toString() + ' functions');
 
-    final compiler = Compiler(
-      logger: logger,
-      entryPoint: p.join(Directory.current.path, 'lib', 'main.dart'),
-      outputDirectory: functionDirectory.path,
-      outputFileName: 'main.dart.js',
-      level: CompilerLevel.O4,
-    );
+    await Future.any(cfg.supabase.functions.entries.map((fn) async {
+      final fnDir = p.join(cfg.supabase.projectPath, 'functions', fn.key);
+      final entryFile = File(p.join(fnDir, 'index.ts'));
+      if (!entryFile.parent.existsSync()) {
+        await entryFile.parent.create(recursive: true);
+      }
 
-    await compiler.compile();
+      final compiler = Compiler(
+        logger: logger,
+        entryPoint: p.join(Directory.current.path, fn.value),
+        outputDirectory: fnDir,
+        outputFileName: 'main.dart.js',
+        level: cfg.get(cfg.supabase, (c) => c.prodCompilerLevel) ??
+            CompilerLevel.O4,
+        fileName: fn.value,
+        exitOnError: cfg.get(cfg.supabase, (c) => c.exitWatchOnFailure) ?? true,
+      );
 
-    await entryFile.writeAsString(
-      edgeFunctionEntryFileDefaultValue('main.dart.js'),
-    );
+      await compiler.compile();
+
+      await entryFile.writeAsString(
+        edgeFunctionEntryFileDefaultValue('main.dart.js'),
+      );
+    }));
   }
 
   @override
   void run() async {
     final isDev = argResults!['dev'] as bool;
-
     if (isDev) {
       await runDev();
     } else {

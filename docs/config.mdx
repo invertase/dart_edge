@@ -1,0 +1,23 @@
+---
+title: Edge Configuration
+---
+
+# Edge Configuration
+
+An optional configuration system exists for fine-tuned control over the behavior of the Edge. This system is based on a
+`edge.yaml` file existing at the root of your application.
+
+For example:
+
+```yaml
+# edge.yaml
+
+supabase:
+  functions:
+    api_handler: 'lib/api.dart'
+    webhook_handler: 'lib/webhooks.dart'
+```
+
+Currently, the following platforms have configuration options:
+
+- [Supabase](/platform/supabase/config)

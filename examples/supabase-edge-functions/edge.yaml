@@ -1,0 +1,4 @@
+supabase:
+  functions:
+    # This is not required as it's the default - just for demo purposes.
+    dart_edge: lib/main.dart
