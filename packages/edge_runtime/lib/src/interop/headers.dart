@@ -30,6 +30,10 @@ extension HeadersProps on Headers {
     js_utils.callMethod(this, 'set', [name, value]);
   }
 
+  List<String> getSetCookie() {
+    return js_utils.callMethod(this, 'getSetCookie', []);
+  }
+
   Iterable<List<String>> get entries {
     final iterator = js_utils.callMethod(this, 'entries', []);
     return i.fromJSIterator(iterator).map((e) => e.cast<String>());
