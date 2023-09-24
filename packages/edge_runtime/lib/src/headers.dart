@@ -1,13 +1,12 @@
 import 'dart:js_util' show jsify;
-import 'package:js_bindings/js_bindings.dart' as js_bindings;
+import 'package:typings/core.dart' as js_interop;
 
 import 'interop/headers.dart' as interop;
 
 class Headers {
   final interop.Headers _delegate;
 
-  Headers([Map<String, String>? headers])
-      : _delegate = interop.Headers(jsify(headers ?? {}));
+  Headers([Map<String, String>? headers]) : _delegate = interop.Headers(jsify(headers ?? {}));
 
   Headers._(this._delegate);
 
@@ -28,7 +27,7 @@ class Headers {
   Iterable<String> get values => _delegate.values;
 
   Map<String, String> toMap() => _delegate.toMap();
-  js_bindings.Headers toJsBindingsHeaders() => _delegate as js_bindings.Headers;
+  js_interop.Headers toJsBindingsHeaders() => _delegate as js_interop.Headers;
 }
 
 extension HeadersExtension on Headers {

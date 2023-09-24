@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 import 'file.dart';
 
@@ -15,7 +15,7 @@ class FormData {
     value.when(file: (value) {
       throw UnimplementedError();
     }, string: (value) {
-      _delegate.append(
+      _delegate.append.$3(
         name,
         interop.Blob(
           [value],
@@ -59,7 +59,7 @@ class FormData {
     value.when(file: (value) {
       throw UnimplementedError();
     }, string: (value) {
-      _delegate.set(
+      _delegate.set.$3(
         name,
         interop.Blob(
           [value],

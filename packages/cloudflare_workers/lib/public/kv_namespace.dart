@@ -50,8 +50,7 @@ class KVNamespace {
     return dartify(json) as Map<K, V>;
   }
 
-  Future<KVNamespaceGetWithMetadataResult<Map<K, V>?>>
-      getJsonWithMetadata<K, V>(
+  Future<KVNamespaceGetWithMetadataResult<Map<K, V>?>> getJsonWithMetadata<K, V>(
     String name, {
     int? cacheTtl,
   }) async {
@@ -114,8 +113,7 @@ class KVNamespace {
     return streamFromJSReader(reader);
   }
 
-  Future<KVNamespaceGetWithMetadataResult<ReadableStream?>>
-      getStreamWithMetadata(
+  Future<KVNamespaceGetWithMetadataResult<ReadableStream?>> getStreamWithMetadata(
     String name, {
     int? cacheTtl,
   }) async {
@@ -162,8 +160,7 @@ class KVNamespace {
       );
 }
 
-KVNamespace kvNamespaceFromJsObject(interop.KVNamespace obj) =>
-    KVNamespace._(obj);
+KVNamespace kvNamespaceFromJsObject(interop.KVNamespace obj) => KVNamespace._(obj);
 
 class KVNamespaceGetWithMetadataResult<T> {
   final interop.KVNamespaceGetWithMetadataResult<T> _delegate;
@@ -175,12 +172,10 @@ class KVNamespaceGetWithMetadataResult<T> {
 class KVNamespaceListResult {
   final interop.KVNamespaceListResult _delegate;
   KVNamespaceListResult._(this._delegate);
-  Iterable<KVNamespaceListKey> get keys sync* {
-    // TODO fix me.
-    throw UnimplementedError('Returns a JsArray/List, but its not iterable?');
-    for (var i = 0; i < _delegate.keys.length; i++) {
-      yield KVNamespaceListKey._(_delegate.keys[i]);
-    }
+  Iterable<KVNamespaceListKey> get keys {
+    return [
+      for (int i = 0; i < _delegate.keys.length; i++) KVNamespaceListKey._(_delegate.keys[i])
+    ];
   }
 
   bool get listComplete => _delegate.listComplete;

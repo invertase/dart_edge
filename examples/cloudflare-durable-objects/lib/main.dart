@@ -12,7 +12,7 @@ class TestClass extends DurableObject {
       await state.storage.setAlarm(DateTime.now().add(Duration(seconds: 2)));
     }
 
-    return Response('Path "${request.url.path}" called $views times.');
+    return Response('Path "${Uri.parse(request.url).path}" called $views times.');
   }
 
   @override
@@ -36,7 +36,7 @@ void main() {
       final namespace = env.getDurableObjectNamespace('TEST');
 
       // Get an ID for the DO (this can be based on the request, name, user ID etc)
-      final id = namespace.idFromName(request.url.path);
+      final id = namespace.idFromName(Uri.parse(request.url).path);
 
       // Send the DO a request instance.
       return namespace.get(id).fetch(request);

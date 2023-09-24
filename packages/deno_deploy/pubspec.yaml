@@ -9,5 +9,5 @@ environment:
 
 dependencies:
   js: ^0.6.5
-  js_bindings: ^0.1.0
   edge_runtime: ^0.0.4+2
+  typings: ^0.0.3

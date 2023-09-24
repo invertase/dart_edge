@@ -1,7 +1,7 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import 'package:edge_runtime/src/interop/promise_interop.dart';
 import 'package:edge_runtime/src/interop/utils_interop.dart';
 
@@ -30,8 +30,7 @@ extension PropsDurableObject on DurableObject {
     js_util.setProperty(this, 'env', env);
   }
 
-  set fetch(
-      Promise<interop.Response> Function(interop.Request request) function) {
+  set fetch(Promise<interop.Response> Function(interop.Request request) function) {
     js_util.setProperty(this, 'fetch', function);
   }
 
@@ -52,38 +51,32 @@ class DurableObjectStorage {
 }
 
 extension PropsDurableObjectStorage on DurableObjectStorage {
-  Future<dynamic> get(/* String | List<String> */ dynamic keys,
-      DurableObjectGetOptions options) async {
+  Future<dynamic> get(
+      /* String | List<String> */ dynamic keys, DurableObjectGetOptions options) async {
     return js_util.promiseToFuture(
       js_util.callMethod(this, 'get', [keys, options]),
     );
   }
 
-  Future<dynamic> put(
-      String key, dynamic value, DurableObjectPutOptions options) {
+  Future<dynamic> put(String key, dynamic value, DurableObjectPutOptions options) {
     var newValue = value;
     if (value is Map || value is Iterable) {
       newValue = jsify(value);
     }
-    return js_util.promiseToFuture(
-        js_util.callMethod(this, 'put', [key, newValue, options]));
+    return js_util.promiseToFuture(js_util.callMethod(this, 'put', [key, newValue, options]));
   }
 
-  Future<void> putEntries<T>(
-          Map<Object, T> entries, DurableObjectPutOptions options) =>
-      js_util.promiseToFuture(
-          js_util.callMethod(this, 'put', [jsify(entries), options]));
+  Future<void> putEntries<T>(Map<Object, T> entries, DurableObjectPutOptions options) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'put', [jsify(entries), options]));
 
-  Future<bool> delete<T>(String key, DurableObjectPutOptions options) => js_util
-      .promiseToFuture(js_util.callMethod(this, 'delete', [key, options]));
+  Future<bool> delete<T>(String key, DurableObjectPutOptions options) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'delete', [key, options]));
 
   Future<void> deleteAll(DurableObjectPutOptions options) =>
       js_util.promiseToFuture(js_util.callMethod(this, 'deleteAll', [options]));
 
-  Future<bool> deleteEntries<T>(Iterable<String> keys,
-          [DurableObjectPutOptions? options]) =>
-      js_util
-          .promiseToFuture(js_util.callMethod(this, 'delete', [keys, options]));
+  Future<bool> deleteEntries<T>(Iterable<String> keys, [DurableObjectPutOptions? options]) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'delete', [keys, options]));
 
   Future<Map<Object, T>> list<T>([DurableObjectListOptions? options]) =>
       js_util.promiseToFuture(js_util.callMethod(this, 'list', [options]));
@@ -91,8 +84,7 @@ extension PropsDurableObjectStorage on DurableObjectStorage {
   Future<int?> getAlarm([DurableObjectGetAlarmOptions? options]) =>
       js_util.promiseToFuture(js_util.callMethod(this, 'getAlarm', [options]));
 
-  Future<void> setAlarm(DateTime scheduled,
-          [DurableObjectSetAlarmOptions? options]) =>
+  Future<void> setAlarm(DateTime scheduled, [DurableObjectSetAlarmOptions? options]) =>
       js_util.promiseToFuture(js_util.callMethod(this, 'setAlarm', [
         scheduled.millisecondsSinceEpoch,
         options,
@@ -103,11 +95,9 @@ extension PropsDurableObjectStorage on DurableObjectStorage {
         options,
       ]));
 
-  Future<void> sync() =>
-      js_util.promiseToFuture(js_util.callMethod(this, 'sync', []));
+  Future<void> sync() => js_util.promiseToFuture(js_util.callMethod(this, 'sync', []));
 
-  Future<void> transaction(
-      Future<void> Function(DurableObjectTransaction tsx) callback) {
+  Future<void> transaction(Future<void> Function(DurableObjectTransaction tsx) callback) {
     return js_util.promiseToFuture(
       js_util.callMethod(this, 'transaction', [
         allowInterop((tsx) async {
@@ -127,8 +117,7 @@ class DurableObjectGetOptions {
 
 extension PropsDurableObjectGetOptions on DurableObjectGetOptions {
   set allowConcurrency(bool? allowConcurrency) {
-    js_util.setProperty(
-        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+    js_util.setProperty(this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
   }
 
   set noCache(bool? noCache) {
@@ -145,8 +134,7 @@ class DurableObjectGetAlarmOptions {
 
 extension PropsDurableObjectGetAlarmOptions on DurableObjectGetAlarmOptions {
   set allowConcurrency(bool? allowConcurrency) {
-    js_util.setProperty(
-        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+    js_util.setProperty(this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
   }
 }
 
@@ -159,13 +147,11 @@ class DurableObjectSetAlarmOptions {
 
 extension PropsDurableObjectSetAlarmOptions on DurableObjectSetAlarmOptions {
   set allowConcurrency(bool? allowConcurrency) {
-    js_util.setProperty(
-        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+    js_util.setProperty(this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
   }
 
   set allowUnconfirmed(bool? allowUnconfirmed) {
-    js_util.setProperty(
-        this, 'allowUnconfirmed', allowUnconfirmed ?? jsUndefined);
+    js_util.setProperty(this, 'allowUnconfirmed', allowUnconfirmed ?? jsUndefined);
   }
 }
 
@@ -178,13 +164,11 @@ class DurableObjectPutOptions {
 
 extension PropsDurableObjectPutOptions on DurableObjectPutOptions {
   set allowConcurrency(bool? allowConcurrency) {
-    js_util.setProperty(
-        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+    js_util.setProperty(this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
   }
 
   set allowUnconfirmed(bool? allowUnconfirmed) {
-    js_util.setProperty(
-        this, 'allowUnconfirmed', allowUnconfirmed ?? jsUndefined);
+    js_util.setProperty(this, 'allowUnconfirmed', allowUnconfirmed ?? jsUndefined);
   }
 
   set noCache(bool? noCache) {
@@ -225,8 +209,7 @@ extension PropsDurableObjectListOptions on DurableObjectListOptions {
   }
 
   set allowConcurrency(bool? allowConcurrency) {
-    js_util.setProperty(
-        this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
+    js_util.setProperty(this, 'allowConcurrency', allowConcurrency ?? jsUndefined);
   }
 
   set noCache(bool? noCache) {
@@ -262,8 +245,7 @@ extension PropsDurableObjectState on DurableObjectState {
 
   DurableObjectStorage get storage => js_util.getProperty(this, 'storage');
 
-  void waitUntil(Future<void> f) =>
-      js_util.callMethod(this, 'waitUntil', [futureToPromise(f)]);
+  void waitUntil(Future<void> f) => js_util.callMethod(this, 'waitUntil', [futureToPromise(f)]);
 
   Future<T> blockConcurrencyWhile<T>(Future<T> Function() callback) {
     return js_util.promiseToFuture(
@@ -284,15 +266,11 @@ class DurableObjectNamespace {
 }
 
 extension PropsDurableObjectNamespace on DurableObjectNamespace {
-  DurableObjectId newUniqueId(
-          [DurableObjectNamespaceNewUniqueIdOptions? options]) =>
+  DurableObjectId newUniqueId([DurableObjectNamespaceNewUniqueIdOptions? options]) =>
       js_util.callMethod(this, 'newUniqueId', [options]);
-  DurableObjectId idFromName(String name) =>
-      js_util.callMethod(this, 'idFromName', [name]);
-  DurableObjectId idFromString(String id) =>
-      js_util.callMethod(this, 'idFromString', [id]);
-  DurableObjectStub get(DurableObjectId id) =>
-      js_util.callMethod(this, 'get', [id]);
+  DurableObjectId idFromName(String name) => js_util.callMethod(this, 'idFromName', [name]);
+  DurableObjectId idFromString(String id) => js_util.callMethod(this, 'idFromString', [id]);
+  DurableObjectStub get(DurableObjectId id) => js_util.callMethod(this, 'get', [id]);
 }
 
 @anonymous
@@ -304,8 +282,7 @@ class DurableObjectId {
 
 extension PropsDurableObjectId on DurableObjectId {
   String get name => js_util.getProperty(this, 'name');
-  bool equals(DurableObjectId other) =>
-      js_util.callMethod(this, 'equals', [other]);
+  bool equals(DurableObjectId other) => js_util.callMethod(this, 'equals', [other]);
   String mToString() => js_util.callMethod(this, 'toString', []);
 }
 
@@ -318,10 +295,8 @@ class Fetcher {
 
 extension PropsFetcher on Fetcher {
   // TODO RequestInit<RequestInitCfProperties>
-  Future<interop.Response> fetch(interop.Request resource,
-          [interop.RequestInit? init]) =>
-      js_util
-          .promiseToFuture(js_util.callMethod(this, 'fetch', [resource, init]));
+  Future<interop.Response> fetch(interop.Request resource, [interop.RequestInit? init]) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'fetch', [resource, init]));
 
   Socket connect(String address, [SocketOptions? options]) =>
       js_util.callMethod(this, 'connect', [address, options]);
@@ -335,10 +310,8 @@ class Socket {
 }
 
 extension PropsSocket on Socket {
-  Future<interop.ReadableStream> get readable =>
-      js_util.getProperty(this, 'readable');
-  Future<interop.ReadableStream> get writable =>
-      js_util.getProperty(this, 'writable');
+  Future<interop.ReadableStream> get readable => js_util.getProperty(this, 'readable');
+  Future<interop.ReadableStream> get writable => js_util.getProperty(this, 'writable');
   Future<bool> get closed => js_util.getProperty(this, 'closed');
   Future<void> close() => js_util.callMethod(this, 'close', []);
 }

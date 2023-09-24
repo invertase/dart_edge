@@ -12,7 +12,7 @@ Future Function() run(Future Function() fn) {
 
 void main() {
   group('package:http Client', () {
-    group('perfroms GET request', () {
+    group('performs GET request', () {
       test('without body', run(() async {
         final Uri uri = Uri.parse('http://localhost:3001/200');
         final res = await http.get(uri);

@@ -1,9 +1,8 @@
 import 'dart:js_util';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 import '../interop/utils_interop.dart' as interop;
-import '../request.dart';
 import '../response.dart';
 import 'cache_query_options.dart';
 
@@ -12,39 +11,37 @@ class Cache {
 
   Cache._(this._delegate);
 
-  Future<void> add(Request request) async {
-    await _delegate.add(request.delegate);
+  Future<void> add(interop.Request request) async {
+    await _delegate.add(request);
   }
 
-  Future<void> addAll(Iterable<Request> requests) async {
-    await _delegate.addAll(requests.map((r) => r.delegate).toList());
+  Future<void> addAll(Iterable<interop.Request> requests) async {
+    await _delegate.addAll(requests.toList());
   }
 
-  Future<void> delete(Request request,
-      [MultiCacheQueryOptions? options]) async {
-    await _delegate.delete(request.delegate, options?.delegate);
+  Future<void> delete(interop.Request request, [MultiCacheQueryOptions? options]) async {
+    await _delegate.delete(request, options?.delegate);
   }
 
-  Future<Response?> match(Request request, [CacheQueryOptions? options]) async {
-    final obj = await promiseToFuture(
-        _delegate.match(request.delegate, options?.delegate));
+  Future<Response?> match(interop.Request request, [CacheQueryOptions? options]) async {
+    final obj = await promiseToFuture(_delegate.match(request, options?.delegate));
     return obj == null ? null : responseFromJsObject(obj);
   }
 
   Future<Iterable<Response>> matchAll(
-      [Request? request, CacheQueryOptions? options]) async {
+      [interop.Request? request, CacheQueryOptions? options]) async {
     final matches = await _delegate.matchAll(
-      request?.delegate ?? interop.jsUndefined,
+      request ?? interop.jsUndefined,
       options?.delegate,
     );
-    return matches.map((obj) => responseFromJsObject(obj));
+    return matches.map((obj, _, __) => responseFromJsObject(obj));
   }
 
   Future<void> put(
-    Request request,
+    interop.Request request,
     Response response,
   ) async {
-    return _delegate.put(request.delegate, response.delegate);
+    return _delegate.put(request, response.delegate);
   }
 }
 

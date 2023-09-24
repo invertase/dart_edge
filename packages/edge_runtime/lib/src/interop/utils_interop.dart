@@ -1,10 +1,9 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 import '../resource.dart';
-import '../request.dart';
 
 interop.Request requestFromResource(Resource resource) {
   switch (resource.runtimeType) {
@@ -13,7 +12,7 @@ interop.Request requestFromResource(Resource resource) {
     case UriValue:
       return interop.Request((resource as UriValue).uri.toString());
     case RequestValue:
-      return (resource as RequestValue).request.delegate;
+      return (resource as RequestValue).request;
     default:
       throw Exception('Unknown resource type ${resource.runtimeType}');
   }

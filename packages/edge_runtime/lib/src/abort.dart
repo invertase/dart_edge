@@ -1,6 +1,6 @@
 import 'dart:js_util' show jsify;
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import './interop/utils_interop.dart';
 
 class AbortController {
@@ -8,8 +8,7 @@ class AbortController {
   AbortController() : _delegate = interop.AbortController();
 
   AbortSignal get signal => AbortSignal._(_delegate.signal);
-  void abort([Object? reason]) =>
-      _delegate.abort(reason != null ? jsify(reason) : jsUndefined);
+  void abort([Object? reason]) => _delegate.abort(reason != null ? jsify(reason) : jsUndefined);
 }
 
 class AbortSignal {

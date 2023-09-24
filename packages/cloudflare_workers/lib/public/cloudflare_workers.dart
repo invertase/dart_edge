@@ -3,10 +3,9 @@ import 'dart:js_util' as js_util;
 import 'package:edge_runtime/edge_runtime.dart';
 import 'package:js/js.dart';
 import 'package:edge_runtime/src/interop/promise_interop.dart';
-import 'package:edge_runtime/src/request.dart';
 import 'package:edge_runtime/src/response.dart';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import '../interop/environment_interop.dart' as interop;
 import '../interop/scheduled_event_interop.dart' as interop;
 import '../interop/email_message_interop.dart' as interop;
@@ -21,20 +20,20 @@ import '../public/environment.dart';
 
 @JS('__dartCloudflareFetchHandler')
 external set globalDartFetchHandler(
-    Promise<interop.Response> Function(interop.Request req,
-            interop.Environment env, interop.ExecutionContext ctx)
+    Promise<interop.Response> Function(
+            interop.Request req, interop.Environment env, interop.ExecutionContext ctx)
         f);
 
 @JS('__dartCloudflareScheduledHandler')
 external set globalDartScheduledHandler(
-    Promise<void> Function(interop.ScheduledEvent event,
-            interop.Environment env, interop.ExecutionContext ctx)
+    Promise<void> Function(
+            interop.ScheduledEvent event, interop.Environment env, interop.ExecutionContext ctx)
         f);
 
 @JS('__dartCloudflareEmailHandler')
 external set globalDartEmailHandler(
-    Promise<void> Function(interop.EmailMessage message,
-            interop.Environment env, interop.ExecutionContext ctx)
+    Promise<void> Function(
+            interop.EmailMessage message, interop.Environment env, interop.ExecutionContext ctx)
         f);
 
 @JS('__dartCloudflareDurableObjects')
@@ -52,11 +51,11 @@ typedef CloudflareWorkersEmailEvent = FutureOr<void> Function(
 typedef CloudflareWorkersDurableObjects = Map<String, DurableObject Function()>;
 
 void attachFetchHandler(CloudflareWorkersFetchEvent handler) {
-  globalDartFetchHandler = allowInterop((interop.Request req,
-      interop.Environment env, interop.ExecutionContext ctx) {
+  globalDartFetchHandler =
+      allowInterop((interop.Request req, interop.Environment env, interop.ExecutionContext ctx) {
     return futureToPromise(Future(() async {
       final response = await handler(
-        requestFromJsObject(req),
+        req,
         environmentFromJsObject(env),
         executionContextFromJsObject(ctx),
       );
@@ -66,8 +65,8 @@ void attachFetchHandler(CloudflareWorkersFetchEvent handler) {
 }
 
 void attachScheduledHandler(CloudflareWorkersScheduledEvent handler) {
-  globalDartScheduledHandler = allowInterop((interop.ScheduledEvent event,
-      interop.Environment env, interop.ExecutionContext ctx) {
+  globalDartScheduledHandler = allowInterop(
+      (interop.ScheduledEvent event, interop.Environment env, interop.ExecutionContext ctx) {
     return futureToPromise(Future(() async {
       return handler(
         scheduledEventFromJsObject(event),
@@ -79,8 +78,8 @@ void attachScheduledHandler(CloudflareWorkersScheduledEvent handler) {
 }
 
 void attachEmailHandler(CloudflareWorkersEmailEvent handler) {
-  globalDartEmailHandler = allowInterop((interop.EmailMessage message,
-      interop.Environment env, interop.ExecutionContext ctx) {
+  globalDartEmailHandler = allowInterop(
+      (interop.EmailMessage message, interop.Environment env, interop.ExecutionContext ctx) {
     return futureToPromise(Future(() async {
       return handler(
         emailMessageFromJsObject(message),
@@ -94,8 +93,7 @@ void attachEmailHandler(CloudflareWorkersEmailEvent handler) {
 void attachDurableObjects(CloudflareWorkersDurableObjects instances) {
   globalDurableObjects = js_util.jsify({
     for (final instance in instances.entries)
-      instance.key: allowInterop(
-          (interop.DurableObjectState state, interop.Environment env) {
+      instance.key: allowInterop((interop.DurableObjectState state, interop.Environment env) {
         final cls = instance.value();
 
         // Attach the state and environment to the delegate.
@@ -106,7 +104,7 @@ void attachDurableObjects(CloudflareWorkersDurableObjects instances) {
         // Call the instance fetch handler, and return the delegate request.
         delegate.fetch = allowInterop((interop.Request requestObj) {
           return futureToPromise(Future(() async {
-            final response = await cls.fetch(requestFromJsObject(requestObj));
+            final response = await cls.fetch(requestObj);
             return response.delegate;
           }));
         });

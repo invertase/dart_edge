@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:edge_runtime/src/request.dart';
+import 'package:typings/core.dart' show Request;
 import 'package:edge_runtime/src/response.dart';
 import '../../interop/durable_object_interop.dart' as interop;
 
@@ -10,8 +10,7 @@ import 'durable_object_state.dart';
 abstract class DurableObject {
   final interop.DurableObject _delegate;
 
-  DurableObjectState get state =>
-      durableObjectStateFromJsObject(_delegate.state);
+  DurableObjectState get state => durableObjectStateFromJsObject(_delegate.state);
 
   Environment get env => environmentFromJsObject(_delegate.env);
 

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import '../interop/durable_object_interop.dart' as interop;
 
 class Socket {

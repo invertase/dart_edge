@@ -1,4 +1,4 @@
-import 'request.dart';
+import 'package:typings/core.dart';
 
 abstract class Resource {
   const factory Resource(String url) = StringValue;
@@ -11,7 +11,7 @@ abstract class Resource {
     } else if (resource is UriValue) {
       return resource.uri;
     } else {
-      return (resource as RequestValue).request.url;
+      return Uri.parse((resource as RequestValue).request.url);
     }
   }
 }

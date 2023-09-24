@@ -1,24 +1,19 @@
 import 'dart:js_util' as js_util;
 import 'dart:async';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:edge_runtime/edge_runtime.dart' as interop;
 
 import 'interop/promise_interop.dart';
-import 'interop/scope_interop.dart';
-import 'request.dart';
-import 'response.dart';
 
 class FetchEvent {
   final interop.FetchEvent _delegate;
   FetchEvent._(this._delegate);
 
   String get type => _delegate.type;
-  Request get request => requestFromJsObject(_delegate.request);
+  interop.Request get request => _delegate.request;
 
-  void respondWith(FutureOr<Response> response) {
-    return _delegate.respondWithPromise(Future(() async {
-      return (await response).delegate;
-    }));
+  void respondWith(FutureOr<interop.Response> response) {
+    return _delegate.respondWithPromise(Future.value(response));
   }
 
   void waitUntil(FutureOr<void> future) {

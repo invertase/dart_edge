@@ -1,6 +1,6 @@
 import 'dart:typed_data' show Uint8List;
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 class TextEncoder {
   final interop.TextEncoder _delegate;
@@ -21,21 +21,20 @@ extension TextEncoderExtension on TextEncoder {
   interop.TextEncoder get delegate => _delegate;
 }
 
-TextEncoder textEncoderFromJsObject(interop.TextEncoder jsObject) =>
-    TextEncoder._(jsObject);
+TextEncoder textEncoderFromJsObject(interop.TextEncoder jsObject) => TextEncoder._(jsObject);
 
 class TextEncoderEncodeIntoResult {
   final interop.TextEncoderEncodeIntoResult _delegate;
 
   TextEncoderEncodeIntoResult._(this._delegate);
 
-  int get read => _delegate.read;
+  int get read => _delegate.read as int? ?? 0;
 
   set read(int newValue) {
     _delegate.read = newValue;
   }
 
-  int get written => _delegate.written;
+  int get written => _delegate.written as int? ?? 0;
 
   set written(int newValue) {
     _delegate.written = newValue;
@@ -46,6 +45,5 @@ extension TextEncoderEncodeIntoResultExtension on TextEncoderEncodeIntoResult {
   interop.TextEncoderEncodeIntoResult get delegate => _delegate;
 }
 
-TextEncoder textEncoderEncodeIntoResultFromJsObject(
-        interop.TextEncoder jsObject) =>
+TextEncoder textEncoderEncodeIntoResultFromJsObject(interop.TextEncoder jsObject) =>
     TextEncoder._(jsObject);

@@ -1,12 +1,12 @@
 import 'package:js/js.dart' as js;
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 import 'promise_interop.dart';
 
 @js.JS()
 external void addEventListener(
   String type,
-  void Function(interop.ExtendableEvent event) callback,
+  void Function(interop.Event event) callback,
 );
 
 @js.JS('fetch')

@@ -24,12 +24,11 @@ void main() {
       expect(await caches.has('exists'), isFalse);
     });
 
-    // TODO: keys() api not working
-    // test('.keys()', () async {
-    //   await caches.open('one');
-    //   await caches.open('two');
-    //   expect(await caches.keys(), ['one', 'two']);
-    // });
+    test('.keys()', () async {
+      await caches.open('one');
+      await caches.open('two');
+      expect(await caches.keys(), ['one', 'two']);
+    });
 
     test('.match()', () async {
       final request = Request(Resource('https://foo.com'));
@@ -78,17 +77,16 @@ void main() {
       expect(await cache.match(request), isNotNull);
     });
 
-    // TODO matchAll() api not working
-    // test('.matchAll()', () async {
-    //   final request = serverRequest('/200');
-    //   final cache = await caches.open('matchAll');
-    //   expect(await cache.matchAll(), isEmpty);
-    //   await cache.add(request);
-    //   expect(await cache.matchAll(), isNotEmpty);
-    //   final matches = await cache.matchAll(request);
-    //   expect(await cache.matchAll(request), isNotEmpty);
-    //   expect(matches.first.url.path, '/200');
-    // });
+    test('.matchAll()', () async {
+      final request = serverRequest('/200');
+      final cache = await caches.open('matchAll');
+      expect(await cache.matchAll(), isEmpty);
+      await cache.add(request);
+      expect(await cache.matchAll(), isNotEmpty);
+      final matches = await cache.matchAll(request);
+      expect(await cache.matchAll(request), isNotEmpty);
+      expect(matches.first.url.path, '/200');
+    });
 
     test('.put()', () async {
       final request = serverRequest('/200');

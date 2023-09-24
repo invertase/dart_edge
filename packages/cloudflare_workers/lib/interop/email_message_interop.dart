@@ -1,7 +1,7 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 @anonymous
 @JS()
@@ -17,8 +17,7 @@ extension PropsEmailMessage on EmailMessage {
   interop.ReadableStream get raw => js_util.getProperty(this, 'raw');
   int get rawSize => js_util.getProperty(this, 'rawSize');
 
-  void setReject(String reason) =>
-      js_util.callMethod(this, 'setReject', [reason]);
-  Future<void> forward(String to, [interop.Headers? headers]) => js_util
-      .promiseToFuture(js_util.callMethod(this, 'forward', [to, headers]));
+  void setReject(String reason) => js_util.callMethod(this, 'setReject', [reason]);
+  Future<void> forward(String to, [interop.Headers? headers]) =>
+      js_util.promiseToFuture(js_util.callMethod(this, 'forward', [to, headers]));
 }

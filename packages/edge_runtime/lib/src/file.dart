@@ -1,9 +1,9 @@
 import 'dart:js_util';
 import 'dart:typed_data';
 
-import 'package:edge_runtime/src/interop/readable_stream.dart';
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
+import './interop/readable_stream.dart';
 import 'blob.dart';
 
 class File implements Blob {
@@ -12,7 +12,7 @@ class File implements Blob {
   File._(this._delegate);
 
   String get name => _delegate.name;
-  int get lastModified => _delegate.lastModified;
+  int get lastModified => _delegate.lastModified as int;
   String? get webkitRelativePath {
     try {
       return _delegate.webkitRelativePath;
@@ -28,7 +28,7 @@ class File implements Blob {
   Future<ByteBuffer> arrayBuffer() => _delegate.arrayBuffer();
 
   @override
-  int get size => _delegate.size;
+  int get size => _delegate.size as int;
 
   @override
   Blob slice([int? start, int? end, String? contentType]) {
