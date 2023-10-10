@@ -12,7 +12,7 @@ class File implements Blob {
   File._(this._delegate);
 
   String get name => _delegate.name;
-  int get lastModified => _delegate.lastModified as int;
+  int get lastModified => _delegate.lastModified.toInt();
   String? get webkitRelativePath {
     try {
       return _delegate.webkitRelativePath;
@@ -28,7 +28,7 @@ class File implements Blob {
   Future<ByteBuffer> arrayBuffer() => _delegate.arrayBuffer();
 
   @override
-  int get size => _delegate.size as int;
+  int get size => _delegate.size.toInt();
 
   @override
   Blob slice([int? start, int? end, String? contentType]) {

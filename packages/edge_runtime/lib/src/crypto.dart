@@ -44,7 +44,8 @@ abstract class Algorithm {
 class RsaOaepParams extends Algorithm {
   final interop.RsaOaepParams _rsaDelegate;
 
-  RsaOaepParams._(this._rsaDelegate) : super._(interop.Algorithm(name: 'RSA-OAEP'));
+  RsaOaepParams._(this._rsaDelegate)
+      : super._(interop.Algorithm(name: 'RSA-OAEP'));
 
   factory RsaOaepParams({
     ByteBuffer? label,

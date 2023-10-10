@@ -2,6 +2,7 @@ import 'dart:js_util';
 
 import 'package:typings/core.dart' as interop hide caches;
 import '../interop/cache_interop.dart' as interop;
+import '../request.dart';
 import '../response.dart';
 import 'cache.dart';
 import 'cache_query_options.dart';
@@ -25,9 +26,10 @@ class CacheStorage {
     return _delegate.keys();
   }
 
-  Future<Response?> match(interop.Request request, [MultiCacheQueryOptions? options]) async {
-    final obj =
-        await promiseToFuture<interop.Response?>(_delegate.match(request, options?.delegate));
+  Future<Response?> match(Request request,
+      [MultiCacheQueryOptions? options]) async {
+    final obj = await promiseToFuture<interop.Response?>(
+        _delegate.match(request.delegate, options?.delegate));
     return obj == null ? null : responseFromJsObject(obj);
   }
 

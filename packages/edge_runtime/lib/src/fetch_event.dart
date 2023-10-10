@@ -1,7 +1,9 @@
 import 'dart:js_util' as js_util;
 import 'dart:async';
 
-import 'package:edge_runtime/edge_runtime.dart' as interop;
+import 'request.dart';
+import 'response.dart';
+import 'package:typings/core.dart' as interop;
 
 import 'interop/promise_interop.dart';
 
@@ -10,9 +12,9 @@ class FetchEvent {
   FetchEvent._(this._delegate);
 
   String get type => _delegate.type;
-  interop.Request get request => _delegate.request;
+  Request get request => _delegate.request;
 
-  void respondWith(FutureOr<interop.Response> response) {
+  void respondWith(FutureOr<Response> response) {
     return _delegate.respondWithPromise(Future.value(response));
   }
 

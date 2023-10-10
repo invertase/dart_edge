@@ -11,33 +11,36 @@ import '../interop/request_init_interop.dart' as interop;
 
 import 'request_init.dart';
 
-Future<Response> fetch(Resource resource,
-    {CloudflareRequestInit? cf,
-    String? method,
-    Headers? headers,
-    Object? body,
-    String? referrer,
-    interop.ReferrerPolicy? referrerPolicy,
-    interop.RequestMode? mode,
-    interop.RequestCredentials? credentials,
-    interop.RequestCache? cache,
-    interop.RequestRedirect? redirect,
-    String? integrity,
-    bool? keepalive,
-    AbortSignal? signal}) async {
+Future<Response> fetch(
+  Resource resource, {
+  CloudflareRequestInit? cf,
+  String? method,
+  Headers? headers,
+  Object? body,
+  String? referrer,
+  interop.ReferrerPolicy? referrerPolicy,
+  interop.RequestMode? mode,
+  interop.RequestCredentials? credentials,
+  interop.RequestCache? cache,
+  interop.RequestRedirect? redirect,
+  String? integrity,
+  bool? keepalive,
+  AbortSignal? signal,
+}) async {
   final init = interop.RequestInit(
-      method: method,
-      headers: headers?.delegate,
-      body: body,
-      referrer: referrer,
-      referrerPolicy: referrerPolicy,
-      mode: mode,
-      credentials: credentials,
-      cache: cache,
-      redirect: redirect,
-      integrity: integrity,
-      keepalive: keepalive,
-      signal: signal?.delegate);
+    method: method,
+    headers: headers?.delegate,
+    body: body,
+    referrer: referrer,
+    referrerPolicy: referrerPolicy,
+    mode: mode,
+    credentials: credentials,
+    cache: cache,
+    redirect: redirect,
+    integrity: integrity,
+    keepalive: keepalive,
+    signal: signal?.delegate,
+  );
 
   // Attach the non-standard Cloudflare properties to the Request Init object.
   if (cf != null) {

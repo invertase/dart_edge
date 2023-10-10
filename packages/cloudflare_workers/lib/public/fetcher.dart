@@ -4,6 +4,7 @@ import 'package:edge_runtime/src/abort.dart';
 import 'package:edge_runtime/src/headers.dart';
 import 'package:typings/core.dart' as interop;
 
+import 'package:edge_runtime/src/request.dart';
 import 'package:edge_runtime/src/response.dart';
 import '../interop/durable_object_interop.dart' as interop;
 
@@ -14,7 +15,7 @@ abstract class Fetcher {
 
   Fetcher(this._delegate);
 
-  Future<Response> fetch(interop.Request request,
+  Future<Response> fetch(Request request,
       {String? method,
       Headers? headers,
       Object? body,
@@ -28,7 +29,7 @@ abstract class Fetcher {
       bool? keepalive,
       AbortSignal? signal}) async {
     final response = await _delegate.fetch(
-      request,
+      request.delegate,
       interop.RequestInit(
           method: method,
           headers: headers?.delegate,

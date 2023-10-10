@@ -3,6 +3,7 @@ import 'package:js/js.dart';
 
 import 'package:typings/core.dart' as interop;
 
+import '../request.dart';
 import '../resource.dart';
 
 interop.Request requestFromResource(Resource resource) {
@@ -12,7 +13,7 @@ interop.Request requestFromResource(Resource resource) {
     case UriValue:
       return interop.Request((resource as UriValue).uri.toString());
     case RequestValue:
-      return (resource as RequestValue).request;
+      return (resource as RequestValue).request.delegate;
     default:
       throw Exception('Unknown resource type ${resource.runtimeType}');
   }

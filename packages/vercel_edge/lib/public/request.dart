@@ -1,9 +1,11 @@
 import 'package:typings/core.dart' as interop;
 
+import 'package:edge_runtime/src/request.dart';
 import '../interop/request_interop.dart';
 
-extension VercelEdgeRequestExtension on interop.Request {
-  IncomingRequestVercelProperties get vc => IncomingRequestVercelProperties._(this);
+extension VercelEdgeRequestExtension on Request {
+  IncomingRequestVercelProperties get vc =>
+      IncomingRequestVercelProperties._(delegate);
 }
 
 class IncomingRequestVercelProperties {

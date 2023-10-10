@@ -11,7 +11,6 @@ export 'package:typings/core.dart'
         RequestDestination,
         RequestMode,
         RequestRedirect,
-        Request,
         RequestInit,
         Request$Typings,
         RequestInit$Typings;
@@ -19,16 +18,19 @@ export 'package:typings/core.dart'
 export 'src/abort.dart' show AbortController, AbortSignal;
 export 'src/blob.dart' show Blob, BlobPropertyBag;
 export 'src/cache/cache.dart' show Cache;
-export 'src/cache/cache_query_options.dart' show CacheQueryOptions, MultiCacheQueryOptions;
+export 'src/cache/cache_query_options.dart'
+    show CacheQueryOptions, MultiCacheQueryOptions;
 export 'src/cache/cache_storage.dart' show CacheStorage, caches;
 export 'src/fetch_event.dart' show FetchEvent;
 export 'src/file.dart' show File;
 export 'src/form_data.dart' show FormData, FormDataEntryValue;
 export 'src/headers.dart' show Headers;
 export 'src/io_http_client.dart';
+export 'src/request.dart' show Request;
 export 'src/resource.dart' show Resource;
 export 'src/response.dart' show Response;
-export 'src/text_decoder.dart' show TextDecoder, TextDecodeOptions, TextDecoderOptions;
+export 'src/text_decoder.dart'
+    show TextDecoder, TextDecodeOptions, TextDecoderOptions;
 export 'src/text_encoder.dart' show TextEncoder, TextEncoderEncodeIntoResult;
 export 'src/top.dart';
 

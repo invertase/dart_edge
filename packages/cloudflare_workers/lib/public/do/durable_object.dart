@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:typings/core.dart' show Request;
+import 'package:edge_runtime/src/request.dart';
 import 'package:edge_runtime/src/response.dart';
 import '../../interop/durable_object_interop.dart' as interop;
 

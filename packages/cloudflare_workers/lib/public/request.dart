@@ -1,10 +1,10 @@
-import 'package:edge_runtime/edge_runtime.dart' show Request;
+import 'package:edge_runtime/src/request.dart';
 
 import '../interop/request_interop.dart' as interop;
 
 extension CloudflareWorkersRequestExtension on Request {
   IncomingRequestCfProperties get cf =>
-      IncomingRequestCfProperties._(interop.CloudflareWorkersRequestInteropExtension(this).cf);
+      IncomingRequestCfProperties._(delegate.cf);
 }
 
 class IncomingRequestCfProperties {

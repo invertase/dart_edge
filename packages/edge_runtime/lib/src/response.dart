@@ -63,7 +63,7 @@ class Response implements Body {
   interop.ResponseType get type => _delegate.type;
   Uri get url => Uri.parse(_delegate.url);
   bool get redirected => _delegate.redirected;
-  int get status => _delegate.status as int;
+  int get status => _delegate.status.toInt();
   bool get ok => _delegate.ok;
   String get statusText => _delegate.statusText;
   Headers get headers {
@@ -89,7 +89,8 @@ class Response implements Body {
   bool get bodyUsed => _delegate.bodyUsed;
 
   @override
-  Future<FormData> formData() async => formDataFromJsObject(await _delegate.formData());
+  Future<FormData> formData() async =>
+      formDataFromJsObject(await _delegate.formData());
 
   @override
   Future<Object?> json() async {

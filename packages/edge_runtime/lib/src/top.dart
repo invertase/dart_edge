@@ -48,12 +48,14 @@ String atob(String encodedData) => interop.atob(encodedData);
 
 String btoa(String stringToEncode) => interop.btoa(stringToEncode);
 
-int setInterval(void Function() callback, Duration duration) =>
-    interop.setInterval(js.allowInterop(callback), duration.inMilliseconds) as int;
+int setInterval(void Function() callback, Duration duration) => interop
+    .setInterval(js.allowInterop(callback), duration.inMilliseconds)
+    .toInt();
 
 void clearInterval(int handle) => interop.clearInterval(handle);
 
-int setTimeout(void Function() callback, Duration duration) =>
-    interop.setTimeout(js.allowInterop(callback), duration.inMilliseconds) as int;
+int setTimeout(void Function() callback, Duration duration) => interop
+    .setTimeout(js.allowInterop(callback), duration.inMilliseconds)
+    .toInt();
 
 void clearTimeout(int handle) => interop.clearTimeout(handle);

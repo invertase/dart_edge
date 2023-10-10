@@ -15,7 +15,7 @@ class Blob {
           options?.delegate ?? interop.BlobPropertyBag(),
         );
 
-  int get size => _delegate.size as int;
+  int get size => _delegate.size.toInt();
   String get type => _delegate.type;
 
   Blob slice([int? start, int? end, String? contentType]) {

@@ -10,7 +10,7 @@ void main() {
       final durable = env.getDurableObjectNamespace('FOO_BAR');
 
       // Generate an ID for the Durable Object (can be any string).
-      final id = durable.idFromName(Uri.parse(request.url).path);
+      final id = durable.idFromName(request.url.path);
 
       // Send a request to the Durable Object.
       return durable.get(id).fetch(request);
