@@ -94,8 +94,7 @@ class Request implements Body {
   bool get bodyUsed => _delegate.bodyUsed;
 
   @override
-  Future<FormData> formData() async =>
-      formDataFromJsObject(await _delegate.formData());
+  Future<FormData> formData() async => formDataFromJsObject(await _delegate.formData());
 
   @override
   Future<Object?> json() async =>
