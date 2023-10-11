@@ -1,11 +1,9 @@
-import 'dart:typed_data' show Uint8List;
-
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 class TextDecoder {
   final interop.TextDecoder _delegate;
 
-  TextDecoder._(this._delegate);
+  // TextDecoder._(this._delegate);
 
   // TODO: What happens if label is null? do we need to use undefined?
   TextDecoder([String? label, TextDecoderOptions? options])
@@ -29,13 +27,13 @@ class TextDecoderOptions {
 
   TextDecoderOptions._(this._delegate);
 
-  bool get fatal => _delegate.fatal;
+  bool get fatal => _delegate.fatal ?? false;
 
   set fatal(bool newValue) {
     _delegate.fatal = newValue;
   }
 
-  bool get ignoreBOM => _delegate.ignoreBOM;
+  bool get ignoreBOM => _delegate.ignoreBOM ?? false;
 
   set ignoreBOM(bool newValue) {
     _delegate.ignoreBOM = newValue;

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'abort.dart';
 import 'blob.dart';
 import 'body.dart';
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import 'interop/readable_stream.dart';
 import 'interop/utils_interop.dart' as interop;
 import 'interop/headers.dart' as headers_interop;
@@ -32,7 +32,6 @@ class Request implements Body {
     String? integrity,
     bool? keepalive,
     AbortSignal? signal,
-    interop.RequestDuplex? duplex,
   }) : _delegate = interop.Request(
           interop.requestFromResource(resource),
           interop.RequestInit(
@@ -49,7 +48,6 @@ class Request implements Body {
             integrity: integrity,
             keepalive: keepalive,
             signal: signal?.delegate,
-            duplex: duplex,
           ),
         );
 
@@ -96,8 +94,7 @@ class Request implements Body {
   bool get bodyUsed => _delegate.bodyUsed;
 
   @override
-  Future<FormData> formData() async =>
-      formDataFromJsObject(await _delegate.formData());
+  Future<FormData> formData() async => formDataFromJsObject(await _delegate.formData());
 
   @override
   Future<Object?> json() async =>

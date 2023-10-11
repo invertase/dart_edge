@@ -18,11 +18,10 @@ void main() {
       expect(headers['foo'], 'bar, baz');
     });
 
-    // TODO: See https://github.com/jodinathan/js_bindings/issues/24
-    // test('.keys()', () {
-    //   final headers = Headers({'foo': 'bar'});
-    //   expect(headers.keys().toList(), ['foo']);
-    // });
+    test('.keys()', () {
+      final headers = Headers({'foo': 'bar'});
+      expect(headers.keys.toList(), ['foo']);
+    });
 
     test('.delete()', () {
       final headers = Headers({'foo': 'bar'})..delete('foo');

@@ -1,4 +1,4 @@
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 extension CloudflareWorkersRequestInteropExtension on interop.Request {
   String? get ipAddress => headers.get('x-real-ip');

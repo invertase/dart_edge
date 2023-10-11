@@ -1,6 +1,6 @@
 import 'dart:js_util';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop hide caches;
 import '../interop/cache_interop.dart' as interop;
 import '../request.dart';
 import '../response.dart';

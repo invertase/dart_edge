@@ -1,11 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
-import 'interop/crypto_interop.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
-export 'package:js_bindings/js_bindings.dart' show KeyFormat, KeyType;
-
-final crypto = Crypto._(interop.crypto);
+final crypto = Crypto._(interop.crypto.call());
 
 class Crypto {
   final interop.Crypto _delegate;
@@ -15,7 +12,7 @@ class Crypto {
   SubtleCrypto get subtle => SubtleCrypto._(_delegate.subtle);
 
   // TODO Is this the right way to do this?
-  TypedData getRandomValues(TypedData typedArray) =>
+  interop.ArrayBufferView getRandomValues(interop.ArrayBufferView typedArray) =>
       _delegate.getRandomValues(typedArray);
 
   String randomUUID() => _delegate.randomUUID();
@@ -31,21 +28,11 @@ class SubtleCrypto {
     CryptoKey key,
     dynamic data,
   ) {
-    final obj = _delegate.encrypt(algorithm._delegate, key._delegate, data);
-    throw UnimplementedError('TODO - how to handle return type?');
+    return _delegate.encrypt(algorithm._delegate, key._delegate, data);
+    // TODO - how to handle return type?
   }
 
-  // TODO decrypt
-  // TODO sign
-  // TODO verify
-  // TODO digest
-  // TODO generateKey
-  // TODO deriveKey
-  // TODO deriveBits
-  // TODO importKey
-  // TODO exportKey
-  // TODO wrapKey
-  // TODO unwrapKey
+  // TODO decrypt, sign, verify, digest, generateKey, deriveKey, deriveBits, importKey, exportKey, wrapKey, unwrapKey
 }
 
 abstract class Algorithm {
@@ -63,11 +50,9 @@ class RsaOaepParams extends Algorithm {
   factory RsaOaepParams({
     ByteBuffer? label,
   }) =>
-      RsaOaepParams._(interop.RsaOaepParams(
-        label: label,
-      ));
+      RsaOaepParams._(interop.RsaOaepParams(label: label, name: "RSA-OAEP"));
 
-  ByteBuffer? get label => _rsaDelegate.label;
+  ByteBuffer? get label => _rsaDelegate.label as interop.ArrayBufferLike;
   set label(ByteBuffer? value) => _rsaDelegate.label = value;
 }
 
@@ -78,5 +63,5 @@ class CryptoKey {
 
   interop.KeyType get type => _delegate.type;
   bool get extractable => _delegate.extractable;
-  List<String> get usages => _delegate.usages;
+  List<interop.KeyUsageOptions> get usages => _delegate.usages;
 }

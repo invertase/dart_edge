@@ -10,8 +10,8 @@ environment:
 dependencies:
   edge: ^0.0.7
   edge_runtime: ^0.0.4+2
-  js_bindings: ^0.1.0
   js: ^0.6.5
+  typings: ^0.0.3
 
 dev_dependencies:
   lints: ^2.0.0

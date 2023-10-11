@@ -5,9 +5,8 @@ import 'package:edge_runtime/src/headers.dart';
 import 'package:edge_runtime/src/response.dart';
 import 'package:edge_runtime/src/abort.dart';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import 'package:edge_runtime/src/interop/utils_interop.dart' as interop;
-import 'package:edge_runtime/src/interop/scope_interop.dart' as interop;
 import '../interop/request_init_interop.dart' as interop;
 
 import 'request_init.dart';
@@ -27,7 +26,6 @@ Future<Response> fetch(
   String? integrity,
   bool? keepalive,
   AbortSignal? signal,
-  interop.RequestDuplex? duplex,
 }) async {
   final init = interop.RequestInit(
     method: method,
@@ -42,7 +40,6 @@ Future<Response> fetch(
     integrity: integrity,
     keepalive: keepalive,
     signal: signal?.delegate,
-    duplex: duplex,
   );
 
   // Attach the non-standard Cloudflare properties to the Request Init object.

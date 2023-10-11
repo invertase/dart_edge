@@ -1,14 +1,14 @@
-import 'package:js/js.dart';
-import 'package:edge_runtime/edge_runtime.dart';
 import 'dart:js_util' as js_util;
-import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:shelf/shelf.dart' as shelf;
+
+import 'package:edge_runtime/edge_runtime.dart';
 import 'package:edge_runtime/src/interop/promise_interop.dart';
 import 'package:edge_runtime/src/response.dart';
+import 'package:js/js.dart';
+import 'package:shelf/shelf.dart' as shelf;
+import 'package:typings/core.dart' as interop;
 
 @JS('__dartVercelFetchHandler')
-external set __dartVercelFetchHandler(
-    Promise<interop.Response> Function(interop.Request req) f);
+external set __dartVercelFetchHandler(Promise<interop.Response> Function(interop.Request req) f);
 
 class VercelEdgeShelf {
   final FutureOr<shelf.Response> Function(shelf.Request request)? fetch;

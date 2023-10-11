@@ -1,6 +1,6 @@
-import 'package:js_bindings/js_bindings.dart' as interop;
-import 'package:edge_runtime/src/request.dart';
+import 'package:typings/core.dart' as interop;
 
+import 'package:edge_runtime/src/request.dart';
 import '../interop/request_interop.dart';
 
 extension VercelEdgeRequestExtension on Request {

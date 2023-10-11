@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:js/js.dart';
 import 'dart:js_util' as js_util;
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import 'package:edge_runtime/src/interop/utils_interop.dart';
 import 'package:edge_runtime/src/interop/promise_interop.dart';
 import 'package:edge_runtime/src/interop/iterator_interop.dart';
@@ -18,12 +18,11 @@ class Env {
 extension PropsEnv on Env {
   String? get(String key) => js_util.callMethod(this, 'get', [key]);
 
-  void set(String key, String value) =>
-      js_util.callMethod(this, 'set', [key, value]);
+  void set(String key, String value) => js_util.callMethod(this, 'set', [key, value]);
   void delete(String key) => js_util.callMethod(this, 'delete', [key]);
   bool has(String key) => js_util.callMethod(this, 'has', [key]);
-  Map<String, String> toObject() => Map<String, String>.from(
-      dartify(js_util.callMethod(this, 'toObject', [])));
+  Map<String, String> toObject() =>
+      Map<String, String>.from(dartify(js_util.callMethod(this, 'toObject', [])));
 }
 
 @JS()

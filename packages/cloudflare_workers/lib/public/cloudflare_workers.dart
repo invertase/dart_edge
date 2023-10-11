@@ -3,10 +3,10 @@ import 'dart:js_util' as js_util;
 import 'package:edge_runtime/edge_runtime.dart';
 import 'package:js/js.dart';
 import 'package:edge_runtime/src/interop/promise_interop.dart';
-import 'package:edge_runtime/src/request.dart';
 import 'package:edge_runtime/src/response.dart';
+import 'package:edge_runtime/src/request.dart';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import '../interop/environment_interop.dart' as interop;
 import '../interop/scheduled_event_interop.dart' as interop;
 import '../interop/email_message_interop.dart' as interop;

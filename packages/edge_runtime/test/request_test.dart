@@ -38,7 +38,7 @@ void main() {
         }),
       );
 
-      expect(request.headers['foo'], 'bar');
+      expect(request.headers.get('foo'), 'bar');
     });
 
     test('.destination', () {

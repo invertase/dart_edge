@@ -10,8 +10,7 @@ import 'durable_object_state.dart';
 abstract class DurableObject {
   final interop.DurableObject _delegate;
 
-  DurableObjectState get state =>
-      durableObjectStateFromJsObject(_delegate.state);
+  DurableObjectState get state => durableObjectStateFromJsObject(_delegate.state);
 
   Environment get env => environmentFromJsObject(_delegate.env);
 

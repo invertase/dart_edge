@@ -1,5 +1,4 @@
 import 'package:test/test.dart';
-import 'package:edge_runtime/edge_runtime.dart';
 
 import 'utils.dart';
 

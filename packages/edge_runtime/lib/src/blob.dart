@@ -2,9 +2,7 @@ import 'dart:js_util';
 import 'dart:typed_data';
 
 import 'package:edge_runtime/src/interop/readable_stream.dart';
-import 'package:js_bindings/js_bindings.dart' as interop;
-
-export 'package:js_bindings/js_bindings.dart' show EndingType;
+import 'package:typings/core.dart' as interop;
 
 class Blob {
   final interop.Blob _delegate;
@@ -13,11 +11,11 @@ class Blob {
 
   Blob([Iterable<dynamic>? blobParts, BlobPropertyBag? options])
       : _delegate = interop.Blob(
-          blobParts,
+          blobParts?.toList() as List<Object>?,
           options?.delegate ?? interop.BlobPropertyBag(),
         );
 
-  int get size => _delegate.size;
+  int get size => _delegate.size.toInt();
   String get type => _delegate.type;
 
   Blob slice([int? start, int? end, String? contentType]) {

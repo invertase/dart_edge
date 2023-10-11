@@ -1,6 +1,6 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import 'package:edge_runtime/src/interop/utils_interop.dart';
 
 extension CloudflareWorkersRequestInteropExtension on interop.RequestInit {
@@ -45,11 +45,11 @@ extension PropsCloudflareRequestInit on CloudflareRequestInit {
     js_util.setProperty(this, 'apps', value ?? jsUndefined);
   }
 
-  set image(dynamic? value) {
+  set image(dynamic value) {
     js_util.setProperty(this, 'image', value ?? jsUndefined);
   }
 
-  set minify(dynamic? value) {
+  set minify(dynamic value) {
     js_util.setProperty(this, 'minify', value ?? jsUndefined);
   }
 
@@ -73,8 +73,7 @@ class RequestInitCfPropertiesImageMinify {
   external factory RequestInitCfPropertiesImageMinify();
 }
 
-extension PropsRequestInitCfPropertiesImageMinify
-    on RequestInitCfPropertiesImageMinify {
+extension PropsRequestInitCfPropertiesImageMinify on RequestInitCfPropertiesImageMinify {
   set javascript(bool? value) {
     js_util.setProperty(this, 'javascript', value ?? jsUndefined);
   }
@@ -130,8 +129,7 @@ class RequestInitCfPropertiesImageDraw extends BasicImageTransformations {
   });
 }
 
-extension PropsRequestInitCfPropertiesImageDraw
-    on RequestInitCfPropertiesImageDraw {
+extension PropsRequestInitCfPropertiesImageDraw on RequestInitCfPropertiesImageDraw {
   set opacity(num? value) {
     js_util.setProperty(this, 'opacity', value ?? jsUndefined);
   }

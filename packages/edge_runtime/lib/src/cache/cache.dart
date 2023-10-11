@@ -1,6 +1,6 @@
 import 'dart:js_util';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 import '../interop/utils_interop.dart' as interop;
 import '../request.dart';
@@ -20,24 +20,21 @@ class Cache {
     await _delegate.addAll(requests.map((r) => r.delegate).toList());
   }
 
-  Future<void> delete(Request request,
-      [MultiCacheQueryOptions? options]) async {
+  Future<void> delete(Request request, [MultiCacheQueryOptions? options]) async {
     await _delegate.delete(request.delegate, options?.delegate);
   }
 
   Future<Response?> match(Request request, [CacheQueryOptions? options]) async {
-    final obj = await promiseToFuture(
-        _delegate.match(request.delegate, options?.delegate));
+    final obj = await promiseToFuture(_delegate.match(request.delegate, options?.delegate));
     return obj == null ? null : responseFromJsObject(obj);
   }
 
-  Future<Iterable<Response>> matchAll(
-      [Request? request, CacheQueryOptions? options]) async {
+  Future<Iterable<Response>> matchAll([Request? request, CacheQueryOptions? options]) async {
     final matches = await _delegate.matchAll(
-      request?.delegate ?? interop.jsUndefined,
+      request ?? interop.jsUndefined,
       options?.delegate,
     );
-    return matches.map((obj) => responseFromJsObject(obj));
+    return matches.map((obj, _, __) => responseFromJsObject(obj));
   }
 
   Future<void> put(

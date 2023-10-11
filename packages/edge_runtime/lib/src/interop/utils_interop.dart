@@ -1,10 +1,10 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
-import '../resource.dart';
 import '../request.dart';
+import '../resource.dart';
 
 interop.Request requestFromResource(Resource resource) {
   switch (resource.runtimeType) {

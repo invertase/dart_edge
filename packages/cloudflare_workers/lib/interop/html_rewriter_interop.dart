@@ -1,6 +1,6 @@
 import 'dart:js_util' as js_util;
 import 'package:js/js.dart';
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 import 'package:edge_runtime/src/interop/promise_interop.dart';
 
 typedef HandlerMethod<T> = Promise<void> Function(T type);
@@ -152,17 +152,14 @@ extension PropsElement on Element {
   bool get removed => js_util.getProperty(this, 'removed');
   String get namespaceURI => js_util.getProperty(this, 'namespaceURI');
 
-  String? getAttribute(String name) =>
-      js_util.callMethod(this, 'getAttribute', [name]);
+  String? getAttribute(String name) => js_util.callMethod(this, 'getAttribute', [name]);
 
-  bool hasAttribute(String name) =>
-      js_util.callMethod(this, 'hasAttribute', [name]);
+  bool hasAttribute(String name) => js_util.callMethod(this, 'hasAttribute', [name]);
 
   Element setAttribute(String name, String value) =>
       js_util.callMethod(this, 'setAttribute', [name, value]);
 
-  Element removeAttribute(String name) =>
-      js_util.callMethod(this, 'removeAttribute', [name]);
+  Element removeAttribute(String name) => js_util.callMethod(this, 'removeAttribute', [name]);
 
   Element before(String text, [ContentOptions? options]) =>
       js_util.callMethod(this, 'before', [text, options]);
@@ -181,14 +178,12 @@ extension PropsElement on Element {
 
   Element remove() => js_util.callMethod(this, 'remove', []);
 
-  Element removeAndKeepContent() =>
-      js_util.callMethod(this, 'removeAndKeepContent', []);
+  Element removeAndKeepContent() => js_util.callMethod(this, 'removeAndKeepContent', []);
 
   Element setInnerContent(String text, [ContentOptions? options]) =>
       js_util.callMethod(this, 'setInnerContent', [text, options]);
 
-  void onEndTag(dynamic handler) =>
-      js_util.callMethod(this, 'onEndTag', [handler]);
+  void onEndTag(dynamic handler) => js_util.callMethod(this, 'onEndTag', [handler]);
 }
 
 @anonymous

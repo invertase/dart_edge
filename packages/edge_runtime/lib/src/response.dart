@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:js_util' show jsify, getProperty;
 import 'dart:typed_data';
 
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 import './utils.dart';
 import 'blob.dart';
@@ -49,7 +49,7 @@ class Response implements Body {
     Headers? headers,
   }) {
     return Response._(
-      interop.Response.json(
+      interop.Response(
         data != null ? jsify(data) : null,
         interop.ResponseInit(
           status: status ?? 200,
@@ -63,7 +63,7 @@ class Response implements Body {
   interop.ResponseType get type => _delegate.type;
   Uri get url => Uri.parse(_delegate.url);
   bool get redirected => _delegate.redirected;
-  int get status => _delegate.status;
+  int get status => _delegate.status.toInt();
   bool get ok => _delegate.ok;
   String get statusText => _delegate.statusText;
   Headers get headers {

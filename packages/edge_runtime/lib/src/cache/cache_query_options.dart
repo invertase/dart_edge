@@ -1,4 +1,4 @@
-import 'package:js_bindings/js_bindings.dart' as interop;
+import 'package:typings/core.dart' as interop;
 
 class CacheQueryOptions {
   bool? ignoreSearch;
