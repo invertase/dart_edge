@@ -15,6 +15,8 @@ class Headers {
   void append(String name, String value) => _delegate.append(name, value);
   void delete(String name) => _delegate.delete(name);
   String? get(String name) => _delegate.get(name);
+  void set(String name, String value) => _delegate.set(name, value);
+  List<String> getSetCookie() => _delegate.getSetCookie();
 
   operator []=(String name, String value) {
     _delegate.set(name, value);
